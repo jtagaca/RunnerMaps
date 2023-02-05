@@ -1,4 +1,4 @@
-CREATE TABLE `runner_maps`.`indoor_locations` (
+CREATE TABLE `indoor_locations` (
   `locationID` INT NOT NULL AUTO_INCREMENT,
   `buildingID` INT NOT NULL,
   `departmentID` INT NULL,
