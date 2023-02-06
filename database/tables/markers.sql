@@ -1,3 +1,5 @@
+DROP TABLE IF EXISTS `markers`;
+
 CREATE TABLE
     `markers` (
         'markerID' int(11) NOT NULL AUTO_INCREMENT,
