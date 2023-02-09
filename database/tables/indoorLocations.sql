@@ -1,3 +1,5 @@
+
+-- good
 CREATE TABLE `indoor_locations` (
   `locationID` int(11) NOT NULL AUTO_INCREMENT,
   `categoryID` int(11) DEFAULT NULL,
