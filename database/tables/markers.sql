@@ -8,4 +8,7 @@ CREATE TABLE
         `row` varchar(45) DEFAULT NULL,
         `col` varchar(45) DEFAULT NULL,
         PRIMARY KEY (`makerID`)
+        KEY `foreign_key_wall_to_floors_index` (`floorID`),
+        CONSTRAINT `foreign_key_of_marker_to_floors` FOREIGN KEY (`floorID`) REFERENCES `floors` (`floorID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+        CONSTRAINT `foreign_key_of_marker_to_buildings` FOREIGN KEY (`buildingID`) REFERENCES `buildings` (`buildingID`) ON DELETE NO ACTION ON UPDATE NO ACTION
     ) 
