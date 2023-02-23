@@ -7,8 +7,8 @@
 DROP TABLE IF EXISTS `wall`;
 DROP TABLE IF EXISTS `indoor_locations`;
 DROP TABLE IF EXISTS `markers`;
-DROP TABLE IF EXISTS `department`;
 DROP TABLE IF EXISTS `users`;
+DROP TABLE IF EXISTS `department`;
 DROP TABLE IF EXISTS `categories`;
 DROP TABLE IF EXISTS `floors`;
 DROP TABLE IF EXISTS `buildings`;
