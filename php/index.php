@@ -15,6 +15,7 @@ session_start();
 
     <body>
         <h1>Campus Map</h1>
+        <h2>Log In</h2>
         
         <form action="auth/login.php" method="POST">
             <input type="text" name="username" value="<?=$_SESSION["loginUsername"]?>" placehodler="username"> 
@@ -22,9 +23,9 @@ session_start();
             <input type="submit" name="login" value="Log In">
         </form>
         <br><br>
-        <a href="auth/reset_password.php"> Forgot Password </a>
+        <a href="auth/reset_password_page.php"> Forgot Password </a>
         <br> <br>
-        <a href="auth/register.php"> Register an Account </a>
+        <a href="auth/register_page.php"> Register an Account </a>
 
     </body>
 
