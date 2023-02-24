@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 import React, { useState, useEffect } from "react";
-import Maps from './Maps.js';
+import Maps from "./Maps.js";
 
 export default function App () {
   const [classroom, setClassroom] = useState("");
