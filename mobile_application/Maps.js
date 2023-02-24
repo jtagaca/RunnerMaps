@@ -2,14 +2,20 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import MapView, { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
+import MapViewDirections from 'react-native-maps-directions';
 
 export default function Maps () {
     const [region, setRegion] = useState(null);
+    // const [destination, setDestination] = useState({
+    //     //Icardo Center parking lot
+    //     latitude: 35.346847,
+    //     longitude: -119.102904,
+    // });
     useEffect(() => {
         (async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
         if (status !== "granted") {
-            setErrorMsg("Permission to access location was denied");
+            console.log("Permission to access location was denied");
             return;
         }
         const location = await Location.getCurrentPositionAsync({});
