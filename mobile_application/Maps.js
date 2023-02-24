@@ -5,16 +5,14 @@ import * as Location from 'expo-location';
 
 export default function Maps () {
     const [region, setRegion] = useState(null);
-    const [currentLocation, setCurrentLocation] = useState(null);
     useEffect(() => {
         (async () => {
-            let { status } = await Location.requestForegroundPermissionsAsync();
-            if (status !== "granted") {
-              setErrorMsg("Permission to access location was denied");
-              return;
-            }
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== "granted") {
+            setErrorMsg("Permission to access location was denied");
+            return;
+        }
         const location = await Location.getCurrentPositionAsync({});
-        setCurrentLocation(location)
         setRegion({
             latitude: location.coords.latitude,
             longitude: location.coords.longitude,
@@ -23,13 +21,9 @@ export default function Maps () {
           });
         })();
       }, []);
-    //   let text = "Waiting..";
-    //     if (currentLocation) {
-    //         text = JSON.stringify(currentLocation);
-    //     }
       return (
         <View style={styles.container}>
-          {/* <Text style={styles.paragraph}>{text}</Text> */}
+        <Text style={styles.titleText}>Runner Maps</Text>
           {region ? (
             <MapView style={styles.map} region={region}>
               <Marker coordinate={region} />
@@ -43,19 +37,23 @@ export default function Maps () {
     
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#fff',
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
         alignItems: 'center',
+        backgroundColor: '#0000FF',
         justifyContent: 'center',
+    },
+    titleText: {
+        color:"#FFFF00",
+        fontSize: 40,
+        fontWeight: 'bold',
+        paddingBottom: 20
     },
     map: {
         width: '100%',
-        height: '100%',
+        height: '50%',
     },
-    paragraph: {
-        margin: 24,
-        fontSize: 18,
-        fontWeight: "bold",
-        textAlign: "center",
-      },
 });
