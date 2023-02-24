@@ -1,6 +1,7 @@
 CREATE TABLE `users` (
   `userID` int(11) NOT NULL AUTO_INCREMENT,
   `password` varchar(255) NOT NULL,
+  -- `username` varchar(255) NOT NULL UNIQUE,
   `username` varchar(255) NOT NULL,
   `userType` varchar(45) NOT NULL,
   `email` varchar(255) NOT NULL,

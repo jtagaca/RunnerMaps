@@ -26,10 +26,19 @@ function register($username, $password, $userType, $email) {
     echo "$hashed and <br> $username and <br> $userType and <br> $email <br>";
 
     if (!$command->execute()) {
-        die(mysqli_error($db) . "<br>");
+        $_SESSION["error"] = die(mysqli_error($db) . "<br>");
+    }
+    else {
+        $_SESSION["success_message"] = "Account successfully created. Username: $username";
     }
 
+    // unset($_POST["username"]);
+    // unset($_POST["email"]);
+    // unset($_POST["password"]);
+    // unset($_POST["password_confirm"]);
+
     echo "executed <br>";
+    header("Location: register_page.php");
 
     // $fetchedResult = $command->get_result();
 
@@ -41,7 +50,7 @@ function register($username, $password, $userType, $email) {
     //         $_SESSION["result"] = "Registration Successful.";
     //     }
     //     else {
-    //         $_SESSION["error"] = $error;
+    //         // $_SESSION["error"] = $error;
     //     }
     // }
 }
@@ -51,6 +60,14 @@ if (isset($_POST["register"])) {
     if (isset($_POST["email"]) && isset($_POST["username"]) &&
         isset($_POST["password"]) && isset($_POST["password_confirm"])) {
 
+
+        //need to check for if blank inputs
+        // if () {
+        //     echo "if fields are not entered";
+        //     $_SESSION["error"] = "make sure all fields are entered <br>";
+        // }
+        
+            
         $email = $_POST["email"];
         $username = $_POST["username"];
         $password = $_POST["password"];
@@ -66,13 +83,12 @@ if (isset($_POST["register"])) {
             echo "before calling register <br>";
             register($username, $password, $userType, $email);
             echo "after calling register <br>";
-            $_SESSION["success_message"] = "Account successfully created. Username: $username";
+            // $_SESSION["success_message"] = "Account successfully created. Username: $username";
         }
     }
     else {
-
-        echo "if fields are not entered";
-        $_SESSION["error"] = "make sure all fields are entered <br>";
+        echo "if form submission is invalid";
+        $_SESSION["error"] = "please submit the form properly <br>";
     }
 }
 
