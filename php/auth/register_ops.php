@@ -66,6 +66,7 @@ if (isset($_POST["register"])) {
             echo "before calling register <br>";
             register($username, $password, $userType, $email);
             echo "after calling register <br>";
+            $_SESSION["success_message"] = "Account successfully created. Username: $username";
         }
     }
     else {

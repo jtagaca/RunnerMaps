@@ -6,6 +6,9 @@ session_start();
 if (isset($_SESSION["error"])) {
     $errorMsg = $_SESSION["error"];
 }
+if (isset($_SESSION["success_message"])) {
+    $success_message = $_SESSION["success_message"];
+}
 
 ?>
 
@@ -44,10 +47,14 @@ if (isset($_SESSION["error"])) {
         </form>
         <br><br>
         <p style="color:red"><?=$errorMsg?></p>
+        <p style="color:green"><?=$success_message?></p>
         <br> <br>
         <a href="../index.php"> Log In Instead </a>
 
-        <?php unset($_SESSION["error"]); ?>
+        <?php 
+        unset($_SESSION["error"]); 
+        unset($_SESSION["success_message"]);
+        ?>
 
     </body>
     
