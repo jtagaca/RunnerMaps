@@ -2,6 +2,7 @@
 session_start();
 require_once("../config/config.php");
 
+// function register($username, $password, $userType, $email_username, $email_domain) {
 function register($username, $password, $userType, $email) {
     $db = get_connection();
 
@@ -9,18 +10,20 @@ function register($username, $password, $userType, $email) {
 
     $hashed = password_hash($password, PASSWORD_DEFAULT);
 
-    echo "hashed: $hashed <br>";
+    // echo "hashed: $hashed <br>";
+    echo "hashed: $hashed <br> username: $username <br> usertype: $userType <br> email: $email <br>";
 
-    $command = $db->prepare("INSERT INTO users (`password`, `username`, `userType`, `email`) VALUES (?, ?, ?, ?");
+    $command = $db->prepare("INSERT INTO users (`password`, `username`, `userType`, `email`) VALUES (?, ?, ?, ?)");
     // $command = $db->prepare("Call RegisterUser(?, ?, ?, ?)");
 
     echo "after prepare, before binding <br>";
 
-    $command->bind_param('ssss', "$hashed", "$username", "$userType", "$email");
+    // print_r($db);
+    $command->bind_param('ssss', $hashed, $username, $userType, $email);
 
     echo "after binding, before executing <br>";
 
-    // echo "$hashed and $username and $userType and $email <br>";
+    echo "$hashed and <br> $username and <br> $userType and <br> $email <br>";
 
     if (!$command->execute()) {
         die(mysqli_error($db) . "<br>");

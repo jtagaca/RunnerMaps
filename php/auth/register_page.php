@@ -27,6 +27,8 @@ if (isset($_SESSION["error"])) {
         <form action="register_ops.php" method="POST">
             <p>Email Address:</p>
             <input type="text" name="email" placeholder="someone@example.com">
+            <!-- <input type="text" name="email_username" placeholder="someone"> <span>@</span>
+            <input type="text" name="email_domain" placeholder="example.com"> -->
             <br><br>
             <p>Choose a Username</p>
             <input type="text" name="username" value="<?=$_SESSION["registerUsername"]?>" placehodler="username"> 
@@ -45,6 +47,8 @@ if (isset($_SESSION["error"])) {
         <br> <br>
         <a href="../index.php"> Log In Instead </a>
 
-    </body>
+        <?php unset($_SESSION["error"]); ?>
 
+    </body>
+    
 </html>
