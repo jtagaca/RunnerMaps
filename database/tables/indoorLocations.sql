@@ -1,5 +1,3 @@
-
--- good
 CREATE TABLE `indoor_locations` (
   `locationID` int(11) NOT NULL AUTO_INCREMENT,
   `categoryID` int(11) DEFAULT NULL,
@@ -7,8 +5,8 @@ CREATE TABLE `indoor_locations` (
   `row` varchar(45) NOT NULL,
   `col` varchar(45) NOT NULL,
   `image` text,
-  `latitude` decimal(9,6) DEFAULT NULL,
-  `longitude` decimal(9,6) DEFAULT NULL,
+  `latitude` decimal(16,16) DEFAULT NULL,
+  `longitude` decimal(16,16) DEFAULT NULL,
   `name` varchar(255) NOT NULL,
   `description` text,
   PRIMARY KEY (`locationID`),
