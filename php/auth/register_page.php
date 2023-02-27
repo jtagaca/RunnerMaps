@@ -34,7 +34,7 @@ if (isset($_SESSION["success_message"])) {
             <input type="text" name="email_domain" placeholder="example.com"> -->
             <br><br>
             <p>Choose a Username</p>
-            <input type="text" name="username" value="<?=$_SESSION["registerUsername"]?>" placehodler="username"> 
+            <input type="text" name="username" value="<?=$_SESSION["registerUsername"]?>" placeholder="username"> 
             <br><br>
             <p>Choose a Password</p>
             <input type="password" name="password" placeholder="*****">
