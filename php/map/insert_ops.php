@@ -32,13 +32,33 @@ if (isset($_POST["uploadJSON"])) {
         // $inputJSONFile = file_get_contents('php://input');
         $inputJSONFile = $_FILES['jsonFile']["tmp_name"];
     
-        print_r($inputJSONFile);
+        // print_r($inputJSONFile);
         // var_dump($inputJSONFile);
         
         $fileContent = file_get_contents($inputJSONFile);
-        print_r($fileContent);
+        // print_r($fileContent);
         
+        $decodedJSON = json_decode($fileContent);
+        print_r($decodedJSON->gridRowLength);
+        echo "<br><br>";
+
+        print_r($decodedJSON->gridColumnLength);
+        echo "<br><br>";
+
+        print_r($decodedJSON->target_locations);
+        echo "<br><br>";
+
+        print_r($decodedJSON->markers);
+        echo "<br><br>";
+
+        print_r($decodedJSON->walls);
+        echo "<br><br>";
+
+        print_r($decodedJSON->target_locations[0]);
+        echo "<br><br>";
         
+        print_r($decodedJSON->target_locations[0] -> row);
+        echo "<br><br>";
 
 
 
