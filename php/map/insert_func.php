@@ -94,7 +94,7 @@ function insertIntoBuildings($buildingName, $mapURL, $geoLocation) {
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
     }
     else {
-        $_SESSION["success_message"] = "Successfully inserted building: $buildingName";
+        $_SESSION["success_message"] = "Successfully inserted building: $buildingName <br>";
     }
 }
 
@@ -111,7 +111,7 @@ function insertIntoFloors($buildingName, $floorNumber, $gridColumnLength, $gridR
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
     }
     else {
-        $_SESSION["success_message"] += "Successfully inserted floor number $floorNumber for building $buildingName";
+        $_SESSION["success_message"] .= "Successfully inserted floor number $floorNumber for building $buildingName <br>";
     }
 }
 
@@ -126,7 +126,7 @@ function insertIntoIndoorLocations($floorID, $row, $col, $image, $latitude, $lon
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
     }
     else {
-        $_SESSION["success_message"] += "Successfully inserted indoor location: $name";
+        $_SESSION["success_message"] .= "Successfully inserted indoor location: $name <br>";
     }
 }
 
@@ -141,7 +141,7 @@ function insertIntoMarkers($floorID, $row, $col, $image, $latitude, $longitude) 
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
     }
     else {
-        $_SESSION["success_message"] += "Successfully inserted indoor location: $name";
+        $_SESSION["success_message"] .= "Successfully inserted markers at: $row, $col <br>";
     }
 }
 
@@ -156,7 +156,7 @@ function insertIntoWall($floorID, $row, $col) {
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
     }
     else {
-        $_SESSION["success_message"] += "Successfully inserted wall at: $row, $col";
+        $_SESSION["success_message"] .= "Successfully inserted wall at: $row, $col <br>";
     }
 }
 

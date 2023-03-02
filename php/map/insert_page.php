@@ -1,5 +1,12 @@
 <?php
 session_start();
+
+if (isset($_SESSION["error"])) {
+    $errorMsg = $_SESSION["error"];
+}
+if (isset($_SESSION["success_message"])) {
+    $success_message = $_SESSION["success_message"];
+}
 ?>
 
 
@@ -41,6 +48,15 @@ session_start();
             <input type="submit" name="uploadJSON" value="Upload">
         </form>
 
+        <br><br>
+        <p style="color:red"><?=$errorMsg?></p>
+        <p style="color:green"><?=$success_message?></p>
+        <br> <br>
+        
+        <?php 
+        unset($_SESSION["error"]); 
+        unset($_SESSION["success_message"]);
+        ?>
 
     </body>
 
