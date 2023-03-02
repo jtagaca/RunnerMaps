@@ -61,26 +61,57 @@ if (isset($_POST["uploadJSON"])) {
         // echo "<br><br>";
 
         $decodedJSON = json_decode($fileContent, true);
-        print_r($decodedJSON["gridRowLength"]);
-        echo "<br><br>";
 
-        print_r($decodedJSON->gridColumnLength);
-        echo "<br><br>";
+        $gridRowLength = $decodedJSON["gridRowLength"];
+        $gridColumnLength = $decodedJSON["gridColumnLength"];
+        $targetLocations = $decodedJSON["target_locations"];
+        $markers = $decodedJSON["markers"]; 
+        $walls = $decodedJSON["walls"];
 
-        print_r($decodedJSON->target_locations);
-        echo "<br><br>";
+        foreach($targetLocations as $rowNumber => $rowData) {
+            foreach($rowData as $key => $value) {
+                echo "key: <br>";
+                print_r($key);
+                echo "<br>";
+                echo "value: <br>";
+                print_r($value);
+                echo "<br>";
+                echo "<br>";
+            }
+        }
 
-        print_r($decodedJSON->markers);
-        echo "<br><br>";
-
-        print_r($decodedJSON->walls);
-        echo "<br><br>";
-
-        print_r($decodedJSON->target_locations[0]);
-        echo "<br><br>";
+        //key counts how many
+        //value is the actual row data
+        // foreach($walls as $key => $value) {
+        //     echo "key: <br>";
+        //     print_r($key);
+        //     echo "<br>";
+        //     echo "value: <br>";
+        //     print_r($value);
+        //     echo "<br>";
+        //     echo "<br>";
+        // }
         
-        print_r($decodedJSON->target_locations[0] -> row);
-        echo "<br><br>";
+        // print_r($decodedJSON["gridRowLength"]);
+        // echo "<br><br>";
+
+        // print_r($decodedJSON["gridColumnLength"]);
+        // echo "<br><br>";
+
+        // print_r($decodedJSON["target_locations"]);
+        // echo "<br><br>";
+
+        // print_r($decodedJSON["markers"]);
+        // echo "<br><br>";
+
+        // print_r($decodedJSON["walls"]);
+        // echo "<br><br>";
+
+        // print_r($decodedJSON["target_locations"][0]);
+        // echo "<br><br>";
+        
+        // print_r($decodedJSON["target_locations"][0]["row"]);
+        // echo "<br><br>";
 
 
 
