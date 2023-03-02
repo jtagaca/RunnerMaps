@@ -54,97 +54,111 @@ if (isset($_POST["uploadJSON"])) {
        
         // echo "insert: $insertBuildingID.";
 
-        if (!$floorExists) {
-            insertIntoFloors($inputBuildingName, $inputFloorNumber, $inputGridColumnLength, $inputGridRowLength);
+        if ($floorExists) {
+            $_SESSION["insert_error"] = "floor data already exists in database";
+            echo $_SESSION["insert_error"];
         }
-
-        $insertFloorID = getFloorID($inputBuildingName, $inputFloorNumber);
+        else {
+            insertIntoFloors($inputBuildingName, $inputFloorNumber, $inputGridColumnLength, $inputGridRowLength);
+            $insertFloorID = getFloorID($inputBuildingName, $inputFloorNumber);
         // echo $insertFloorID;
 
-        foreach($targetLocations as $rowNumber => $entireRow) {
-            // print_r($rowData);
+            foreach($targetLocations as $rowNumber => $entireRow) {
+                // print_r($rowData);
+                // echo "<br><br>";
+                
+                $inputRow = $entireRow->row;
+                $inputCol = $entireRow->col;
+                $inputLatitude = $entireRow->latitude;
+                $inputLongitude = $entireRow->longitude;
+                $inputImage= $entireRow->image_url;
+                $inputName = $entireRow->name;
+
+                // insertIntoIndoorLocations($insertFloorID, $inputRow, $inputCol, $inputImage, $inputLatitude, $inputLongitude, $name, "");
+
+                // print_r($nameInput);
+                // echo "<br><br>";
+            }
+
+            foreach($markers as $rowNumber => $entireRow) {
+                // print_r($rowData);
+                // echo "<br><br>";
+                
+                $inputRow = $entireRow->row;
+                $inputCol = $entireRow->col;
+                $inputLatitude = $entireRow->latitude;
+                $inputLongitude = $entireRow->longitude;
+                $inputImage= $entireRow->image_url;
+                $inputName = $entireRow->name;
+
+                insertIntoMarkers($insertFloorID, $inputRow, $inputCol, $inputImage, $inputLatitude, $inputLongitude);
+
+                // print_r($inputRow);
+                // echo "<br><br>";
+            }
+
+            foreach($walls as $rowNumber => $entireRow) {
+                // print_r($rowData);
+                // echo "<br><br>";
+                
+                $inputRow = $entireRow->row;
+                $inputCol = $entireRow->col;
+            
+
+                insertIntoWall($insertFloorID, $inputRow, $inputCol);
+
+                // print_r($inputRow);
+                // echo "<br><br>";
+            }
+
+
+            //object method:
+            // $decodedJSON = json_decode($fileContent);
+            // print_r($decodedJSON->gridRowLength);
+            // echo "<br><br>";
+
+            // print_r($decodedJSON->gridColumnLength);
+            // echo "<br><br>";
+
+            // print_r($decodedJSON->target_locations);
+            // echo "<br><br>";
+
+            // print_r($decodedJSON->markers);
+            // echo "<br><br>";
+
+            // print_r($decodedJSON->walls);
+            // echo "<br><br>";
+
+            // print_r($decodedJSON->target_locations[0]);
             // echo "<br><br>";
             
-            $inputRow = $entireRow->row;
-            $inputCol = $entireRow->col;
-            $inputLatitude = $entireRow->latitude;
-            $inputLongitude = $entireRow->longitude;
-            $inputImage= $entireRow->image_url;
-            $inputName = $entireRow->name;
-
-            // insertIntoIndoorLocations($insertFloorID, $inputRow, $inputCol, $inputImage, $inputLatitude, $inputLongitude, $name, "");
-
-            // print_r($nameInput);
+            // print_r($decodedJSON->target_locations[0] -> row);
             // echo "<br><br>";
-        }
 
-        foreach($markers as $rowNumber => $entireRow) {
-            // print_r($rowData);
-            // echo "<br><br>";
             
-            $inputRow = $entireRow->row;
-            $inputCol = $entireRow->col;
-            $inputLatitude = $entireRow->latitude;
-            $inputLongitude = $entireRow->longitude;
-            $inputImage= $entireRow->image_url;
-            $inputName = $entireRow->name;
 
-            // insertIntoMarkers($insertFloorID, $inputRow, $inputCol, $inputImage, $inputLatitude, $inputLongitude, $name, "");
 
-            // print_r($inputRow);
-            // echo "<br><br>";
+            //associative array method:
+            // $decodedJSON = json_decode($fileContent, true);
+
+            // $gridRowLength = $decodedJSON["gridRowLength"];
+            // $gridColumnLength = $decodedJSON["gridColumnLength"];
+            // $targetLocations = $decodedJSON["target_locations"];
+            // $markers = $decodedJSON["markers"]; 
+            // $walls = $decodedJSON["walls"];
+
+            // foreach($targetLocations as $rowNumber => $rowData) {
+            //     foreach($rowData as $key => $value) {
+            //         echo "key: <br>";
+            //         print_r($key);
+            //         echo "<br>";
+            //         echo "value: <br>";
+            //         print_r($value);
+            //         echo "<br>";
+            //         echo "<br>";
+            //     }
+            // }
         }
-
-
-        //object method:
-        // $decodedJSON = json_decode($fileContent);
-        // print_r($decodedJSON->gridRowLength);
-        // echo "<br><br>";
-
-        // print_r($decodedJSON->gridColumnLength);
-        // echo "<br><br>";
-
-        // print_r($decodedJSON->target_locations);
-        // echo "<br><br>";
-
-        // print_r($decodedJSON->markers);
-        // echo "<br><br>";
-
-        // print_r($decodedJSON->walls);
-        // echo "<br><br>";
-
-        // print_r($decodedJSON->target_locations[0]);
-        // echo "<br><br>";
-        
-        // print_r($decodedJSON->target_locations[0] -> row);
-        // echo "<br><br>";
-
-        
-
-
-        //associative array method:
-        // $decodedJSON = json_decode($fileContent, true);
-
-        // $gridRowLength = $decodedJSON["gridRowLength"];
-        // $gridColumnLength = $decodedJSON["gridColumnLength"];
-        // $targetLocations = $decodedJSON["target_locations"];
-        // $markers = $decodedJSON["markers"]; 
-        // $walls = $decodedJSON["walls"];
-
-        // foreach($targetLocations as $rowNumber => $rowData) {
-        //     foreach($rowData as $key => $value) {
-        //         echo "key: <br>";
-        //         print_r($key);
-        //         echo "<br>";
-        //         echo "value: <br>";
-        //         print_r($value);
-        //         echo "<br>";
-        //         echo "<br>";
-        //     }
-        // }
-
-
-
     }
     else {
         echo "if form submission is invalid";
