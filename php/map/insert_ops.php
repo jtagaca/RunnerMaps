@@ -24,28 +24,47 @@ if (isset($_POST["uploadJSON"])) {
         $inputBuildingName = $_POST["buildingName"];
         $inputFloorNumber = $_POST["floorNumber"];
 
-        // if (is_uploaded_file($_FILES['jsonFile'])) {
-        //     echo 2;
-            
-        // }
-
-        // $inputJSONFile = file_get_contents('php://input');
         $inputJSONFile = $_FILES['jsonFile']["tmp_name"];
     
-        // print_r($inputJSONFile);
-        // var_dump($inputJSONFile);
-        
         $fileContent = file_get_contents($inputJSONFile);
-        // print_r($fileContent);
         
         $decodedJSON = json_decode($fileContent);
-        $gridRowLength = $decodedJSON->gridRowLength;
-        $gridColumnLength = $decodedJSON->gridColumnLength;
+        $inputGridRowLength = $decodedJSON->gridRowLength;
+        $inputGridColumnLength = $decodedJSON->gridColumnLength;
+
         $targetLocations = $decodedJSON->target_locations;
-        // print_r($targetLocations);
+        $markers = $decodedJSON->markers;
+        $walls = $decodedJSON->walls;
+
+        // doesBuildingExist("2");
+
+        
+        $buildingExists = doesBuildingAlreadyExist($inputBuildingName);
+        // echo $buildingExists;
+
+        if (!$buildingExists) {
+            insertIntoBuildings($inputBuildingName, "", "");
+        }
+        
+        $insertBuildingID = getBuildingID($inputBuildingName);
+        // echo $insertBuildingID;
+        // echo $insertBuildingID;
+
+        $floorExists = doesFloorAlreadyExist($inputBuildingName, $inputFloorNumber);
+       
+        // echo "insert: $insertBuildingID.";
+
+        if (!$floorExists) {
+            insertIntoFloors($inputBuildingName, $inputFloorNumber, $inputGridColumnLength, $inputGridRowLength);
+        }
+
+        $insertFloorID = getFloorID($inputBuildingName, $inputFloorNumber);
+        // echo $insertFloorID;
+
         foreach($targetLocations as $rowNumber => $entireRow) {
             // print_r($rowData);
             // echo "<br><br>";
+            
             $inputRow = $entireRow->row;
             $inputCol = $entireRow->col;
             $inputLatitude = $entireRow->latitude;
@@ -53,11 +72,28 @@ if (isset($_POST["uploadJSON"])) {
             $inputImage= $entireRow->image_url;
             $inputName = $entireRow->name;
 
-            print_r($nameInput);
-            echo "<br><br>";
+            // insertIntoIndoorLocations($insertFloorID, $inputRow, $inputCol, $inputImage, $inputLatitude, $inputLongitude, $name, "");
 
+            // print_r($nameInput);
+            // echo "<br><br>";
         }
 
+        foreach($markers as $rowNumber => $entireRow) {
+            // print_r($rowData);
+            // echo "<br><br>";
+            
+            $inputRow = $entireRow->row;
+            $inputCol = $entireRow->col;
+            $inputLatitude = $entireRow->latitude;
+            $inputLongitude = $entireRow->longitude;
+            $inputImage= $entireRow->image_url;
+            $inputName = $entireRow->name;
+
+            // insertIntoMarkers($insertFloorID, $inputRow, $inputCol, $inputImage, $inputLatitude, $inputLongitude, $name, "");
+
+            // print_r($inputRow);
+            // echo "<br><br>";
+        }
 
 
         //object method:
