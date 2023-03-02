@@ -12,50 +12,30 @@ function doesBuildingAlreadyExist($buildingName) {
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
     }
 
-    // echo 1;
-
     $fetchedResult = $command->get_result();
 
-    // echo 2;
-
     if ($row = $fetchedResult->fetch_assoc()) {
-        // echo 3;
         return true;
     }
     else {
-        // echo 4;
         return false;
     }
 
 }
 
 function doesFloorAlreadyExist($buildingName, $floorNumber) {
-    // echo $insertBuildingID + 1;
+
     $buildingID = getBuildingID($buildingName);
 
     $db = get_connection();
-
-    // echo $insertBuildingID + 2;
-
     $command = $db->prepare("SELECT floorID FROM `floors` WHERE buildingID = ? AND floorNumber = ?");
-    
-    // echo $insertBuildingID + 3;
-
     $command->bind_param('ii', $buildingID, $floorNumber);
 
-    // echo $insertBuildingID + 4;
-
     if (!$command->execute()) {
-        // echo $insertBuildingID + 5;
-
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
     }
 
-    // echo $insertBuildingID + 6;
-
     $fetchedResult = $command->get_result();
-
-    // echo $insertBuildingID + 7;
 
     if ($row = $fetchedResult->fetch_assoc()) {
         return true;
@@ -77,10 +57,7 @@ function getBuildingID($buildingName) {
 
     $fetchedResult = $command->get_result();
 
-    // print_r($fetchedResult);
-
     if ($row = $fetchedResult->fetch_assoc()) {
-        // echo 2;
         return $row["buildingID"];
     }
 }
