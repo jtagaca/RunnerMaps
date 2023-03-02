@@ -38,6 +38,29 @@ if (isset($_POST["uploadJSON"])) {
         $fileContent = file_get_contents($inputJSONFile);
         // print_r($fileContent);
         
+        $decodedJSON = json_decode($fileContent);
+        $gridRowLength = $decodedJSON->gridRowLength;
+        $gridColumnLength = $decodedJSON->gridColumnLength;
+        $targetLocations = $decodedJSON->target_locations;
+        // print_r($targetLocations);
+        foreach($targetLocations as $rowNumber => $entireRow) {
+            // print_r($rowData);
+            // echo "<br><br>";
+            $inputRow = $entireRow->row;
+            $inputCol = $entireRow->col;
+            $inputLatitude = $entireRow->latitude;
+            $inputLongitude = $entireRow->longitude;
+            $inputImage= $entireRow->image_url;
+            $inputName = $entireRow->name;
+
+            print_r($nameInput);
+            echo "<br><br>";
+
+        }
+
+
+
+        //object method:
         // $decodedJSON = json_decode($fileContent);
         // print_r($decodedJSON->gridRowLength);
         // echo "<br><br>";
@@ -60,58 +83,29 @@ if (isset($_POST["uploadJSON"])) {
         // print_r($decodedJSON->target_locations[0] -> row);
         // echo "<br><br>";
 
-        $decodedJSON = json_decode($fileContent, true);
+        
 
-        $gridRowLength = $decodedJSON["gridRowLength"];
-        $gridColumnLength = $decodedJSON["gridColumnLength"];
-        $targetLocations = $decodedJSON["target_locations"];
-        $markers = $decodedJSON["markers"]; 
-        $walls = $decodedJSON["walls"];
 
-        foreach($targetLocations as $rowNumber => $rowData) {
-            foreach($rowData as $key => $value) {
-                echo "key: <br>";
-                print_r($key);
-                echo "<br>";
-                echo "value: <br>";
-                print_r($value);
-                echo "<br>";
-                echo "<br>";
-            }
-        }
+        //associative array method:
+        // $decodedJSON = json_decode($fileContent, true);
 
-        //key counts how many
-        //value is the actual row data
-        // foreach($walls as $key => $value) {
-        //     echo "key: <br>";
-        //     print_r($key);
-        //     echo "<br>";
-        //     echo "value: <br>";
-        //     print_r($value);
-        //     echo "<br>";
-        //     echo "<br>";
+        // $gridRowLength = $decodedJSON["gridRowLength"];
+        // $gridColumnLength = $decodedJSON["gridColumnLength"];
+        // $targetLocations = $decodedJSON["target_locations"];
+        // $markers = $decodedJSON["markers"]; 
+        // $walls = $decodedJSON["walls"];
+
+        // foreach($targetLocations as $rowNumber => $rowData) {
+        //     foreach($rowData as $key => $value) {
+        //         echo "key: <br>";
+        //         print_r($key);
+        //         echo "<br>";
+        //         echo "value: <br>";
+        //         print_r($value);
+        //         echo "<br>";
+        //         echo "<br>";
+        //     }
         // }
-        
-        // print_r($decodedJSON["gridRowLength"]);
-        // echo "<br><br>";
-
-        // print_r($decodedJSON["gridColumnLength"]);
-        // echo "<br><br>";
-
-        // print_r($decodedJSON["target_locations"]);
-        // echo "<br><br>";
-
-        // print_r($decodedJSON["markers"]);
-        // echo "<br><br>";
-
-        // print_r($decodedJSON["walls"]);
-        // echo "<br><br>";
-
-        // print_r($decodedJSON["target_locations"][0]);
-        // echo "<br><br>";
-        
-        // print_r($decodedJSON["target_locations"][0]["row"]);
-        // echo "<br><br>";
 
 
 
