@@ -6,6 +6,8 @@ CREATE TABLE `markers` ( -- complained about not being on the same line
         `image` TEXT DEFAULT NULL, -- was missing "DEFAULT"
         `row` varchar(45) DEFAULT NULL,
         `col` varchar(45) DEFAULT NULL,
+        `latitude` decimal(9,6) DEFAULT NULL,
+        `longitude` decimal(9,6) DEFAULT NULL,
         PRIMARY KEY (`markerID`), -- found a typo "makerID".
                                  -- man! found the final bug. it was missing a comma.
         KEY `foreign_key_wall_to_floors_index` (`floorID`), -- wall to floors? typo?
