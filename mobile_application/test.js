@@ -26,15 +26,14 @@ export default function Test() {
   };
 
   return (
-    <View style={styles.container}>
+    <View className="flex-1 items-center justify-center bg-white">
       {currentLocation && (
-        <Text style={styles.text}>
+        <Text>
           Current location: {currentLocation.latitude},{" "}
           {currentLocation.longitude}
         </Text>
       )}
       <Button title="Get Current Location" onPress={handleGetCurrentLocation} />
-      <StatusBar style="auto" />
     </View>
   );
 }
