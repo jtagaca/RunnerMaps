@@ -1,16 +1,15 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Button, Text } from "react-native";
 import React, { useState, useEffect } from "react";
-import Maps from "./Maps.js";
 
-export default function App () {
-  const [classroom, setClassroom] = useState("");
-
+import { Provider } from "react-redux";
+import store from "./redux_store/store";
+import Test from "./test";
+export default function App() {
   return (
-    <View style={styles.container}>
-      <Maps />
-      <StatusBar style="auto" />
-    </View>
+    <Provider store={store}>
+      <Test />
+    </Provider>
   );
 }
 
@@ -20,6 +19,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
     alignItems: "center",
     justifyContent: "center",
-
+  },
+  text: {
+    fontSize: 20,
+    marginBottom: 20,
   },
 });
