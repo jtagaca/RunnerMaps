@@ -34,6 +34,7 @@
     "react-native-web": "~0.18.7",
     "react-redux": "^8.0.5",
     "rn-wave-bottom-bar": "^2.2.19",
+    "tailwindcss-brand-colors": "^0.3.3",
     "twrnc": "^3.6.0"
   },
   "devDependencies": {
