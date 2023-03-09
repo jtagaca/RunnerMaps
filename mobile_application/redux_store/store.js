@@ -6,7 +6,7 @@ const store = configureStore({
     closestLocations: reducers.closestLocations,
     targetLocations: reducers.targetLocations,
     buildingLocations: reducers.buildingLocations,
-    currentLocation: reducers.currentLocation,
+    currentLocations: reducers.currentLocation,
   },
 });
 

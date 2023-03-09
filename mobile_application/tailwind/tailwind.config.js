@@ -26,6 +26,5 @@ module.exports = {
         },
       });
     }),
-    require("tailwindcss-brand-colors"),
   ],
 };

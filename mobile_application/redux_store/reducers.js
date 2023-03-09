@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-
+import { fetchBuildings } from "./actions/Building_Locations";
 const closestLocationsSlice = createSlice({
   name: "closestLocations",
   initialState: [],
@@ -21,12 +21,26 @@ const targetLocationsSlice = createSlice({
 });
 
 const buildingLocationsSlice = createSlice({
-  name: "buildingLocations",
-  initialState: [],
-  reducers: {
-    setBuildingLocations: (state, action) => {
-      return action.payload;
-    },
+  name: "buildings",
+  initialState: {
+    data: [],
+    status: "idle",
+    error: null,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchBuildings.pending, (state) => {
+        state.status = "loading";
+      })
+      .addCase(fetchBuildings.fulfilled, (state, action) => {
+        state.status = "succeeded";
+        state.data = action.payload;
+      })
+      .addCase(fetchBuildings.rejected, (state, action) => {
+        state.status = "failed";
+        state.error = action.error.message;
+      });
   },
 });
 
@@ -42,7 +56,6 @@ const currentLocationSlice = createSlice({
 
 export const { setClosestLocations } = closestLocationsSlice.actions;
 export const { setTargetLocations } = targetLocationsSlice.actions;
-export const { setBuildingLocations } = buildingLocationsSlice.actions;
 export const { setCurrentLocation } = currentLocationSlice.actions;
 
 export default {
