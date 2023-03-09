@@ -27,6 +27,7 @@ export default function Maps () {
           });
         })();
       }, []);
+
       const handleGetDirections = async () => {
         const apiKey = "AIzaSyAJVYqFZxP1cE040AZVjzRHNVAX10jUORI";
         const location = await Location.getCurrentPositionAsync({});
@@ -35,8 +36,10 @@ export default function Maps () {
           longitude: location.coords.longitude,
         };
         const destinationStr = `${destination.latitude},${destination.longitude}`;
-        const directionsUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${origin.latitude},
-        ${origin.longitude}&destination=${destinationStr}&key=${apiKey}`;
+        const originStr = `${origin.latitude},${origin.longitude}`;
+        const directionsUrl = `https://maps.googleapis.com/maps/api/directions/json?
+        origin=${originStr}&destination=${destinationStr}&key=${apiKey}`;
+        
         const response = await fetch(directionsUrl);
         const result = await response.json();
         const points = MapViewDirections.processPolyline(result.routes[0].overview_polyline.points);
@@ -48,8 +51,8 @@ export default function Maps () {
           edgePadding: { top: 20, right: 20, bottom: 20, left: 20 },
           animated: true,
         });
-
       }
+
       return (
         <View style={styles.container}>
         <Text style={styles.titleText}>Runner Maps</Text>
@@ -68,7 +71,7 @@ export default function Maps () {
           ) : (
             <Text>Loading...</Text>
           )}
-          <Button style={styles.getDirections} title="Get directions" onPress={handleGetDirections} />
+          {/* <Button style={styles.getDirections} title="Get directions" onPress={handleGetDirections} /> */}
         </View>
       );
 };
