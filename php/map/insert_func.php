@@ -146,17 +146,17 @@ function insertIntoMarkers($floorID, $row, $col, $image, $latitude, $longitude) 
 }
 
 
-function insertIntoWall($floorID, $row, $col) {
+function insertIntoWalls($floorID, $row, $col) {
     
     $db = get_connection();
-    $command = $db->prepare("INSERT INTO wall (`floorID`, `row`, `col`) VALUES (?, ?, ?)");
+    $command = $db->prepare("INSERT INTO walls (`floorID`, `row`, `col`) VALUES (?, ?, ?)");
     $command->bind_param('iss', $floorID, $row, $col);
 
     if (!$command->execute()) {
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
     }
     else {
-        $_SESSION["success_message"] .= "Successfully inserted wall at: $row, $col <br>";
+        $_SESSION["success_message"] .= "Successfully inserted walls at: $row, $col <br>";
     }
 }
 

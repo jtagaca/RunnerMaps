@@ -85,13 +85,13 @@ if (isset($_POST["uploadJSON"])) {
             insertIntoMarkers($insertFloorID, $inputRow, $inputCol, $inputImage, $inputLatitude, $inputLongitude);
         }
 
-        //insert into the wall table
+        //insert into the walls table
         foreach($walls as $rowNumber => $entireRow) {
             
             $inputRow = $entireRow->row;
             $inputCol = $entireRow->col;
            
-            insertIntoWall($insertFloorID, $inputRow, $inputCol);
+            insertIntoWalls($insertFloorID, $inputRow, $inputCol);
         }
     }
 
