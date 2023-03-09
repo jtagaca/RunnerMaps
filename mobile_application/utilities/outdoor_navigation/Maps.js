@@ -7,9 +7,9 @@ import MapViewDirections from 'react-native-maps-directions';
 export default function Maps () {
     const [region, setRegion] = useState(null);
     const [destination, setDestination] = useState({
-        //Icardo Center parking lot
-        latitude: 35.346847,
-        longitude: -119.102904,
+        //Science 3 Entrance 1
+        latitude: 35.348883,
+        longitude: -119.103437,
     });
     useEffect(() => {
         (async () => {
@@ -62,13 +62,13 @@ export default function Maps () {
                 destination={destination}
                 apikey="AIzaSyAJVYqFZxP1cE040AZVjzRHNVAX10jUORI"
                 strokeWidth={3}
-                strokeColor="hotpink"
+                strokeColor="red"
               />
             </MapView>
           ) : (
             <Text>Loading...</Text>
           )}
-          <Button style={styles.getDirections}title="Get directions" onPress={handleGetDirections} />
+          <Button style={styles.getDirections} title="Get directions" onPress={handleGetDirections} />
         </View>
       );
 };
