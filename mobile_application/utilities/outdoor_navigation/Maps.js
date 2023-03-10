@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { Alert, StyleSheet, View, Text, Button } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import MapViewDirections from 'react-native-maps-directions';
@@ -39,9 +39,20 @@ export default function Maps () {
         const originStr = `${origin.latitude},${origin.longitude}`;
         const directionsUrl = `https://maps.googleapis.com/maps/api/directions/json?
         origin=${originStr}&destination=${destinationStr}&key=${apiKey}`;
-        
-        const response = await fetch(directionsUrl);
-        const result = await response.json();
+        try {
+          const response = await fetch(directionsUrl);
+          const result = await response.json();
+          if (result.status === 'OK' && result.routes.length > 0) {
+            const polyline = result.routes[0].overview_polyline.points;
+            const url = `https://www.google.com/maps/dir/?api=1&destination=${destination}&travelmode=driving&dir_action=navigate&polyline=${polyline}`;
+            Linking.openURL(url);
+          } else {
+            Alert.alert('Error', 'Directions not found');
+          }
+        } 
+        catch (error) {
+          Alert.alert('Error', error.message);
+        }
         const points = MapViewDirections.processPolyline(result.routes[0].overview_polyline.points);
         setDestination({
           latitude: result.routes[0].legs[0].end_location.lat,
@@ -71,7 +82,7 @@ export default function Maps () {
           ) : (
             <Text>Loading...</Text>
           )}
-          {/* <Button style={styles.getDirections} title="Get directions" onPress={handleGetDirections} /> */}
+          <Button color="#FFFF00" title="Get directions" onPress={handleGetDirections} />
         </View>
       );
 };
@@ -94,10 +105,8 @@ const styles = StyleSheet.create({
         paddingBottom: 20
     },
     map: {
+        zoom: 0,
         width: '100%',
         height: '50%',
     },
-    getDirections: {
-      color: "#FFFF00",
-    }
 });
