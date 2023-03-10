@@ -15,21 +15,24 @@ export default function IndoorNavigation() {
   const indoor_status = useSelector((state) => state.indoor_locations.status);
   const indoor_error = useSelector((state) => state.indoor_locations.error);
 
-  const currenBuildingToNavigateTo = useSelector(
-    (state) => state.current_building_to_indoor_navigate
+  const selected_building_to_indoor_navigate = useSelector(
+    (state) => state.selected_building_to_indoor_navigate
   );
 
   // useEffect(() => {
   //   console.log(
-  //     "use selector for current building" + currenBuildingToNavigateTo
+  //     "use selector for current building" + selected_building_to_indoor_navigate
   //   );
-  // }, [currenBuildingToNavigateTo]);
+  // }, [selected_building_to_indoor_navigate]);
   useEffect(() => {
     dispatch(getBuildings());
-    if (currenBuildingToNavigateTo && currenBuildingToNavigateTo.id) {
-      dispatch(getIndoorLocationsById(currenBuildingToNavigateTo.id));
+    if (
+      selected_building_to_indoor_navigate &&
+      selected_building_to_indoor_navigate.id
+    ) {
+      dispatch(getIndoorLocationsById(selected_building_to_indoor_navigate.id));
     }
-  }, [dispatch, currenBuildingToNavigateTo]);
+  }, [dispatch, selected_building_to_indoor_navigate]);
 
   const data = buildings.map((building) => ({
     title: building.buildingName,

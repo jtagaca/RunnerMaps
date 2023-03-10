@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getBuildings } from "./actions/Building_Locations";
 import { getIndoorLocationsById } from "./actions/Indoor_Locations";
+
 const closestLocationsSlice = createSlice({
   name: "closestLocations",
   initialState: [],
@@ -34,7 +35,7 @@ const indoor_locations_slice = createSlice({
   },
 });
 
-const building_slice = createSlice({
+const buildings_slice = createSlice({
   name: "buildings",
   initialState: {
     data: [],
@@ -68,8 +69,8 @@ const currentLocationSlice = createSlice({
   },
 });
 
-const current_building_to_indoor_navigate_slice = createSlice({
-  name: "currentIndoorNavigationBuilding",
+const selected_building_to_indoor_navigate_slice = createSlice({
+  name: "selected_building_to_indoor_navigate",
   initialState: {
     id: null,
     title: null,
@@ -84,14 +85,14 @@ const current_building_to_indoor_navigate_slice = createSlice({
 
 export const { setClosestLocations } = closestLocationsSlice.actions;
 export const { setCurrentLocation } = currentLocationSlice.actions;
-
 export const { setCurrentIndoorNavigationBuilding } =
-  current_building_to_indoor_navigate_slice.actions;
+  selected_building_to_indoor_navigate_slice.actions;
+
 export default {
   closestLocations: closestLocationsSlice.reducer,
   indoor_locations: indoor_locations_slice.reducer,
-  buildings: building_slice.reducer,
+  buildings: buildings_slice.reducer,
   currentLocation: currentLocationSlice.reducer,
-  current_building_to_indoor_navigate_slice:
-    current_building_to_indoor_navigate_slice.reducer,
+  selected_building_to_indoor_navigate:
+    selected_building_to_indoor_navigate_slice.reducer,
 };

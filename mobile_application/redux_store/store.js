@@ -7,8 +7,8 @@ const store = configureStore({
     indoor_locations: reducers.indoor_locations,
     buildings: reducers.buildings,
     currentLocations: reducers.currentLocation,
-    current_building_to_indoor_navigate:
-      reducers.current_building_to_indoor_navigate_slice,
+    selected_building_to_indoor_navigate:
+      reducers.selected_building_to_indoor_navigate,
   },
 });
 
