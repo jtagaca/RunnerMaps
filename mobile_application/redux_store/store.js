@@ -5,7 +5,7 @@ const store = configureStore({
   reducer: {
     closestLocations: reducers.closestLocations,
     indoor_locations: reducers.indoor_locations,
-    buildingLocations: reducers.buildingLocations,
+    buildings: reducers.buildings,
     currentLocations: reducers.currentLocation,
     current_building_to_indoor_navigate:
       reducers.current_building_to_indoor_navigate_slice,

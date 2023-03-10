@@ -1,22 +1,15 @@
-import { StyleSheet, Text, View } from "react-native";
-import AntDesign from "react-native-vector-icons/AntDesign";
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchBuildings } from "../redux_store/actions/Building_Locations";
+import { getBuildings } from "../redux_store/actions/Building_Locations";
 import { getIndoorLocationsById } from "../redux_store/actions/Indoor_Locations";
 import tw from "../tailwind/CustomTailwind";
 import { CustomDropdown } from "../utilities/Indoor_Navigation/Components/CustomDropdown";
 
-import axios from "axios";
-import qs from "qs";
 export default function IndoorNavigation() {
-  const custom_style = tw`text-center text-white border-solid border-2 border-sky-500 text-black  `;
   const dispatch = useDispatch();
-  const buildingLocations = useSelector(
-    (state) => state.buildingLocations.data
-  );
-  const status = useSelector((state) => state.buildingLocations.status);
-  const error = useSelector((state) => state.buildingLocations.error);
+  const buildings = useSelector((state) => state.buildings.data);
+  const status = useSelector((state) => state.buildings.status);
+  const error = useSelector((state) => state.buildings.error);
 
   const indoor_locations = useSelector((state) => state.indoor_locations.data);
   const indoor_status = useSelector((state) => state.indoor_locations.status);
@@ -32,13 +25,13 @@ export default function IndoorNavigation() {
   //   );
   // }, [currenBuildingToNavigateTo]);
   useEffect(() => {
-    dispatch(fetchBuildings());
+    dispatch(getBuildings());
     if (currenBuildingToNavigateTo && currenBuildingToNavigateTo.id) {
       dispatch(getIndoorLocationsById(currenBuildingToNavigateTo.id));
     }
   }, [dispatch, currenBuildingToNavigateTo]);
 
-  const data = buildingLocations.map((building) => ({
+  const data = buildings.map((building) => ({
     title: building.buildingName,
     id: building.buildingID.toString(),
   }));

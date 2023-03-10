@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { fetchBuildings } from "./actions/Building_Locations";
+import { getBuildings } from "./actions/Building_Locations";
 import { getIndoorLocationsById } from "./actions/Indoor_Locations";
 const closestLocationsSlice = createSlice({
   name: "closestLocations",
@@ -34,7 +34,7 @@ const indoor_locations_slice = createSlice({
   },
 });
 
-const buildingLocationsSlice = createSlice({
+const building_slice = createSlice({
   name: "buildings",
   initialState: {
     data: [],
@@ -44,14 +44,14 @@ const buildingLocationsSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchBuildings.pending, (state) => {
+      .addCase(getBuildings.pending, (state) => {
         state.status = "loading";
       })
-      .addCase(fetchBuildings.fulfilled, (state, action) => {
+      .addCase(getBuildings.fulfilled, (state, action) => {
         state.status = "succeeded";
         state.data = action.payload;
       })
-      .addCase(fetchBuildings.rejected, (state, action) => {
+      .addCase(getBuildings.rejected, (state, action) => {
         state.status = "failed";
         state.error = action.error.message;
       });
@@ -90,7 +90,7 @@ export const { setCurrentIndoorNavigationBuilding } =
 export default {
   closestLocations: closestLocationsSlice.reducer,
   indoor_locations: indoor_locations_slice.reducer,
-  buildingLocations: buildingLocationsSlice.reducer,
+  buildings: building_slice.reducer,
   currentLocation: currentLocationSlice.reducer,
   current_building_to_indoor_navigate_slice:
     current_building_to_indoor_navigate_slice.reducer,
