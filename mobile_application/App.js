@@ -9,6 +9,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import IndoorNavigationScreen from "./screens/Indoor_Navigation";
 import OutdoorNavigationScreen from "./screens/Outdoor_Navigation";
 import Icon from "react-native-vector-icons/FontAwesome";
+import TestScreen from "./test";
 
 const Tab = createBottomTabNavigator();
 
@@ -31,6 +32,15 @@ export default function App() {
               <Tab.Screen
                 name="Outdoor Navigation"
                 component={OutdoorNavigationScreen}
+                options={{
+                  tabBarIcon: ({ color, size }) => (
+                    <Icon name="compass" color={color} size={size} />
+                  ),
+                }}
+              />
+              <Tab.Screen
+                name="Test Screen Redux"
+                component={TestScreen}
                 options={{
                   tabBarIcon: ({ color, size }) => (
                     <Icon name="compass" color={color} size={size} />
