@@ -4,6 +4,8 @@ import tw from "../tailwind/CustomTailwind";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBuildings } from "../redux_store/actions/Building_Locations";
+import { fetchTargetLocations } from "../redux_store/actions/Indoor_Locations";
+
 import axios from "axios";
 import qs from "qs";
 export default function IndoorNavigation() {
@@ -15,30 +17,16 @@ export default function IndoorNavigation() {
   const status = useSelector((state) => state.buildingLocations.status);
   const error = useSelector((state) => state.buildingLocations.error);
 
+  const indoor_locations = useSelector((state) => state.targetLocations.data);
+  const indoor_status = useSelector((state) => state.targetLocations.status);
+  const indoor_error = useSelector((state) => state.targetLocations.error);
+
   useEffect(() => {
     dispatch(fetchBuildings());
     console.log("Locations" + buildingLocations);
+    dispatch(fetchTargetLocations(1));
   }, [dispatch]);
 
-  useEffect(() => {
-    async function getBuildingLocations() {
-      const obj = { get_list_of_buildings: true };
-      await axios({
-        method: "post",
-        url: "https://www.cs.csub.edu/~runnermaps/backend/index.php",
-        data: qs.stringify(obj),
-        dataType: "JSON",
-        withCredentials: true,
-      })
-        .then((response) => {
-          console.log("buildings from function", response.data);
-        })
-        .catch((error) => {
-          console.log("error from function", error);
-        });
-    }
-    getBuildingLocations();
-  }, []);
   if (status === "loading") {
     return (
       <View>

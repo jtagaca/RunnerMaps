@@ -7,7 +7,7 @@ import { setCurrentLocation } from "./redux_store/reducers";
 
 export default function Test() {
   const dispatch = useDispatch();
-  const currentLocation = useSelector((state) => state.currentLocation);
+  const currentLocation = useSelector((state) => state.currentLocations);
 
   const handleGetCurrentLocation = async () => {
     try {

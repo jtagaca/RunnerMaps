@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { fetchBuildings } from "./actions/Building_Locations";
+import { fetchTargetLocations } from "./actions/Indoor_Locations";
 const closestLocationsSlice = createSlice({
   name: "closestLocations",
   initialState: [],
@@ -12,11 +13,24 @@ const closestLocationsSlice = createSlice({
 
 const targetLocationsSlice = createSlice({
   name: "targetLocations",
-  initialState: [],
-  reducers: {
-    setTargetLocations: (state, action) => {
-      return action.payload;
-    },
+  initialState: {
+    data: [],
+    status: "idle",
+    error: null,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(fetchTargetLocations.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(fetchTargetLocations.fulfilled, (state, action) => {
+        state.status = "fulfilled";
+        state.data = action.payload;
+      })
+      .addCase(fetchTargetLocations.rejected, (state, action) => {
+        state.status = "rejected";
+      });
   },
 });
 
@@ -55,7 +69,6 @@ const currentLocationSlice = createSlice({
 });
 
 export const { setClosestLocations } = closestLocationsSlice.actions;
-export const { setTargetLocations } = targetLocationsSlice.actions;
 export const { setCurrentLocation } = currentLocationSlice.actions;
 
 export default {
