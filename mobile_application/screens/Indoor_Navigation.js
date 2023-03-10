@@ -1,10 +1,11 @@
-import { View, Text } from "react-native";
-import React from "react";
-import tw from "../tailwind/CustomTailwind";
-import { useEffect } from "react";
+import { StyleSheet, Text, View } from "react-native";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchBuildings } from "../redux_store/actions/Building_Locations";
 import { fetchTargetLocations } from "../redux_store/actions/Indoor_Locations";
+import tw from "../tailwind/CustomTailwind";
+import { CustomDropdown } from "../utilities/Indoor_Navigation/Components/CustomDropdown";
 
 import axios from "axios";
 import qs from "qs";
@@ -42,12 +43,14 @@ export default function IndoorNavigation() {
       </View>
     );
   }
+
+  const data = buildingLocations.map((building) => ({
+    title: building.buildingName,
+    id: building.buildingID.toString(),
+  }));
   return (
-    <View>
-      {buildingLocations &&
-        buildingLocations.map((building) => (
-          <Text key={building.buildingID}>{building.buildingName}</Text>
-        ))}
-    </View>
+    <>
+      <CustomDropdown data={data} />
+    </>
   );
 }
