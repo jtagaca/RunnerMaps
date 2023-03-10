@@ -38,7 +38,7 @@ export default function App() {
                   ),
                 }}
               />
-              <Tab.Screen
+              {/* <Tab.Screen
                 name="Test Screen Redux"
                 component={TestScreen}
                 options={{
@@ -46,7 +46,7 @@ export default function App() {
                     <Icon name="compass" color={color} size={size} />
                   ),
                 }}
-              />
+              /> */}
             </Tab.Navigator>
           </NavigationContainer>
         </Provider>
