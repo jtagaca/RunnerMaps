@@ -22,35 +22,37 @@ export default function IndoorNavigation() {
   const indoor_status = useSelector((state) => state.targetLocations.status);
   const indoor_error = useSelector((state) => state.targetLocations.error);
 
+  const currenBuildingToNavigateTo = useSelector(
+    (state) => state.current_building_to_indoor_navigate
+  );
+
+  // useEffect(() => {
+  //   console.log(
+  //     "use selector for current building" + currenBuildingToNavigateTo
+  //   );
+  // }, [currenBuildingToNavigateTo]);
   useEffect(() => {
     dispatch(fetchBuildings());
-    console.log("Locations" + buildingLocations);
-    dispatch(fetchTargetLocations(1));
-  }, [dispatch]);
-
-  if (status === "loading") {
-    return (
-      <View>
-        <Text>Loading...</Text>
-      </View>
-    );
-  }
-
-  if (status === "failed") {
-    return (
-      <View>
-        <Text>{error}</Text>
-      </View>
-    );
-  }
+    if (currenBuildingToNavigateTo && currenBuildingToNavigateTo.id) {
+      dispatch(fetchTargetLocations(currenBuildingToNavigateTo.id));
+    }
+  }, [dispatch, currenBuildingToNavigateTo]);
 
   const data = buildingLocations.map((building) => ({
     title: building.buildingName,
     id: building.buildingID.toString(),
   }));
+
+  const indoor_locations_data = indoor_locations.map((location) => ({
+    title: location.name + " " + location.locationID,
+    id: location.locationID.toString(),
+  }));
   return (
     <>
-      <CustomDropdown data={data} />
+      {data != null ? <CustomDropdown data={data} /> : null}
+      {indoor_status == "fulfilled" ? (
+        <CustomDropdown data={indoor_locations_data} />
+      ) : null}
     </>
   );
 }

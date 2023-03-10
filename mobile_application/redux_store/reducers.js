@@ -68,12 +68,30 @@ const currentLocationSlice = createSlice({
   },
 });
 
+const current_building_to_indoor_navigate_slice = createSlice({
+  name: "currentIndoorNavigationBuilding",
+  initialState: {
+    id: null,
+    title: null,
+  },
+  reducers: {
+    setCurrentIndoorNavigationBuilding: (state, action) => {
+      state.id = action.payload.id;
+      state.title = action.payload.title;
+    },
+  },
+});
+
 export const { setClosestLocations } = closestLocationsSlice.actions;
 export const { setCurrentLocation } = currentLocationSlice.actions;
 
+export const { setCurrentIndoorNavigationBuilding } =
+  current_building_to_indoor_navigate_slice.actions;
 export default {
   closestLocations: closestLocationsSlice.reducer,
   targetLocations: targetLocationsSlice.reducer,
   buildingLocations: buildingLocationsSlice.reducer,
   currentLocation: currentLocationSlice.reducer,
+  current_building_to_indoor_navigate_slice:
+    current_building_to_indoor_navigate_slice.reducer,
 };
