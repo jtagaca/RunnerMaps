@@ -102,7 +102,7 @@ function getDirections(tempNodes) {
 
 // try to get a return first
 
-const solveTheGrid = () => {
+const solveTheGrid = (grid, initializedPosition) => {
   // make a deep copy of the grid
   // let deep_clone_grid = cloneDeep(grid);
   // setPreviousGrid(deep_clone_grid);
@@ -196,3 +196,5 @@ const solveTheGrid = () => {
     }, 1 * (row + listOfAllNodes.length));
   }
 };
+
+export { solveTheGrid };

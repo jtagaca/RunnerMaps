@@ -11,6 +11,8 @@ import {
 import SegmentedControlTab from "react-native-segmented-control-tab";
 
 import Screen_Functions from "../utilities/Indoor_Navigation/Library/Screen_Functions";
+import { solveTheGrid } from "../utilities/Indoor_Navigation/Library/Algorithm_Functions";
+
 import {
   Button,
   Alert,
@@ -108,6 +110,60 @@ export default function IndoorNavigation() {
     return;
   };
 
+  const handleStartNavigationConfirmed = () => {
+    let gridStartRowLength =
+      indoor_locations_map[
+        String(indoor_navigation_properties.start_location_id)
+      ].gridRowLength;
+    let gridStartColumnLength =
+      indoor_locations_map[
+        String(indoor_navigation_properties.start_location_id)
+      ].gridColumnLength;
+    let start_location_row_index =
+      indoor_locations_map[
+        String(indoor_navigation_properties.start_location_id)
+      ].row;
+    let start_location_column_index =
+      indoor_locations_map[
+        String(indoor_navigation_properties.start_location_id)
+      ].col;
+
+    debugger;
+    if (isStartAndDestinationOnDifferentFloors == false) {
+      let destination_location_row_index =
+        indoor_locations_map[
+          String(indoor_navigation_properties.destination_location_id)
+        ].row;
+      let destination_location_column_index =
+        indoor_locations_map[
+          String(indoor_navigation_properties.destination_location_id)
+        ].col;
+
+      let initializedPosition = {
+        startRowIndex: start_location_row_index,
+        startColIndex: start_location_column_index,
+        endRowIndex: destination_location_row_index,
+        endColIndex: destination_location_column_index,
+      };
+      let grid;
+      for (let i = 0; i < gridStartRowLength; i++) {
+        grid[i] = [];
+        for (let j = 0; j < gridStartColumnLength; j++) {
+          grid[i][j] = 0;
+        }
+      }
+    }
+    if (isStartAndDestinationOnDifferentFloors == true) {
+      let gridDestinationRowLength =
+        indoor_locations_map[
+          String(indoor_navigation_properties.destination_location_id)
+        ].gridRowLength;
+      let gridDestinationColumnLength =
+        indoor_locations_map[
+          String(indoor_navigation_properties.destination_location_id)
+        ].gridColumnLength;
+    }
+  };
   return (
     <>
       <ScrollView
@@ -153,7 +209,7 @@ export default function IndoorNavigation() {
               <Pressable
                 style={[styles.button, styles.buttonClose]}
                 onPress={() => {
-                  setModalVisible(!modalVisible);
+                  handleStartNavigationConfirmed();
                 }}
               >
                 <Text style={styles.textStyle}>Start</Text>
