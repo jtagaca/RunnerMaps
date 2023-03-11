@@ -37,5 +37,43 @@ if (isset($_POST['get_list_of_indoor_locations_by_building_id'])) {
     }
 
     echo json_encode($list_of_buildings);
+} else if (isset($_POST['get_walls_by_floor_id'])) {
+    $connection = get_connection();
+
+    $floor_id_for_walls = intval($_POST['floor_id_for_walls']);
+    $query = "SELECT * FROM walls WHERE floorID = ?";
+
+    $statement = mysqli_prepare($connection, $query);
+
+    mysqli_stmt_bind_param($statement, 'i', $floor_id_for_walls);
+    mysqli_stmt_execute($statement);
+
+    $list_of_walls = array();
+    $result = mysqli_stmt_get_result($statement);
+    while ($row = mysqli_fetch_assoc($result)) {
+        $list_of_walls[] = $row;
+    }
+
+    echo json_encode($list_of_walls);
+} else if (isset($_POST['get_markers_by_floor_id'])) {
+    $connection = get_connection();
+
+    $floor_id_for_markers = intval($_POST['floor_id_for_markers']);
+    $query = "SELECT * FROM markers WHERE floorID = ?";
+
+    $statement = mysqli_prepare($connection, $query);
+
+    mysqli_stmt_bind_param($statement, 'i', $floor_id_for_markers);
+    mysqli_stmt_execute($statement);
+
+    $list_of_markers = array();
+    $result = mysqli_stmt_get_result($statement);
+    while ($row = mysqli_fetch_assoc($result)) {
+        $list_of_markers[] = $row;
+    }
+
+    echo json_encode($list_of_markers);
 }
+
+
 ?>
