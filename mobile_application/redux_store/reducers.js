@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { getBuildings } from "./actions/Building_Locations";
 import { getIndoorLocationsById } from "./actions/Indoor_Locations";
 
+// to be edited
 const closestLocationsSlice = createSlice({
   name: "closestLocations",
   initialState: [],
@@ -59,16 +60,6 @@ const buildings_slice = createSlice({
   },
 });
 
-const currentLocationSlice = createSlice({
-  name: "currentLocation",
-  initialState: null,
-  reducers: {
-    setCurrentLocation: (state, action) => {
-      return action.payload;
-    },
-  },
-});
-
 const selected_building_to_indoor_navigate_slice = createSlice({
   name: "selected_building_to_indoor_navigate",
   initialState: {
@@ -79,6 +70,17 @@ const selected_building_to_indoor_navigate_slice = createSlice({
     setCurrentIndoorNavigationBuilding: (state, action) => {
       state.id = action.payload.id;
       state.title = action.payload.title;
+    },
+  },
+});
+
+// to be edited
+const currentLocationSlice = createSlice({
+  name: "currentLocation",
+  initialState: null,
+  reducers: {
+    setCurrentLocation: (state, action) => {
+      return action.payload;
     },
   },
 });
