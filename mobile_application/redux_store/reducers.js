@@ -82,6 +82,7 @@ const indoor_navigation_properties_slice = createSlice({
     start_location_id: null,
     destination_location: null,
     destination_location_id: null,
+    chosen_method_to_navigate_between_floors: null,
   },
   reducers: {
     setSelectedBuildingToIndoorNavigate: (state, action) => {
@@ -95,6 +96,12 @@ const indoor_navigation_properties_slice = createSlice({
     setSelectedDestinationLocationToIndoorNavigate: (state, action) => {
       state.destination_location = action.payload.title;
       state.destination_location_id = action.payload.id;
+    },
+    setChosenMethodToNavigateBetweenFloors: (state, action) => {
+      state.chosen_method_to_navigate_between_floors = action.payload;
+    },
+    deleteChooserMethodToNavigateBetweenFloors: (state) => {
+      state.chosen_method_to_navigate_between_floors = null;
     },
   },
 });

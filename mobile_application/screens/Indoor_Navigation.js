@@ -4,7 +4,10 @@ import { getBuildings } from "../redux_store/actions/Building_Locations";
 import { getIndoorLocationsById } from "../redux_store/actions/Indoor_Locations";
 import tw from "../tailwind/CustomTailwind";
 import { CustomDropdown } from "../utilities/Indoor_Navigation/Components/Custom_Dropdown";
-import { indoor_locations_actions } from "../redux_store/reducers";
+import {
+  indoor_locations_actions,
+  indoor_navigation_properties_actions,
+} from "../redux_store/reducers";
 import SegmentedControlTab from "react-native-segmented-control-tab";
 
 import Screen_Functions from "../utilities/Indoor_Navigation/Library/Screen_Functions";
@@ -78,11 +81,17 @@ export default function IndoorNavigation() {
     title: location.name + " " + location.locationID,
     id: location.locationID.toString(),
   }));
-
+  const ways_to_navigate_between_floors = ["Elevator", "Stairs"];
+  const empty_query_result = "Please select a building to populate.";
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleIndexChange = (index) => {
     setSelectedIndex(index);
+    dispatch(
+      indoor_navigation_properties_actions.setChosenMethodToNavigateBetweenFloors(
+        ways_to_navigate_between_floors[index]
+      )
+    );
   };
   const handleStartNavigation = () => {
     setModalVisible(true);
@@ -99,8 +108,6 @@ export default function IndoorNavigation() {
     return;
   };
 
-  const ways_to_navigate_between_floors = ["Elevator", "Stairs"];
-  const empty_query_result = "Please select a building to populate.";
   return (
     <>
       <ScrollView
