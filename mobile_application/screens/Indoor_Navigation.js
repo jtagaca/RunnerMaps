@@ -110,6 +110,7 @@ export default function IndoorNavigation() {
     return;
   };
 
+  // const getWalls and markers
   const handleStartNavigationConfirmed = () => {
     let gridStartRowLength =
       indoor_locations_map[
