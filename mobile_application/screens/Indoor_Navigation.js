@@ -6,6 +6,7 @@ import tw from "../tailwind/CustomTailwind";
 import { CustomDropdown } from "../utilities/Indoor_Navigation/Components/Custom_Dropdown";
 import { indoor_navigation_properties_actions } from "../redux_store/reducers";
 import { indoor_locations_actions } from "../redux_store/reducers";
+import SegmentedControlTab from "react-native-segmented-control-tab";
 
 import {
   Button,
@@ -15,10 +16,15 @@ import {
   Text,
   Pressable,
   View,
+  ScrollView,
 } from "react-native";
 
 export default function IndoorNavigation() {
   const [modalVisible, setModalVisible] = useState(false);
+  const [
+    isStartAndDestinationOnDifferentFloors,
+    setIsStartAndDestinationOnDifferentFloors,
+  ] = useState(false);
   const dispatch = useDispatch();
   const buildings = useSelector((state) => state.buildings.data);
   const status = useSelector((state) => state.buildings.status);
@@ -28,7 +34,7 @@ export default function IndoorNavigation() {
   const indoor_locations_map = useSelector(
     (state) => state.indoor_locations.map
   );
-
+  let is_start_and_destination_location_different_floors = false;
   const indoor_status = useSelector((state) => state.indoor_locations.status);
   const indoor_error = useSelector((state) => state.indoor_locations.error);
 
@@ -89,14 +95,18 @@ export default function IndoorNavigation() {
     );
   };
   const handleStartNavigation = () => {
+    setModalVisible(true);
     if (
       indoor_locations_map[
         String(indoor_navigation_properties.start_location_id)
-      ] !=
+      ].floorID !=
       indoor_locations_map[
         String(indoor_navigation_properties.destination_location_id)
-      ]
-    );
+      ].floorID
+    ) {
+      setIsStartAndDestinationOnDifferentFloors(true);
+    }
+    return;
   };
   const handleClearIndoorNavigationProperties = (type) => {
     if (type) {
@@ -122,60 +132,102 @@ export default function IndoorNavigation() {
     }
   };
 
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const handleIndexChange = (index) => {
+    setSelectedIndex(index);
+  };
+
   const empty_query_result = "Please select a building to populate.";
   return (
     <>
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          setModalVisible(!modalVisible);
-        }}
+      <ScrollView
+        style={styles.container}
+        contentContainerStyle={{ flex: 1, padding: 24 }}
+        keyboardShouldPersistTaps="handled"
       >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World!</Text>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
-      <Text>Building Selected:</Text>
-      {data.length > 0 ? (
-        <CustomDropdown
-          data={data}
-          handleSelection={handleSelectionBuilding}
-          handleClear={handleClearIndoorNavigationProperties}
-          type={"building"}
-        />
-      ) : null}
-      <Text>Start Location:</Text>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              {isStartAndDestinationOnDifferentFloors == true ? (
+                <>
+                  <Text>
+                    Your start location and destination location are on
+                    different floors{" "}
+                  </Text>
+                  <Text>Choose your preferred method</Text>
+                  <SegmentedControlTab
+                    values={["Elevator", "Stairs"]}
+                    selectedIndex={selectedIndex}
+                    onTabPress={handleIndexChange}
+                  />
+                </>
+              ) : null}
 
-      <CustomDropdown
-        data={indoor_locations_data}
-        handleSelection={handleSelectionStartLocation}
-        handleClear={handleClearIndoorNavigationProperties}
-        type={"start_location"}
-        empty_query_result={empty_query_result}
-      />
-      <Text>Destination Location:</Text>
-      <CustomDropdown
-        data={indoor_locations_data}
-        handleSelection={handleSelectionDestinationLocation}
-        handleClear={handleClearIndoorNavigationProperties}
-        type={"destination_location"}
-        empty_query_result={empty_query_result}
-      />
-      <Button
-        title="Start Navigation"
-        onPress={() => setModalVisible(true)}
-      ></Button>
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                }}
+              >
+                <Text style={styles.textStyle}>Cancel</Text>
+              </Pressable>
+
+              <Pressable
+                style={[styles.button, styles.buttonClose]}
+                onPress={() => {
+                  setModalVisible(!modalVisible);
+                }}
+              >
+                <Text style={styles.textStyle}>Start</Text>
+              </Pressable>
+            </View>
+          </View>
+        </Modal>
+        <Text>Building Selected:</Text>
+        {data.length > 0 ? (
+          <CustomDropdown
+            data={data}
+            handleSelection={handleSelectionBuilding}
+            handleClear={handleClearIndoorNavigationProperties}
+            type={"building"}
+          />
+        ) : null}
+        <Text>Start Location:</Text>
+
+        <CustomDropdown
+          data={indoor_locations_data}
+          handleSelection={handleSelectionStartLocation}
+          handleClear={handleClearIndoorNavigationProperties}
+          type={"start_location"}
+          empty_query_result={empty_query_result}
+        />
+        <Text>Destination Location:</Text>
+        <CustomDropdown
+          data={indoor_locations_data}
+          handleSelection={handleSelectionDestinationLocation}
+          handleClear={handleClearIndoorNavigationProperties}
+          type={"destination_location"}
+          empty_query_result={empty_query_result}
+        />
+
+        <Button
+          disabled={
+            indoor_navigation_properties.start_location_id == null ||
+            indoor_navigation_properties.destination_location_id == null
+          }
+          title="Start Navigation"
+          onPress={handleStartNavigation}
+        ></Button>
+      </ScrollView>
     </>
   );
 }
