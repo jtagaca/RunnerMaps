@@ -4,10 +4,10 @@ import { getBuildings } from "../redux_store/actions/Building_Locations";
 import { getIndoorLocationsById } from "../redux_store/actions/Indoor_Locations";
 import tw from "../tailwind/CustomTailwind";
 import { CustomDropdown } from "../utilities/Indoor_Navigation/Components/Custom_Dropdown";
-import { indoor_navigation_properties_actions } from "../redux_store/reducers";
 import { indoor_locations_actions } from "../redux_store/reducers";
 import SegmentedControlTab from "react-native-segmented-control-tab";
 
+import Screen_Functions from "../utilities/Indoor_Navigation/Library/Screen_Functions";
 import {
   Button,
   Alert,
@@ -26,6 +26,13 @@ export default function IndoorNavigation() {
     setIsStartAndDestinationOnDifferentFloors,
   ] = useState(false);
   const dispatch = useDispatch();
+
+  const {
+    handleSelectionBuilding,
+    handleSelectionStartLocation,
+    handleSelectionDestinationLocation,
+    handleClearIndoorNavigationProperties,
+  } = Screen_Functions();
   const buildings = useSelector((state) => state.buildings.data);
   const status = useSelector((state) => state.buildings.status);
   const error = useSelector((state) => state.buildings.error);
@@ -34,7 +41,6 @@ export default function IndoorNavigation() {
   const indoor_locations_map = useSelector(
     (state) => state.indoor_locations.map
   );
-  let is_start_and_destination_location_different_floors = false;
   const indoor_status = useSelector((state) => state.indoor_locations.status);
   const indoor_error = useSelector((state) => state.indoor_locations.error);
 
@@ -73,26 +79,10 @@ export default function IndoorNavigation() {
     id: location.locationID.toString(),
   }));
 
-  const handleSelectionBuilding = (building) => {
-    dispatch(
-      indoor_navigation_properties_actions.setSelectedBuildingToIndoorNavigate(
-        building
-      )
-    );
-  };
-  const handleSelectionStartLocation = (start_location) => {
-    dispatch(
-      indoor_navigation_properties_actions.setSelectedStartLocationToIndoorNavigate(
-        start_location
-      )
-    );
-  };
-  const handleSelectionDestinationLocation = (destination_location) => {
-    dispatch(
-      indoor_navigation_properties_actions.setSelectedDestinationLocationToIndoorNavigate(
-        destination_location
-      )
-    );
+  const [selectedIndex, setSelectedIndex] = useState(0);
+
+  const handleIndexChange = (index) => {
+    setSelectedIndex(index);
   };
   const handleStartNavigation = () => {
     setModalVisible(true);
@@ -108,36 +98,8 @@ export default function IndoorNavigation() {
     }
     return;
   };
-  const handleClearIndoorNavigationProperties = (type) => {
-    if (type) {
-      if (type == "building") {
-        dispatch(
-          indoor_navigation_properties_actions.setSelectedBuildingToIndoorNavigate(
-            { id: null, title: null }
-          )
-        );
-      } else if (type == "start_location") {
-        dispatch(
-          indoor_navigation_properties_actions.setSelectedStartLocationToIndoorNavigate(
-            { id: null, title: null }
-          )
-        );
-      } else if (type == "destination_location") {
-        dispatch(
-          indoor_navigation_properties_actions.setSelectedDestinationLocationToIndoorNavigate(
-            { id: null, title: null }
-          )
-        );
-      }
-    }
-  };
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
-
-  const handleIndexChange = (index) => {
-    setSelectedIndex(index);
-  };
-
+  const ways_to_navigate_between_floors = ["Elevator", "Stairs"];
   const empty_query_result = "Please select a building to populate.";
   return (
     <>
@@ -165,7 +127,7 @@ export default function IndoorNavigation() {
                   </Text>
                   <Text>Choose your preferred method</Text>
                   <SegmentedControlTab
-                    values={["Elevator", "Stairs"]}
+                    values={ways_to_navigate_between_floors}
                     selectedIndex={selectedIndex}
                     onTabPress={handleIndexChange}
                   />
