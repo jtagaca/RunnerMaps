@@ -3,7 +3,11 @@ import { useDispatch, useSelector } from "react-redux";
 import { getBuildings } from "../redux_store/actions/Building_Locations";
 import { getIndoorLocationsById } from "../redux_store/actions/Indoor_Locations";
 import tw from "../tailwind/CustomTailwind";
-import { CustomDropdown } from "../utilities/Indoor_Navigation/Components/CustomDropdown";
+import { CustomDropdown } from "../utilities/Indoor_Navigation/Components/Custom_Dropdown";
+import { indoor_navigation_properties_actions } from "../redux_store/reducers";
+import { indoor_locations_actions } from "../redux_store/reducers";
+
+import { Text, Button } from "react-native";
 
 export default function IndoorNavigation() {
   const dispatch = useDispatch();
@@ -15,24 +19,25 @@ export default function IndoorNavigation() {
   const indoor_status = useSelector((state) => state.indoor_locations.status);
   const indoor_error = useSelector((state) => state.indoor_locations.error);
 
-  const selected_building_to_indoor_navigate = useSelector(
-    (state) => state.selected_building_to_indoor_navigate
+  const indoor_navigation_properties = useSelector(
+    (state) => state.indoor_navigation_properties
   );
 
-  // useEffect(() => {
-  //   console.log(
-  //     "use selector for current building" + selected_building_to_indoor_navigate
-  //   );
-  // }, [selected_building_to_indoor_navigate]);
   useEffect(() => {
     dispatch(getBuildings());
-    if (
-      selected_building_to_indoor_navigate &&
-      selected_building_to_indoor_navigate.id
-    ) {
-      dispatch(getIndoorLocationsById(selected_building_to_indoor_navigate.id));
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (indoor_navigation_properties) {
+      if (indoor_navigation_properties.building_id != null) {
+        dispatch(
+          getIndoorLocationsById(indoor_navigation_properties.building_id)
+        );
+        return;
+      }
+      dispatch(indoor_locations_actions.clearIndoorLocationData());
     }
-  }, [dispatch, selected_building_to_indoor_navigate]);
+  }, [indoor_navigation_properties]);
 
   const data = buildings.map((building) => ({
     title: building.buildingName,
@@ -43,12 +48,78 @@ export default function IndoorNavigation() {
     title: location.name + " " + location.locationID,
     id: location.locationID.toString(),
   }));
+
+  const handleSelectionBuilding = (building) => {
+    dispatch(
+      indoor_navigation_properties_actions.setSelectedBuildingToIndoorNavigate(
+        building
+      )
+    );
+  };
+  const handleSelectionStartLocation = (start_location) => {
+    dispatch(
+      indoor_navigation_properties_actions.setSelectedStartLocationToIndoorNavigate(
+        start_location
+      )
+    );
+  };
+  const handleSelectionDestinationLocation = (destination_location) => {
+    dispatch(
+      indoor_navigation_properties_actions.setSelectedDestinationLocationToIndoorNavigate(
+        destination_location
+      )
+    );
+  };
+  const handleClearIndoorNavigationProperties = (type) => {
+    if (type) {
+      if (type == "building") {
+        dispatch(
+          indoor_navigation_properties_actions.setSelectedBuildingToIndoorNavigate(
+            { id: null, title: null }
+          )
+        );
+      } else if (type == "start_location") {
+        dispatch(
+          indoor_navigation_properties_actions.setSelectedStartLocationToIndoorNavigate(
+            { id: null, title: null }
+          )
+        );
+      } else if (type == "destination_location") {
+        dispatch(
+          indoor_navigation_properties_actions.setSelectedDestinationLocationToIndoorNavigate(
+            { id: null, title: null }
+          )
+        );
+      }
+    }
+  };
+
   return (
     <>
-      {data != null ? <CustomDropdown data={data} /> : null}
-      {indoor_status == "fulfilled" ? (
-        <CustomDropdown data={indoor_locations_data} />
+      <Text>Building Selected:</Text>
+      {data.length > 0 ? (
+        <CustomDropdown
+          data={data}
+          handleSelection={handleSelectionBuilding}
+          handleClear={handleClearIndoorNavigationProperties}
+          type={"building"}
+        />
       ) : null}
+      <Text>Start Location:</Text>
+
+      <CustomDropdown
+        data={indoor_locations_data}
+        handleSelection={handleSelectionStartLocation}
+        handleClear={handleClearIndoorNavigationProperties}
+        type={"start_location"}
+      />
+      <Text>Destination Location:</Text>
+      <CustomDropdown
+        data={indoor_locations_data}
+        handleSelection={handleSelectionDestinationLocation}
+        handleClear={handleClearIndoorNavigationProperties}
+        type={"destination_location"}
+      />
     </>
   );
 }

@@ -20,7 +20,13 @@ const indoor_locations_slice = createSlice({
     status: "idle",
     error: null,
   },
-  reducers: {},
+  reducers: {
+    clearIndoorLocationData: (state) => {
+      state.data = [];
+      state.status = "idle";
+      state.error = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getIndoorLocationsById.pending, (state) => {
@@ -60,16 +66,24 @@ const buildings_slice = createSlice({
   },
 });
 
-const selected_building_to_indoor_navigate_slice = createSlice({
-  name: "selected_building_to_indoor_navigate",
+const indoor_navigation_properties_slice = createSlice({
+  name: "indoor_navigation_properties",
   initialState: {
-    id: null,
-    title: null,
+    building_id: null,
+    building_name: null,
+    start_location: null,
+    destination_location: null,
   },
   reducers: {
-    setCurrentIndoorNavigationBuilding: (state, action) => {
-      state.id = action.payload.id;
-      state.title = action.payload.title;
+    setSelectedBuildingToIndoorNavigate: (state, action) => {
+      state.building_id = action.payload.id;
+      state.building_name = action.payload.title;
+    },
+    setSelectedStartLocationToIndoorNavigate: (state, action) => {
+      state.start_location = action.payload.title;
+    },
+    setSelectedDestinationLocationToIndoorNavigate: (state, action) => {
+      state.destination_location = action.payload.title;
     },
   },
 });
@@ -87,14 +101,14 @@ const currentLocationSlice = createSlice({
 
 export const { setClosestLocations } = closestLocationsSlice.actions;
 export const { setCurrentLocation } = currentLocationSlice.actions;
-export const { setCurrentIndoorNavigationBuilding } =
-  selected_building_to_indoor_navigate_slice.actions;
+export const indoor_locations_actions = indoor_locations_slice.actions;
+export const indoor_navigation_properties_actions =
+  indoor_navigation_properties_slice.actions;
 
 export default {
   closestLocations: closestLocationsSlice.reducer,
   indoor_locations: indoor_locations_slice.reducer,
   buildings: buildings_slice.reducer,
   currentLocation: currentLocationSlice.reducer,
-  selected_building_to_indoor_navigate:
-    selected_building_to_indoor_navigate_slice.reducer,
+  indoor_navigation_properties: indoor_navigation_properties_slice.reducer,
 };
