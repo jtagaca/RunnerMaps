@@ -94,6 +94,7 @@ export default function IndoorNavigation() {
     }
   };
 
+  const empty_query_result = "Please select a building to populate.";
   return (
     <>
       <Text>Building Selected:</Text>
@@ -112,6 +113,7 @@ export default function IndoorNavigation() {
         handleSelection={handleSelectionStartLocation}
         handleClear={handleClearIndoorNavigationProperties}
         type={"start_location"}
+        empty_query_result={empty_query_result}
       />
       <Text>Destination Location:</Text>
       <CustomDropdown
@@ -119,6 +121,7 @@ export default function IndoorNavigation() {
         handleSelection={handleSelectionDestinationLocation}
         handleClear={handleClearIndoorNavigationProperties}
         type={"destination_location"}
+        empty_query_result={empty_query_result}
       />
     </>
   );

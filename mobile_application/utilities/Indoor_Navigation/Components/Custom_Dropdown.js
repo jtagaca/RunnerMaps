@@ -9,6 +9,7 @@ export const CustomDropdown = ({
   handleSelection,
   handleClear,
   type,
+  empty_query_result,
 }) => {
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -36,6 +37,7 @@ export const CustomDropdown = ({
             paddingLeft: 18,
           },
         }}
+        emptyResultText={empty_query_result}
         onClear={handleClearLocal}
         ItemSeparatorComponent={
           <View
