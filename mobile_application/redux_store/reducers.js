@@ -19,12 +19,19 @@ const indoor_locations_slice = createSlice({
     data: [],
     status: "idle",
     error: null,
+    map: {},
   },
   reducers: {
     clearIndoorLocationData: (state) => {
       state.data = [];
       state.status = "idle";
       state.error = null;
+    },
+    buildIndoorLocationLookUpMap: (state) => {
+      state.map = {};
+      state.data.forEach((location) => {
+        state.map[location.locationID] = location;
+      });
     },
   },
   extraReducers: (builder) => {

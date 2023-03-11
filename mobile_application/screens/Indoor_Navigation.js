@@ -7,9 +7,18 @@ import { CustomDropdown } from "../utilities/Indoor_Navigation/Components/Custom
 import { indoor_navigation_properties_actions } from "../redux_store/reducers";
 import { indoor_locations_actions } from "../redux_store/reducers";
 
-import { Text, Button } from "react-native";
+import {
+  Button,
+  Alert,
+  Modal,
+  StyleSheet,
+  Text,
+  Pressable,
+  View,
+} from "react-native";
 
 export default function IndoorNavigation() {
+  const [modalVisible, setModalVisible] = useState(false);
   const dispatch = useDispatch();
   const buildings = useSelector((state) => state.buildings.data);
   const status = useSelector((state) => state.buildings.status);
@@ -39,6 +48,11 @@ export default function IndoorNavigation() {
     }
   }, [indoor_navigation_properties]);
 
+  useEffect(() => {
+    if (indoor_locations.length > 0) {
+      dispatch(indoor_locations_actions.buildIndoorLocationLookUpMap());
+    }
+  }, [indoor_locations]);
   const data = buildings.map((building) => ({
     title: building.buildingName,
     id: building.buildingID.toString(),
@@ -70,6 +84,9 @@ export default function IndoorNavigation() {
       )
     );
   };
+  // const handleStartNavigation = () => {
+  //   if(indoor_navigation_properties.start_location)
+  // };
   const handleClearIndoorNavigationProperties = (type) => {
     if (type) {
       if (type == "building") {
@@ -97,6 +114,27 @@ export default function IndoorNavigation() {
   const empty_query_result = "Please select a building to populate.";
   return (
     <>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.modalText}>Hello World!</Text>
+            <Pressable
+              style={[styles.button, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.textStyle}>Hide Modal</Text>
+            </Pressable>
+          </View>
+        </View>
+      </Modal>
       <Text>Building Selected:</Text>
       {data.length > 0 ? (
         <CustomDropdown
@@ -123,6 +161,54 @@ export default function IndoorNavigation() {
         type={"destination_location"}
         empty_query_result={empty_query_result}
       />
+      <Button
+        title="Start Navigation"
+        onPress={() => setModalVisible(true)}
+      ></Button>
     </>
   );
 }
+
+const styles = StyleSheet.create({
+  centeredView: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    marginTop: 22,
+  },
+  modalView: {
+    margin: 20,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  button: {
+    borderRadius: 20,
+    padding: 10,
+    elevation: 2,
+  },
+  buttonOpen: {
+    backgroundColor: "#F194FF",
+  },
+  buttonClose: {
+    backgroundColor: "#2196F3",
+  },
+  textStyle: {
+    color: "white",
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  modalText: {
+    marginBottom: 15,
+    textAlign: "center",
+  },
+});
