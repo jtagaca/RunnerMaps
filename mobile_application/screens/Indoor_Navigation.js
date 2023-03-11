@@ -25,6 +25,10 @@ export default function IndoorNavigation() {
   const error = useSelector((state) => state.buildings.error);
 
   const indoor_locations = useSelector((state) => state.indoor_locations.data);
+  const indoor_locations_map = useSelector(
+    (state) => state.indoor_locations.map
+  );
+
   const indoor_status = useSelector((state) => state.indoor_locations.status);
   const indoor_error = useSelector((state) => state.indoor_locations.error);
 
@@ -84,9 +88,16 @@ export default function IndoorNavigation() {
       )
     );
   };
-  // const handleStartNavigation = () => {
-  //   if(indoor_navigation_properties.start_location)
-  // };
+  const handleStartNavigation = () => {
+    if (
+      indoor_locations_map[
+        String(indoor_navigation_properties.start_location_id)
+      ] !=
+      indoor_locations_map[
+        String(indoor_navigation_properties.destination_location_id)
+      ]
+    );
+  };
   const handleClearIndoorNavigationProperties = (type) => {
     if (type) {
       if (type == "building") {

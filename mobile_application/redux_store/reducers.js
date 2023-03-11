@@ -79,7 +79,9 @@ const indoor_navigation_properties_slice = createSlice({
     building_id: null,
     building_name: null,
     start_location: null,
+    start_location_id: null,
     destination_location: null,
+    destination_location_id: null,
   },
   reducers: {
     setSelectedBuildingToIndoorNavigate: (state, action) => {
@@ -88,9 +90,11 @@ const indoor_navigation_properties_slice = createSlice({
     },
     setSelectedStartLocationToIndoorNavigate: (state, action) => {
       state.start_location = action.payload.title;
+      state.start_location_id = action.payload.id;
     },
     setSelectedDestinationLocationToIndoorNavigate: (state, action) => {
       state.destination_location = action.payload.title;
+      state.destination_location_id = action.payload.id;
     },
   },
 });
