@@ -22,9 +22,16 @@ export const CustomDropdown = ({
     handleClear(type);
     setSelectedItem(null);
   };
+  const dropdownController = useRef(null);
+
+  const searchRef = useRef(null);
   return (
     data != null && (
       <AutocompleteDropdown
+        ref={searchRef}
+        controller={(controller) => {
+          dropdownController.current = controller;
+        }}
         clearOnFocus={false}
         onSelectItem={(item) => item && handleSelectionLocal(item)}
         dataSet={data}
@@ -37,6 +44,7 @@ export const CustomDropdown = ({
             paddingLeft: 18,
           },
         }}
+        closeOnBlur={true}
         emptyResultText={empty_query_result}
         onClear={handleClearLocal}
         ItemSeparatorComponent={
