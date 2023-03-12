@@ -218,7 +218,6 @@ export default function IndoorNavigation({ navigation }) {
         }
         path.push(shortest_path[i]);
       }
-      // add the destination to the path array
       path.push({
         key: path.length - 1,
         row: destination_location_row_index,
@@ -255,6 +254,9 @@ export default function IndoorNavigation({ navigation }) {
         ].gridColumnLength;
     }
   };
+  function goToIndoorNavigationScreen() {
+    navigation.push("Indoor Navigation");
+  }
   return (
     <>
       <ScrollView
