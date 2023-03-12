@@ -1,3 +1,4 @@
+import React, { useEffect, useRef, useState } from "react";
 import {
   View,
   Text,
@@ -6,7 +7,6 @@ import {
   StyleSheet,
   Image,
 } from "react-native";
-import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import Swiper from "react-native-deck-swiper";
 import cloneDeep from "lodash/cloneDeep";
@@ -16,6 +16,7 @@ export default function Indoor_Navigation() {
   const shortest_path = useSelector(
     (state) => state.indoor_navigation_properties.shortest_path_directions
   );
+  const swiperRef = useRef(null);
 
   const carousel_data = cloneDeep(shortest_path);
 
@@ -26,19 +27,20 @@ export default function Indoor_Navigation() {
   useEffect(() => {
     console.log("carousel_data" + sorted_shortest_path);
   }, [sorted_shortest_path]);
-  // handle the back button by changing the state of the modal to false
 
-  // each rerender see if the previous index is - 2 and you are at the start then the state of the
-  // swipe left should be true
-  // disableLeftSwipe	bool	disable left swipe	false
+  const [is_left_swipe_possible, set_is_left_swipe_possible] = useState(true);
+  const [current_index_of_swiper, set_current_index_of_swiper] = useState(0);
 
-  const [is_left_swipe_possible, set_is_left_swipe_possible] =
-    React.useState(true);
   const width = Dimensions.get("window").width;
+
   return (
+    // maybe percentage of how much slides are still there
+    // as well as the current speed of the user and estimated time
+    // a button to enable auto navigation by going to the next slide if the user is at checkpoint
     <View style={styles.container}>
       <Swiper
         cards={sorted_shortest_path}
+        ref={swiperRef}
         renderCard={(card, index) => {
           return (
             <View style={styles.card}>
@@ -73,30 +75,47 @@ export default function Indoor_Navigation() {
             </View>
           );
         }}
-        // goBackToPreviousCardOnSwipeLeft={true}
-        onSwiped={(cardIndex) => {
-          console.log("card index" + cardIndex);
+        // onSwiped={(prevIndex, nextIndex) => {
+        //   debugger;
+        //   handleSwiped(prevIndex, nextIndex);
+        // }}
+        onSwipedRight={(cardIndex) => {
+          set_current_index_of_swiper(cardIndex + 1);
         }}
-        // showSecondCard={false}
+        onSwipedLeft={(cardIndex) => {
+          set_current_index_of_swiper(cardIndex - 1);
+        }}
+        onSwiped={(cardIndex) => {
+          console.log("onSwiped" + cardIndex);
+        }}
         onSwipedAll={() => {
-          console.log("onSwipedAll");
+          alert("Congratulations! You have reached your destination");
         }}
         cardIndex={0}
         backgroundColor={"#4FD0E9"}
         stackSize={3}
+        showSecondCard={false}
+        goBackToPreviousCardOnSwipeLeft={true}
+        disableLeftSwipe={current_index_of_swiper === 0 ? true : false}
       >
         <Button
           onPress={() => {
-            console.log("oulala");
+            swiperRef.current.swipeRight();
           }}
-          title="Press me"
-        >
-          You can press me
-        </Button>
+          title="Swipe Right"
+        ></Button>
+        <Button
+          onPress={() => {
+            swiperRef.current.swipeLeft();
+          }}
+          title="Swipe Left"
+          disabled={current_index_of_swiper === 0 ? true : false}
+        />
       </Swiper>
     </View>
   );
 }
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
