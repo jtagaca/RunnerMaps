@@ -99,7 +99,7 @@ export default function IndoorNavigation({ navigation }) {
     );
   };
   const handleStartNavigation = () => {
-    setModalVisible(true);
+    setModalVisible(!modalVisible);
     if (
       indoor_locations_map[
         String(indoor_navigation_properties.start_location_id)
@@ -218,6 +218,7 @@ export default function IndoorNavigation({ navigation }) {
         }
         path.push(shortest_path[i]);
       }
+      // add the destination to the path array
       path.push({
         key: path.length - 1,
         row: destination_location_row_index,
@@ -344,6 +345,10 @@ export default function IndoorNavigation({ navigation }) {
           }
           title="Start Navigation"
           onPress={handleStartNavigation}
+        ></Button>
+        <Button
+          title="Go to other page"
+          onPress={goToIndoorNavigationScreen}
         ></Button>
       </ScrollView>
     </>
