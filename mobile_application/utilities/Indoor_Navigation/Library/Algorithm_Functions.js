@@ -102,17 +102,11 @@ function getDirections(tempNodes) {
 
 // try to get a return first
 
-const solveTheGrid = (grid, initializedPosition) => {
-  // make a deep copy of the grid
-  // let deep_clone_grid = cloneDeep(grid);
-  // setPreviousGrid(deep_clone_grid);
-
+const solveTheGrid = (grid, initializedPosition, map_of_markers) => {
   const [shortPathList, listOfAllNodes, solvedGrid] = dijkstraAlgo(
     grid,
     initializedPosition
   );
-  setGrid(solvedGrid);
-  // create nodes with row and col as well as direction from the shortPathList
   let tempNodes = [];
   for (let i = 0; i < shortPathList.length; i++) {
     let [row, col] = shortPathList[i];
@@ -124,13 +118,10 @@ const solveTheGrid = (grid, initializedPosition) => {
       userDirection: "",
     });
   }
-
   let sortedNodes = tempNodes.sort((a, b) => a.key - b.key);
-  // remove the last node
   let nodes = getDirections(sortedNodes);
   nodes = nodes.sort((a, b) => a.key - b.key);
   let last_node = nodes[nodes.length - 1];
-  // check the last node and set the direction using the start node
   if (last_node.direction == "right") {
     if (last_node.col < initializedPosition.col) {
       last_node.userDirection = "left";
@@ -158,43 +149,19 @@ const solveTheGrid = (grid, initializedPosition) => {
       last_node.userDirection = "left";
     }
   }
-  for (let row = 0; row < listOfAllNodes.length; row++) {
-    setTimeout(() => {
-      const node = listOfAllNodes[row];
-      changeColor(node[0], node[1], "visual");
-    }, 1 * row);
-  }
-
-  // filter currentSelectedPredefinedMarkers with is_target_location false
-  let temp = {};
-  for (var key in currentSelectedPredefinedMarkers) {
-    if (currentSelectedPredefinedMarkers[key].is_target_location == false) {
-      temp[key] = currentSelectedPredefinedMarkers[key];
-    }
-  }
 
   for (let row = 0; row < nodes.length; row++) {
-    setTimeout(() => {
-      const node = nodes[row];
-
-      changeColor(node.row, node.col, "path");
-
-      if (row != node.length - 1) {
-        if (temp[[node.row, node.col]] != undefined) {
-          if (node.userDirection == "") {
-            node.userDirection = "keep straight";
-          }
-          document.querySelector(
-            `.node-${node.row}-${node.col}`
-          ).innerHTML = `<div class="text">${node.userDirection}</div>`;
+    const node = nodes[row];
+    debugger;
+    if (row != node.length - 1) {
+      if (map_of_markers[[node.row, node.col]] != undefined) {
+        if (node.userDirection == "") {
+          node.userDirection = "keep straight";
         }
-
-        document.querySelector(
-          `.node-${node.row}-${node.col}`
-        ).innerHTML = `<div class="text">${node.userDirection}</div>`;
       }
-    }, 1 * (row + listOfAllNodes.length));
+    }
   }
+  return nodes;
 };
 
 export { solveTheGrid };

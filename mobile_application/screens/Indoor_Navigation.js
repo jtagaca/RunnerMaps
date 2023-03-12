@@ -10,7 +10,10 @@ import {
 } from "../redux_store/reducers";
 import SegmentedControlTab from "react-native-segmented-control-tab";
 
-import Screen_Functions from "../utilities/Indoor_Navigation/Library/Screen_Functions";
+import Screen_Functions, {
+  getWallsByFloorId,
+  getMarkersByFloorId,
+} from "../utilities/Indoor_Navigation/Library/Screen_Functions";
 import { solveTheGrid } from "../utilities/Indoor_Navigation/Library/Algorithm_Functions";
 
 import {
@@ -110,35 +113,39 @@ export default function IndoorNavigation() {
     return;
   };
 
-  // const getWalls and markers
-  const handleStartNavigationConfirmed = () => {
-    let gridStartRowLength =
+  const handleStartNavigationConfirmed = async () => {
+    let gridStartRowLength = parseInt(
       indoor_locations_map[
         String(indoor_navigation_properties.start_location_id)
-      ].gridRowLength;
-    let gridStartColumnLength =
+      ].gridRowLength
+    );
+    let gridStartColumnLength = parseInt(
       indoor_locations_map[
         String(indoor_navigation_properties.start_location_id)
-      ].gridColumnLength;
-    let start_location_row_index =
+      ].gridColumnLength
+    );
+    let start_location_row_index = parseInt(
       indoor_locations_map[
         String(indoor_navigation_properties.start_location_id)
-      ].row;
-    let start_location_column_index =
+      ].row
+    );
+    let start_location_column_index = parseInt(
       indoor_locations_map[
         String(indoor_navigation_properties.start_location_id)
-      ].col;
+      ].col
+    );
 
-    debugger;
     if (isStartAndDestinationOnDifferentFloors == false) {
-      let destination_location_row_index =
+      let destination_location_row_index = parseInt(
         indoor_locations_map[
           String(indoor_navigation_properties.destination_location_id)
-        ].row;
-      let destination_location_column_index =
+        ].row
+      );
+      let destination_location_column_index = parseInt(
         indoor_locations_map[
           String(indoor_navigation_properties.destination_location_id)
-        ].col;
+        ].col
+      );
 
       let initializedPosition = {
         startRowIndex: start_location_row_index,
@@ -146,13 +153,33 @@ export default function IndoorNavigation() {
         endRowIndex: destination_location_row_index,
         endColIndex: destination_location_column_index,
       };
-      let grid;
+      let grid = [];
       for (let i = 0; i < gridStartRowLength; i++) {
         grid[i] = [];
         for (let j = 0; j < gridStartColumnLength; j++) {
-          grid[i][j] = 0;
+          grid[i][j] = -1;
         }
       }
+      const walls = await getWallsByFloorId(
+        indoor_locations_map[
+          String(indoor_navigation_properties.start_location_id)
+        ].floorID
+      );
+      let markers = await getMarkersByFloorId(
+        indoor_locations_map[
+          String(indoor_navigation_properties.start_location_id)
+        ].floorID
+      );
+      let map_of_markers = {};
+
+      for (let i = 0; i < walls.length; i++) {
+        grid[walls[i].row][walls[i].col] = "WALL";
+      }
+      for (let i = 0; i < markers.length; i++) {
+        map_of_markers[[markers[i].row, markers[i].col]] = markers[i];
+      }
+      debugger;
+      let path = solveTheGrid(grid, initializedPosition, map_of_markers);
     }
     if (isStartAndDestinationOnDifferentFloors == true) {
       let gridDestinationRowLength =

@@ -6,8 +6,8 @@ export const dijkstraAlgo = (grid, initPos) => {
   const listOfAllNodes = [];
   const tGrid = grid;
   const queue = new Queue();
-  queue.enqueue([startRowIndex, startColIndex]);
-  listOfAllNodes.push([startRowIndex, startColIndex]);
+  queue.enqueue([endRowIndex, endColIndex]);
+  listOfAllNodes.push([endRowIndex, endColIndex]);
 
   while (!queue.isEmpty()) {
     const [currentRowIdx, currentColIdx] = queue.dequeue();
@@ -110,15 +110,15 @@ export const dijkstraAlgo = (grid, initPos) => {
 };
 
 const findShortPath = (grid, initPos) => {
-  const { startRowIndex, startColIndex, endRowIndex, endColIndex } = initPos;
+  const { endRowIndex, endColIndex, startRowIndex, startColIndex } = initPos;
   const MAX_PATH_LENGTH = (grid.length - 1) * (grid[0].length - 1);
 
-  let currentRowIdx = endRowIndex,
-    currentColIdx = endColIndex;
+  let currentRowIdx = startRowIndex,
+    currentColIdx = startColIndex;
   const listOfNodes = [];
   listOfNodes.push([currentRowIdx, currentColIdx]);
   let count = 0;
-  while (currentRowIdx != startRowIndex || currentColIdx != startColIndex) {
+  while (currentRowIdx != endRowIndex || currentColIdx != endColIndex) {
     count++;
     if (count >= MAX_PATH_LENGTH) {
       break;
