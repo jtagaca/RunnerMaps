@@ -24,8 +24,8 @@ export default function Indoor_Navigation() {
   });
 
   useEffect(() => {
-    console.log("carousel_data" + carousel_data);
-  }, [carousel_data]);
+    console.log("carousel_data" + sorted_shortest_path);
+  }, [sorted_shortest_path]);
   // handle the back button by changing the state of the modal to false
 
   // each rerender see if the previous index is - 2 and you are at the start then the state of the
@@ -43,7 +43,16 @@ export default function Indoor_Navigation() {
           return (
             <View style={styles.card}>
               <Text style={styles.text}>{card.locationName}</Text>
-              <Text style={styles.text}>{card.userDirection}</Text>
+              {card.userDirection &&
+              card.userDirection != null &&
+              card.userDirection != "" ? (
+                <>
+                  {card.userDirection != "enter" ? (
+                    <Text style={styles.text}>In the Hallway</Text>
+                  ) : null}
+                  <Text style={styles.text}>{card.userDirection}</Text>
+                </>
+              ) : null}
               {card.image && card.image != null && card.image != "" ? (
                 <Image
                   source={{ uri: card.image }}
@@ -58,11 +67,11 @@ export default function Indoor_Navigation() {
             </View>
           );
         }}
-        goBackToPreviousCardOnSwipeLeft={true}
+        // goBackToPreviousCardOnSwipeLeft={true}
         onSwiped={(cardIndex) => {
           console.log("card index" + cardIndex);
         }}
-        showSecondCard={false}
+        // showSecondCard={false}
         onSwipedAll={() => {
           console.log("onSwipedAll");
         }}

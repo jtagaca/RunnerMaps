@@ -102,7 +102,13 @@ function getDirections(tempNodes) {
 
 // try to get a return first
 
-const solveTheGrid = (grid, initializedPosition, map_of_markers) => {
+const solveTheGrid = (
+  grid,
+  initializedPosition,
+  map_of_markers,
+  indoor_locations_map,
+  floor_id
+) => {
   const [shortPathList, listOfAllNodes, solvedGrid] = dijkstraAlgo(
     grid,
     initializedPosition
@@ -157,13 +163,53 @@ const solveTheGrid = (grid, initializedPosition, map_of_markers) => {
   for (let row = 0; row < nodes.length; row++) {
     const node = nodes[row];
     if (row != node.length - 1) {
+      let key = [floor_id, node.row, node.col].join(",");
       if (map_of_markers[[node.row, node.col]] != undefined) {
         if (node.userDirection == "") {
           node.userDirection = "keep straight";
         }
         node.latitude = map_of_markers[[node.row, node.col]].latitude;
         node.longitude = map_of_markers[[node.row, node.col]].longitude;
-        node.image = map_of_markers[[node.row, node.col]].image;
+      } else if (indoor_locations_map[key] != undefined) {
+        if (
+          key ==
+          [
+            floor_id,
+            initializedPosition.startRowIndex,
+            initializedPosition.startColIndex,
+          ].join(",")
+        ) {
+          continue;
+        }
+        if (
+          key ==
+          [
+            floor_id,
+            initializedPosition.endRowIndex,
+            initializedPosition.endColIndex,
+          ].join(",")
+        ) {
+          continue;
+        }
+
+        // insert a new node in this location
+        const newNode = {
+          // create a new node object here
+          key: node.key + 0.5,
+          row: node.row,
+          col: node.col,
+          direction: null,
+          userDirection: "enter",
+          latitude: indoor_locations_map[key].latitude,
+          longitude: indoor_locations_map[key].longitude,
+          image: indoor_locations_map[key].image,
+          locationName:
+            indoor_locations_map[key].name +
+            " " +
+            indoor_locations_map[key].locationID,
+        };
+        nodes.splice(row + 1, 0, newNode); // add the new node after the current node
+        row++; // skip the new node on the next iteration
       }
     }
   }

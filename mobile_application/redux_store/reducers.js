@@ -30,7 +30,8 @@ const indoor_locations_slice = createSlice({
     buildIndoorLocationLookUpMap: (state) => {
       state.map = {};
       state.data.forEach((location) => {
-        state.map[location.locationID] = location;
+        state.map[[location.floorID, location.row, location.col].join(",")] =
+          location;
       });
     },
   },

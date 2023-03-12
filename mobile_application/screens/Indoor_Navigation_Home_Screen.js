@@ -84,7 +84,7 @@ export default function IndoorNavigation({ navigation }) {
 
   const indoor_locations_data = indoor_locations.map((location) => ({
     title: location.name + " " + location.row + " " + location.col,
-    id: location.locationID.toString(),
+    id: [location.floorID, location.row, location.col].join(","),
   }));
   const ways_to_navigate_between_floors = ["Elevator", "Stairs"];
   const empty_query_result = "Please select a building to populate.";
@@ -114,6 +114,10 @@ export default function IndoorNavigation({ navigation }) {
   };
 
   const handleStartNavigationConfirmed = async () => {
+    // todo rename change the variable
+    // add a variable for this and change it indoor_locations_map[String(indoor_navigation_properties.start_location_id)]
+    //   .floorID;
+
     let gridStartRowLength = parseInt(
       indoor_locations_map[
         String(indoor_navigation_properties.start_location_id)
@@ -136,6 +140,10 @@ export default function IndoorNavigation({ navigation }) {
     );
 
     if (isStartAndDestinationOnDifferentFloors == false) {
+      let floor_id =
+        indoor_locations_map[
+          String(indoor_navigation_properties.start_location_id)
+        ].floorID;
       let destination_location_row_index = parseInt(
         indoor_locations_map[
           String(indoor_navigation_properties.destination_location_id)
@@ -201,7 +209,9 @@ export default function IndoorNavigation({ navigation }) {
       let shortest_path = solveTheGrid(
         grid,
         initializedPosition,
-        map_of_markers
+        map_of_markers,
+        indoor_locations_map,
+        floor_id
       );
       if (shortest_path.length == 0) {
         Alert.alert("No path found");
@@ -220,7 +230,7 @@ export default function IndoorNavigation({ navigation }) {
       }
       // add the destination to the path array
       path.push({
-        key: path.length - 1,
+        key: shortest_path[shortest_path.length - 1].key + 1,
         row: destination_location_row_index,
         col: destination_location_column_index,
         locationName: indoor_navigation_properties.destination_location,
