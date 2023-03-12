@@ -116,6 +116,10 @@ const solveTheGrid = (grid, initializedPosition, map_of_markers) => {
       col: col,
       direction: null,
       userDirection: "",
+      latitude: null,
+      longitude: null,
+      image: null,
+      locationName: null,
     });
   }
   let sortedNodes = tempNodes.sort((a, b) => a.key - b.key);
@@ -152,12 +156,14 @@ const solveTheGrid = (grid, initializedPosition, map_of_markers) => {
 
   for (let row = 0; row < nodes.length; row++) {
     const node = nodes[row];
-    debugger;
     if (row != node.length - 1) {
       if (map_of_markers[[node.row, node.col]] != undefined) {
         if (node.userDirection == "") {
           node.userDirection = "keep straight";
         }
+        node.latitude = map_of_markers[[node.row, node.col]].latitude;
+        node.longitude = map_of_markers[[node.row, node.col]].longitude;
+        node.image = map_of_markers[[node.row, node.col]].image;
       }
     }
   }

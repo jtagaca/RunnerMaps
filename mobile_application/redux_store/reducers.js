@@ -83,6 +83,7 @@ const indoor_navigation_properties_slice = createSlice({
     destination_location: null,
     destination_location_id: null,
     chosen_method_to_navigate_between_floors: null,
+    shortest_path_directions: [],
   },
   reducers: {
     setSelectedBuildingToIndoorNavigate: (state, action) => {
@@ -102,6 +103,9 @@ const indoor_navigation_properties_slice = createSlice({
     },
     deleteChooserMethodToNavigateBetweenFloors: (state) => {
       state.chosen_method_to_navigate_between_floors = null;
+    },
+    setShortestPathDirections: (state, action) => {
+      state.shortest_path_directions = action.payload;
     },
   },
 });
