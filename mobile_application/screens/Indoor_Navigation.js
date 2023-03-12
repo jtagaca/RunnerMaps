@@ -47,10 +47,16 @@ export default function Indoor_Navigation() {
               card.userDirection != null &&
               card.userDirection != "" ? (
                 <>
-                  {card.userDirection != "enter" ? (
-                    <Text style={styles.text}>In the Hallway</Text>
-                  ) : null}
                   <Text style={styles.text}>{card.userDirection}</Text>
+                  {card.userDirection !== "enter" ? (
+                    card.is_outside && card.is_outside !== false ? (
+                      <Text style={styles.text}>
+                        You are outside, follow the road path
+                      </Text>
+                    ) : (
+                      <Text style={styles.text}>In the Hallway</Text>
+                    )
+                  ) : null}
                 </>
               ) : null}
               {card.image && card.image != null && card.image != "" ? (

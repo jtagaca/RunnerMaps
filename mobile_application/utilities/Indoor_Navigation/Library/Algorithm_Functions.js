@@ -126,6 +126,7 @@ const solveTheGrid = (
       longitude: null,
       image: null,
       locationName: null,
+      is_outside: false,
     });
   }
   let sortedNodes = tempNodes.sort((a, b) => a.key - b.key);
@@ -160,10 +161,14 @@ const solveTheGrid = (
     }
   }
 
+  let is_outside = false;
   for (let row = 0; row < nodes.length; row++) {
     const node = nodes[row];
     if (row != node.length - 1) {
       let key = [floor_id, node.row, node.col].join(",");
+      if (is_outside == true) {
+        node.is_outside = true;
+      }
       if (map_of_markers[[node.row, node.col]] != undefined) {
         if (node.userDirection == "") {
           node.userDirection = "keep straight";
@@ -200,6 +205,7 @@ const solveTheGrid = (
           col: node.col,
           direction: null,
           userDirection: "enter",
+          is_outside: false,
           latitude: indoor_locations_map[key].latitude,
           longitude: indoor_locations_map[key].longitude,
           image: indoor_locations_map[key].image,
@@ -210,6 +216,12 @@ const solveTheGrid = (
         };
         nodes.splice(row + 1, 0, newNode); // add the new node after the current node
         row++; // skip the new node on the next iteration
+
+        if (row != 0 || row != nodes.length - 1) {
+          if (indoor_locations_map[key].name == "entrance") {
+            is_outside = !is_outside;
+          }
+        }
       }
     }
   }
