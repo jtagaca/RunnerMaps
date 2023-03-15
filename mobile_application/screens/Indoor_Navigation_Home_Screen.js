@@ -7,6 +7,7 @@ import { CustomDropdown } from "../utilities/Indoor_Navigation/Components/Custom
 import {
   indoor_locations_actions,
   indoor_navigation_properties_actions,
+  setCurrentGeolocationProperties,
 } from "../redux_store/reducers";
 import SegmentedControlTab from "react-native-segmented-control-tab";
 
@@ -15,7 +16,8 @@ import Screen_Functions, {
   getMarkersByFloorId,
 } from "../utilities/Indoor_Navigation/Library/Screen_Functions";
 import { solveTheGrid } from "../utilities/Indoor_Navigation/Library/Algorithm_Functions";
-
+import * as Location from "expo-location";
+// const Decimal = require("decimal.js");
 import {
   Button,
   Alert,
@@ -33,6 +35,7 @@ export default function IndoorNavigation({ navigation }) {
     isStartAndDestinationOnDifferentFloors,
     setIsStartAndDestinationOnDifferentFloors,
   ] = useState(false);
+  const [geolocationProperties, setGeolocationProperties] = useState(null);
   const dispatch = useDispatch();
   const [nearest_elevator_or_stairs, set_nearest_elevator_or_stairs] =
     useState(null);
@@ -46,10 +49,16 @@ export default function IndoorNavigation({ navigation }) {
   const buildings = useSelector((state) => state.buildings.data);
   const status = useSelector((state) => state.buildings.status);
   const error = useSelector((state) => state.buildings.error);
-
+  const haversineDistance = require("geodetic-haversine-distance");
   const indoor_locations = useSelector((state) => state.indoor_locations.data);
   const indoor_locations_map = useSelector(
     (state) => state.indoor_locations.map
+  );
+  const indoor_locations_elevators = useSelector(
+    (state) => state.indoor_locations.elevators
+  );
+  const indoor_locations_stairs = useSelector(
+    (state) => state.indoor_locations.stairs
   );
   const indoor_status = useSelector((state) => state.indoor_locations.status);
   const indoor_error = useSelector((state) => state.indoor_locations.error);
@@ -57,6 +66,25 @@ export default function IndoorNavigation({ navigation }) {
   const indoor_navigation_properties = useSelector(
     (state) => state.indoor_navigation_properties
   );
+  useEffect(() => {
+    const updateLocation = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({
+        enableHighAccuracy: true,
+        accuracy: Location.Accuracy.Highest,
+      });
+      setGeolocationProperties(location.coords);
+    };
+
+    updateLocation();
+    const interval_id = setInterval(updateLocation, 1000);
+    return () => clearInterval(interval_id);
+  }, []);
 
   useEffect(() => {
     dispatch(getBuildings());
@@ -99,6 +127,7 @@ export default function IndoorNavigation({ navigation }) {
         ways_to_navigate_between_floors[index]
       )
     );
+    findNearestElevatorOrStairs(index);
   };
   const handleStartNavigation = () => {
     setModalVisible(!modalVisible);
@@ -115,28 +144,46 @@ export default function IndoorNavigation({ navigation }) {
     return;
   };
 
-  const findNearestElevatorOrStairs = () => {
+  const findNearestElevatorOrStairs = (index) => {
     let floor_id =
       indoor_locations_map[
         String(indoor_navigation_properties.start_location_id)
       ].floorID;
-    let start_location_row_index = parseInt(
-      indoor_locations_map[
-        String(indoor_navigation_properties.start_location_id)
-      ].row
-    );
-    let start_location_column_index = parseInt(
-      indoor_locations_map[
-        String(indoor_navigation_properties.start_location_id)
-      ].col
-    );
-    let nearest_elevator_or_stairs = solveTheGrid(
-      walls,
-      markers,
-      start_location_row_index,
-      start_location_column_index
-    );
-    set_nearest_elevator_or_stairs(nearest_elevator_or_stairs);
+    // find elevators in the indoor_locations.elevators array using the floorid
+    let locations = [];
+    if (ways_to_navigate_between_floors[index] == "Elevator") {
+      locations = indoor_locations_elevators.filter(
+        (elevator) => elevator.floorID == floor_id
+      );
+    } else if (ways_to_navigate_between_floors[index] == "Stairs") {
+      locations = indoor_locations_stairs.filter(
+        (stairs) => stairs.floorID == floor_id
+      );
+    }
+    let current_geolocation_temp = {
+      latitude: geolocationProperties.latitude,
+      longitude: geolocationProperties.longitude,
+    };
+    debugger;
+    // for loop in locations and add a distance property to each location
+    // let other_geolocation = {
+    //   latitude: new Decimal(locations[0].latitude).toFixed(20),
+    //   longitude: new Decimal(locations[0].longitude).toFixed(20),
+    // };
+    // let distance = haversineDistance(
+    //   current_geolocation_temp,
+    //   other_geolocation
+    // );
+    // for (let i = 0; i < locations.length; i++) {
+    //   locations[i].distance = haversineDistance(current_geolocation_temp, );
+    // }
+
+    // const sorted_locations_via_haversine_distance = locations.sort((a, b) => {
+    //   const distanceToA = haversineDistance(current_geolocation_temp, a);
+    //   const distanceToB = haversineDistance(current_geolocation_temp, b);
+    //   return distanceToA - distanceToB;
+    // });
+    set_nearest_elevator_or_stairs(sorted_locations_via_haversine_distance[0]);
   };
   const handleStartNavigationConfirmed = async () => {
     // todo rename change the variable

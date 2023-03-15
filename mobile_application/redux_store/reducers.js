@@ -124,18 +124,19 @@ const indoor_navigation_properties_slice = createSlice({
 });
 
 // to be edited
-const currentLocationSlice = createSlice({
-  name: "currentLocation",
-  initialState: null,
+const current_geolocation_slice = createSlice({
+  name: "current_geolocation",
+  initialState: {},
   reducers: {
-    setCurrentLocation: (state, action) => {
+    setCurrentGeolocationProperties: (state, action) => {
       return action.payload;
     },
   },
 });
 
 export const { setClosestLocations } = closestLocationsSlice.actions;
-export const { setCurrentLocation } = currentLocationSlice.actions;
+export const { setCurrentGeolocationProperties } =
+  current_geolocation_slice.actions;
 export const indoor_locations_actions = indoor_locations_slice.actions;
 export const indoor_navigation_properties_actions =
   indoor_navigation_properties_slice.actions;
@@ -144,6 +145,6 @@ export default {
   closestLocations: closestLocationsSlice.reducer,
   indoor_locations: indoor_locations_slice.reducer,
   buildings: buildings_slice.reducer,
-  currentLocation: currentLocationSlice.reducer,
+  currentLocation: current_geolocation_slice.reducer,
   indoor_navigation_properties: indoor_navigation_properties_slice.reducer,
 };
