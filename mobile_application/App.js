@@ -2,12 +2,13 @@ import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
 import store from "./redux_store/store";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Provider as PaperProvider } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import IndoorNavigationHomeScreen from "./screens/Indoor_Navigation_Home_Screen";
 import HomeScreen from "./screens/Home_Screen";
+import * as Location from "expo-location";
 
 import IndoorNavigation from "./screens/Indoor_Navigation";
 
@@ -21,6 +22,37 @@ const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
 
 export default function App() {
+  const [location, setLocation] = useState(null);
+  useEffect(() => {
+    const updateLocation = async () => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== "granted") {
+        setErrorMsg("Permission to access location was denied");
+        return;
+      }
+
+      let location = await Location.getCurrentPositionAsync({
+        enableHighAccuracy: true,
+        accuracy: Location.Accuracy.Highest,
+      });
+      setLocation(location);
+    };
+
+    updateLocation();
+    const interval_id = setInterval(updateLocation, 1000);
+    return () => clearInterval(interval_id);
+  }, []);
+  // useEffect(() => {
+  //   if (location) {
+  //     console.log(
+  //       "current location" +
+  //         location.coords.latitude +
+  //         ":" +
+  //         location.coords.longitude
+  //     );
+  //   }
+  // }, [location]);
+
   return (
     <SafeAreaProvider>
       <PaperProvider>
