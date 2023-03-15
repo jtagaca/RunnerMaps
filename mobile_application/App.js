@@ -15,11 +15,10 @@ import IndoorNavigation from "./screens/Indoor_Navigation";
 import OutdoorNavigationScreen from "./screens/Outdoor_Navigation";
 import Icon from "react-native-vector-icons/FontAwesome";
 import TestScreen from "./test";
+
 import { createStackNavigator } from "@react-navigation/stack";
 
 const Stack = createStackNavigator();
-
-const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [location, setLocation] = useState(null);
