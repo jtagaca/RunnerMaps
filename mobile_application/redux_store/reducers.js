@@ -20,6 +20,8 @@ const indoor_locations_slice = createSlice({
     status: "idle",
     error: null,
     map: {},
+    elevators: [],
+    stairs: [],
   },
   reducers: {
     clearIndoorLocationData: (state) => {
@@ -29,9 +31,19 @@ const indoor_locations_slice = createSlice({
     },
     buildIndoorLocationLookUpMap: (state) => {
       state.map = {};
+      state.stairs = [];
+      state.elevators = [];
+
       state.data.forEach((location) => {
         state.map[[location.floorID, location.row, location.col].join(",")] =
           location;
+
+        if (location.name === "stairs") {
+          state.stairs.push(location);
+        }
+        if (location.name === "elevator") {
+          state.elevators.push(location);
+        }
       });
     },
   },

@@ -34,6 +34,8 @@ export default function IndoorNavigation({ navigation }) {
     setIsStartAndDestinationOnDifferentFloors,
   ] = useState(false);
   const dispatch = useDispatch();
+  const [nearest_elevator_or_stairs, set_nearest_elevator_or_stairs] =
+    useState(null);
 
   const {
     handleSelectionBuilding,
@@ -113,6 +115,29 @@ export default function IndoorNavigation({ navigation }) {
     return;
   };
 
+  const findNearestElevatorOrStairs = () => {
+    let floor_id =
+      indoor_locations_map[
+        String(indoor_navigation_properties.start_location_id)
+      ].floorID;
+    let start_location_row_index = parseInt(
+      indoor_locations_map[
+        String(indoor_navigation_properties.start_location_id)
+      ].row
+    );
+    let start_location_column_index = parseInt(
+      indoor_locations_map[
+        String(indoor_navigation_properties.start_location_id)
+      ].col
+    );
+    let nearest_elevator_or_stairs = solveTheGrid(
+      walls,
+      markers,
+      start_location_row_index,
+      start_location_column_index
+    );
+    set_nearest_elevator_or_stairs(nearest_elevator_or_stairs);
+  };
   const handleStartNavigationConfirmed = async () => {
     // todo rename change the variable
     // add a variable for this and change it indoor_locations_map[String(indoor_navigation_properties.start_location_id)]
