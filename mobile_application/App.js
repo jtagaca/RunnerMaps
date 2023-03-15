@@ -1,3 +1,5 @@
+import "react-native-gesture-handler";
+
 import { NavigationContainer } from "@react-navigation/native";
 import { Provider } from "react-redux";
 import store from "./redux_store/store";
@@ -8,7 +10,6 @@ import { SafeAreaProvider } from "react-native-safe-area-context";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import IndoorNavigationHomeScreen from "./screens/Indoor_Navigation_Home_Screen";
 import HomeScreen from "./screens/Home_Screen";
-
 import IndoorNavigation from "./screens/Indoor_Navigation";
 
 import OutdoorNavigationScreen from "./screens/Outdoor_Navigation";
