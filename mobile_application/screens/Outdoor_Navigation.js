@@ -1,7 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, View } from "react-native";
 import React, { useState, useEffect } from "react";
-import Maps from "../utilities/outdoor_navigation/Maps.js";
+import Maps from "../utilities/Outdoor_Navigation/Maps.js";
 
 export default function OutdoorNavigation() {
   const [classroom, setClassroom] = useState("");

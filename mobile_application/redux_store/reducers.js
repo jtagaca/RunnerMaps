@@ -1,6 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getBuildings } from "./actions/Building_Locations";
 import { getIndoorLocationsById } from "./actions/Indoor_Locations";
+
+// to be edited
 const closestLocationsSlice = createSlice({
   name: "closestLocations",
   initialState: [],
@@ -17,8 +19,34 @@ const indoor_locations_slice = createSlice({
     data: [],
     status: "idle",
     error: null,
+    map: {},
+    elevators: [],
+    stairs: [],
   },
-  reducers: {},
+  reducers: {
+    clearIndoorLocationData: (state) => {
+      state.data = [];
+      state.status = "idle";
+      state.error = null;
+    },
+    buildIndoorLocationLookUpMap: (state) => {
+      state.map = {};
+      state.stairs = [];
+      state.elevators = [];
+
+      state.data.forEach((location) => {
+        state.map[[location.floorID, location.row, location.col].join(",")] =
+          location;
+
+        if (location.name === "stairs") {
+          state.stairs.push(location);
+        }
+        if (location.name === "elevator") {
+          state.elevators.push(location);
+        }
+      });
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getIndoorLocationsById.pending, (state) => {
@@ -34,7 +62,7 @@ const indoor_locations_slice = createSlice({
   },
 });
 
-const building_slice = createSlice({
+const buildings_slice = createSlice({
   name: "buildings",
   initialState: {
     data: [],
@@ -58,40 +86,65 @@ const building_slice = createSlice({
   },
 });
 
-const currentLocationSlice = createSlice({
-  name: "currentLocation",
-  initialState: null,
+const indoor_navigation_properties_slice = createSlice({
+  name: "indoor_navigation_properties",
+  initialState: {
+    building_id: null,
+    building_name: null,
+    start_location: null,
+    start_location_id: null,
+    destination_location: null,
+    destination_location_id: null,
+    chosen_method_to_navigate_between_floors: null,
+    shortest_path_directions: [],
+  },
   reducers: {
-    setCurrentLocation: (state, action) => {
+    setSelectedBuildingToIndoorNavigate: (state, action) => {
+      state.building_id = action.payload.id;
+      state.building_name = action.payload.title;
+    },
+    setSelectedStartLocationToIndoorNavigate: (state, action) => {
+      state.start_location = action.payload.title;
+      state.start_location_id = action.payload.id;
+    },
+    setSelectedDestinationLocationToIndoorNavigate: (state, action) => {
+      state.destination_location = action.payload.title;
+      state.destination_location_id = action.payload.id;
+    },
+    setChosenMethodToNavigateBetweenFloors: (state, action) => {
+      state.chosen_method_to_navigate_between_floors = action.payload;
+    },
+    deleteChooserMethodToNavigateBetweenFloors: (state) => {
+      state.chosen_method_to_navigate_between_floors = null;
+    },
+    setShortestPathDirections: (state, action) => {
+      state.shortest_path_directions = action.payload;
+    },
+  },
+});
+
+// to be edited
+const current_geolocation_slice = createSlice({
+  name: "current_geolocation",
+  initialState: {},
+  reducers: {
+    setCurrentGeolocationProperties: (state, action) => {
       return action.payload;
     },
   },
 });
 
-const current_building_to_indoor_navigate_slice = createSlice({
-  name: "currentIndoorNavigationBuilding",
-  initialState: {
-    id: null,
-    title: null,
-  },
-  reducers: {
-    setCurrentIndoorNavigationBuilding: (state, action) => {
-      state.id = action.payload.id;
-      state.title = action.payload.title;
-    },
-  },
-});
-
 export const { setClosestLocations } = closestLocationsSlice.actions;
-export const { setCurrentLocation } = currentLocationSlice.actions;
+export const { setCurrentGeolocationProperties } =
+  current_geolocation_slice.actions;
+export const indoor_locations_actions = indoor_locations_slice.actions;
+export const indoor_navigation_properties_actions =
+  indoor_navigation_properties_slice.actions;
 
-export const { setCurrentIndoorNavigationBuilding } =
-  current_building_to_indoor_navigate_slice.actions;
 export default {
   closestLocations: closestLocationsSlice.reducer,
   indoor_locations: indoor_locations_slice.reducer,
-  buildings: building_slice.reducer,
-  currentLocation: currentLocationSlice.reducer,
-  current_building_to_indoor_navigate_slice:
-    current_building_to_indoor_navigate_slice.reducer,
+  buildings: buildings_slice.reducer,
+  currentLocation: current_geolocation_slice.reducer,
+  indoor_navigation_properties: indoor_navigation_properties_slice.reducer,
 };

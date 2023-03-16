@@ -1,53 +1,33 @@
 import { View, Text } from "react-native";
 import React from "react";
-import WaveBottomBar from "rn-wave-bottom-bar";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import IndoorNavigationHomeScreen from "./Indoor_Navigation_Home_Screen";
+import OutdoorNavigationScreen from "./Outdoor_Navigation";
+import Icon from "react-native-vector-icons/FontAwesome";
 
 const Tab = createBottomTabNavigator();
 
 export default function Home_Screen() {
   return (
-    <View>
-      <Tab.Navigator
-        screenOptions={{
-          tabBarActiveTintColor: "#5F0B65",
-          tabBarActiveBackgroundColor: "#5F0B65",
-          tabBarInactiveBackgroundColor: "red",
+    <Tab.Navigator>
+      <Tab.Screen
+        name="Indoor Navigation Home"
+        component={IndoorNavigationHomeScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="street-view" color={color} size={size} />
+          ),
         }}
-        tabBar={(props) => (
-          <BottomFabBar
-            mode={"square" | "default"}
-            isRtl={false}
-            // Add Shadow for active tab bar button
-            focusedButtonStyle={{
-              shadowColor: "#000",
-              shadowOffset: {
-                width: 0,
-                height: 7,
-              },
-              shadowOpacity: 0.41,
-              shadowRadius: 9.11,
-              elevation: 14,
-            }}
-            // - You can add the style below to show screen content under the tab-bar
-            // - It will makes the "transparent tab bar" effect.
-            bottomBarContainerStyle={{
-              position: "absolute",
-              bottom: 0,
-              left: 0,
-              right: 0,
-            }}
-            {...props}
-          />
-        )}
-      >
-        <Tab.Screen
-          options={{
-            tabBarIcon: tabBarIcon("aliwangwang-o1"),
-          }}
-          name="Home"
-          component={generateScreen("Home")}
-        />
-      </Tab.Navigator>
-    </View>
+      />
+      <Tab.Screen
+        name="Outdoor Navigation"
+        component={OutdoorNavigationScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="compass" color={color} size={size} />
+          ),
+        }}
+      />
+    </Tab.Navigator>
   );
 }
