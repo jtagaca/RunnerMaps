@@ -76,7 +76,6 @@ export default function Indoor_Navigation() {
           );
         }}
         // onSwiped={(prevIndex, nextIndex) => {
-        //   debugger;
         //   handleSwiped(prevIndex, nextIndex);
         // }}
         onSwipedRight={(cardIndex) => {

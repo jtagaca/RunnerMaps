@@ -17,7 +17,7 @@ import Screen_Functions, {
 } from "../utilities/Indoor_Navigation/Library/Screen_Functions";
 import { solveTheGrid } from "../utilities/Indoor_Navigation/Library/Algorithm_Functions";
 import * as Location from "expo-location";
-// const Decimal = require("decimal.js");
+const Decimal = require("decimal.js");
 import {
   Button,
   Alert,
@@ -127,7 +127,11 @@ export default function IndoorNavigation({ navigation }) {
         ways_to_navigate_between_floors[index]
       )
     );
-    findNearestElevatorOrStairs(index);
+    let floor_id =
+      indoor_locations_map[
+        String(indoor_navigation_properties.start_location_id)
+      ].floorID;
+    findNearestElevatorOrStairs(null, index, floor_id);
   };
   const handleStartNavigation = () => {
     setModalVisible(!modalVisible);
@@ -141,14 +145,15 @@ export default function IndoorNavigation({ navigation }) {
     ) {
       setIsStartAndDestinationOnDifferentFloors(true);
     }
-    return;
-  };
-
-  const findNearestElevatorOrStairs = (index) => {
     let floor_id =
       indoor_locations_map[
         String(indoor_navigation_properties.start_location_id)
       ].floorID;
+    findNearestElevatorOrStairs(null, 0, floor_id);
+    return;
+  };
+
+  const findNearestElevatorOrStairs = (start_point, index, floor_id) => {
     // find elevators in the indoor_locations.elevators array using the floorid
     let locations = [];
     if (ways_to_navigate_between_floors[index] == "Elevator") {
@@ -160,36 +165,40 @@ export default function IndoorNavigation({ navigation }) {
         (stairs) => stairs.floorID == floor_id
       );
     }
-    let current_geolocation_temp = {
-      latitude: geolocationProperties.latitude,
-      longitude: geolocationProperties.longitude,
-    };
-    debugger;
-    // for loop in locations and add a distance property to each location
-    // let other_geolocation = {
-    //   latitude: new Decimal(locations[0].latitude).toFixed(20),
-    //   longitude: new Decimal(locations[0].longitude).toFixed(20),
-    // };
-    // let distance = haversineDistance(
-    //   current_geolocation_temp,
-    //   other_geolocation
-    // );
-    // for (let i = 0; i < locations.length; i++) {
-    //   locations[i].distance = haversineDistance(current_geolocation_temp, );
-    // }
+    let current_geolocation_temp;
+    if (start_point == null) {
+      current_geolocation_temp = {
+        latitude: parseFloat(geolocationProperties.latitude),
+        longitude: parseFloat(geolocationProperties.longitude),
+      };
+    } else {
+      current_geolocation_temp = {
+        latitude: parseFloat(start_point.latitude),
+        longitude: parseFloat(start_point.longitude),
+      };
+    }
 
-    // const sorted_locations_via_haversine_distance = locations.sort((a, b) => {
-    //   const distanceToA = haversineDistance(current_geolocation_temp, a);
-    //   const distanceToB = haversineDistance(current_geolocation_temp, b);
-    //   return distanceToA - distanceToB;
-    // });
+    for (let i = 0; i < locations.length; i++) {
+      const locationWithDistance = {
+        ...locations[i],
+        distance: haversineDistance(current_geolocation_temp, {
+          latitude: parseFloat(locations[i].latitude),
+          longitude: parseFloat(locations[i].longitude),
+        }),
+      };
+      locations[i] = locationWithDistance;
+    }
+
+    let sorted_locations_via_haversine_distance = locations.sort(
+      (a, b) => a.distance - b.distance
+    );
     set_nearest_elevator_or_stairs(sorted_locations_via_haversine_distance[0]);
+    return sorted_locations_via_haversine_distance[0];
   };
   const handleStartNavigationConfirmed = async () => {
     // todo rename change the variable
     // add a variable for this and change it indoor_locations_map[String(indoor_navigation_properties.start_location_id)]
     //   .floorID;
-
     let gridStartRowLength = parseInt(
       indoor_locations_map[
         String(indoor_navigation_properties.start_location_id)
@@ -228,11 +237,12 @@ export default function IndoorNavigation({ navigation }) {
       );
 
       let initializedPosition = {
-        startRowIndex: start_location_row_index,
-        startColIndex: start_location_column_index,
-        endRowIndex: destination_location_row_index,
-        endColIndex: destination_location_column_index,
+        startRowIndex: parseInt(start_location_row_index),
+        startColIndex: parseInt(start_location_column_index),
+        endRowIndex: parseInt(destination_location_row_index),
+        endColIndex: parseInt(destination_location_column_index),
       };
+
       let grid = [];
       for (let i = 0; i < gridStartRowLength; i++) {
         grid[i] = [];
@@ -240,7 +250,7 @@ export default function IndoorNavigation({ navigation }) {
           grid[i][j] = -1;
         }
       }
-      const walls = await getWallsByFloorId(
+      let walls = await getWallsByFloorId(
         indoor_locations_map[
           String(indoor_navigation_properties.start_location_id)
         ].floorID
@@ -327,14 +337,247 @@ export default function IndoorNavigation({ navigation }) {
       return;
     }
     if (isStartAndDestinationOnDifferentFloors == true) {
-      let gridDestinationRowLength =
+      gridStartRowLength = parseInt(
+        indoor_locations_map[
+          String(indoor_navigation_properties.start_location_id)
+        ].gridRowLength
+      );
+      gridStartColumnLength = parseInt(
+        indoor_locations_map[
+          String(indoor_navigation_properties.start_location_id)
+        ].gridColumnLength
+      );
+      // nearest_elevator_or_stairs;
+      let floor_id =
+        indoor_locations_map[
+          String(indoor_navigation_properties.start_location_id)
+        ].floorID;
+      start_location_row_index = parseInt(
+        indoor_locations_map[
+          String(indoor_navigation_properties.start_location_id)
+        ].row
+      );
+      start_location_column_index = parseInt(
+        indoor_locations_map[
+          String(indoor_navigation_properties.start_location_id)
+        ].col
+      );
+      let destination_location_row_index = parseInt(
+        nearest_elevator_or_stairs.row
+      );
+      let destination_location_column_index = parseInt(
+        nearest_elevator_or_stairs.col
+      );
+
+      let initializedPosition = {
+        startRowIndex: parseInt(start_location_row_index),
+        startColIndex: parseInt(start_location_column_index),
+        endRowIndex: parseInt(destination_location_row_index),
+        endColIndex: parseInt(destination_location_column_index),
+      };
+
+      let grid = [];
+      for (let i = 0; i < gridStartRowLength; i++) {
+        grid[i] = [];
+        for (let j = 0; j < gridStartColumnLength; j++) {
+          grid[i][j] = -1;
+        }
+      }
+      const walls = await getWallsByFloorId(
+        indoor_locations_map[
+          String(indoor_navigation_properties.start_location_id)
+        ].floorID
+      );
+      let markers = await getMarkersByFloorId(
+        indoor_locations_map[
+          String(indoor_navigation_properties.start_location_id)
+        ].floorID
+      );
+      let map_of_markers = {};
+
+      for (let i = 0; i < walls.length; i++) {
+        grid[walls[i].row][walls[i].col] = "WALL";
+      }
+      for (let i = 0; i < markers.length; i++) {
+        map_of_markers[[markers[i].row, markers[i].col]] = markers[i];
+      }
+      let path = [];
+      path.push({
+        key: -1,
+        row: start_location_row_index,
+        col: start_location_column_index,
+        locationName: indoor_navigation_properties.start_location,
+        image:
+          indoor_locations_map[
+            String(indoor_navigation_properties.start_location_id)
+          ].image,
+        userDirection: "",
+        latitude:
+          indoor_locations_map[
+            String(indoor_navigation_properties.start_location_id)
+          ].latitude,
+        longitude:
+          indoor_locations_map[
+            String(indoor_navigation_properties.start_location_id)
+          ].longitude,
+      });
+      let shortest_path = solveTheGrid(
+        grid,
+        initializedPosition,
+        map_of_markers,
+        indoor_locations_map,
+        floor_id
+      );
+      if (shortest_path.length == 0) {
+        Alert.alert("No path found");
+        return;
+      }
+      // add the shortest_path to the path array
+      for (let i = 0; i < shortest_path.length; i++) {
+        if (
+          shortest_path[i].userDirection == "" &&
+          shortest_path[i].latitude == null &&
+          shortest_path[i].longitude == null
+        ) {
+          continue;
+        }
+        path.push(shortest_path[i]);
+      }
+      // add the destination to the path array
+      path.push({
+        key: shortest_path[shortest_path.length - 1].key + 1,
+        row: destination_location_row_index,
+        col: destination_location_column_index,
+        locationName: nearest_elevator_or_stairs.name,
+        image: nearest_elevator_or_stairs.image,
+        userDirection: "",
+        latitude: nearest_elevator_or_stairs.latitude,
+        longitude: nearest_elevator_or_stairs.longitude,
+      });
+
+      let destination_floor_id =
+        indoor_locations_map[
+          String(indoor_navigation_properties.destination_location_id)
+        ].floorID;
+      let current_index = nearest_elevator_or_stairs.name == "elevator" ? 0 : 1;
+      let new_destination_elevator_or_stairs = findNearestElevatorOrStairs(
+        nearest_elevator_or_stairs,
+        current_index,
+        destination_floor_id
+      );
+      destination_location_row_index =
+        indoor_locations_map[
+          String(indoor_navigation_properties.destination_location_id)
+        ].row;
+      destination_location_column_index =
+        indoor_locations_map[
+          String(indoor_navigation_properties.destination_location_id)
+        ].col;
+
+      const initializedPosition2 = {
+        startRowIndex: parseInt(new_destination_elevator_or_stairs.row),
+        startColIndex: parseInt(new_destination_elevator_or_stairs.col),
+        endRowIndex: parseInt(destination_location_row_index),
+        endColIndex: parseInt(destination_location_column_index),
+      };
+
+      const gridStartRowLength2 =
         indoor_locations_map[
           String(indoor_navigation_properties.destination_location_id)
         ].gridRowLength;
-      let gridDestinationColumnLength =
+      const gridStartColumnLength2 =
         indoor_locations_map[
           String(indoor_navigation_properties.destination_location_id)
         ].gridColumnLength;
+
+      const grid2 = [];
+      for (let i = 0; i < gridStartRowLength2; i++) {
+        grid2[i] = [];
+        for (let j = 0; j < gridStartColumnLength2; j++) {
+          grid2[i][j] = -1;
+        }
+      }
+      const walls2 = await getWallsByFloorId(
+        indoor_locations_map[
+          String(indoor_navigation_properties.destination_location_id)
+        ].floorID
+      );
+      const markers2 = await getMarkersByFloorId(
+        indoor_locations_map[
+          String(indoor_navigation_properties.destination_location_id)
+        ].floorID
+      );
+      const map_of_markers2 = {};
+
+      for (let i = 0; i < walls2.length; i++) {
+        grid2[walls2[i].row][walls2[i].col] = "WALL";
+      }
+      for (let i = 0; i < markers2.length; i++) {
+        map_of_markers2[[markers2[i].row, markers2[i].col]] = markers2[i];
+      }
+      shortest_path2 = solveTheGrid(
+        grid2,
+        initializedPosition2,
+        map_of_markers2,
+        indoor_locations_map,
+        destination_floor_id
+      );
+      if (shortest_path2.length == 0) {
+        Alert.alert("No path found");
+        return;
+      }
+
+      // add the shortest_path2 to the path array
+      for (let i = 0; i < shortest_path2.length; i++) {
+        if (
+          shortest_path2[i].userDirection == "" &&
+          shortest_path2[i].latitude == null &&
+          shortest_path2[i].longitude == null
+        ) {
+          continue;
+        }
+        shortest_path2[i].key += 100;
+        path.push(shortest_path2[i]);
+      }
+      debugger;
+      // add the destination to the path array
+      path.push({
+        key: path[path.length - 1].key + 1,
+        row: destination_location_row_index,
+        col: destination_location_column_index,
+        locationName:
+          indoor_locations_map[
+            String(indoor_navigation_properties.destination_location_id)
+          ].name,
+        image:
+          indoor_locations_map[
+            String(indoor_navigation_properties.destination_location_id)
+          ].image,
+        userDirection: "",
+        latitude:
+          indoor_locations_map[
+            String(indoor_navigation_properties.destination_location_id)
+          ].name.latitude,
+        longitude:
+          indoor_locations_map[
+            String(indoor_navigation_properties.destination_location_id)
+          ].name.longitude,
+      });
+      debugger;
+      dispatch(
+        indoor_navigation_properties_actions.setShortestPathDirections(path)
+      );
+
+      navigation.push("Indoor Navigation");
+      // return;
+      // let gridDestinationRowLength =
+      //   indoor_locations_map[
+      //     String(indoor_navigation_properties.destination_location_id)
+      //   ].gridRowLength;
+      // let gridDestinationColumnLength =
+      //   indoor_locations_map[
+      //     String(indoor_navigation_properties.destination_location_id)
+      //   ].gridColumnLength;
     }
   };
   function goToIndoorNavigationScreen() {
