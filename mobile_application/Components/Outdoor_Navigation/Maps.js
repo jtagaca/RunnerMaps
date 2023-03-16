@@ -3,6 +3,7 @@ import { Alert, StyleSheet, View, Text, Button } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import MapViewDirections from 'react-native-maps-directions';
+import api_key from './secrets.env';
 
 export default function Maps () {
     const [region, setRegion] = useState(null);
@@ -29,7 +30,7 @@ export default function Maps () {
       }, []);
 
       const handleGetDirections = async () => {
-        const apiKey = "AIzaSyAJVYqFZxP1cE040AZVjzRHNVAX10jUORI";
+        const apiKey = api_key;
         const location = await Location.getCurrentPositionAsync({});
         const origin = {
           latitude: location.coords.latitude,
@@ -74,7 +75,7 @@ export default function Maps () {
               <MapViewDirections
                 origin={region}
                 destination={destination}
-                apikey="AIzaSyAJVYqFZxP1cE040AZVjzRHNVAX10jUORI"
+                apikey={api_key}
                 strokeWidth={3}
                 strokeColor="red"
               />
