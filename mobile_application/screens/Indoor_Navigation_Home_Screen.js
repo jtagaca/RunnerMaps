@@ -82,7 +82,7 @@ export default function IndoorNavigation({ navigation }) {
     };
 
     updateLocation();
-    const interval_id = setInterval(updateLocation, 1000);
+    const interval_id = setInterval(updateLocation, 5000);
     return () => clearInterval(interval_id);
   }, []);
 

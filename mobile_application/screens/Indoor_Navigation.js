@@ -24,10 +24,6 @@ export default function Indoor_Navigation() {
     return a.key - b.key;
   });
 
-  useEffect(() => {
-    console.log("carousel_data" + sorted_shortest_path);
-  }, [sorted_shortest_path]);
-
   const [is_left_swipe_possible, set_is_left_swipe_possible] = useState(true);
   const [current_index_of_swiper, set_current_index_of_swiper] = useState(0);
 

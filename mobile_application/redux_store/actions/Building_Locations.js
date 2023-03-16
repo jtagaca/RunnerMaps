@@ -11,6 +11,5 @@ export const getBuildings = createAsyncThunk("buildings/fetch", async () => {
     dataType: "JSON",
     withCredentials: true,
   });
-  console.log("buildings from function", response.data);
   return response.data;
 });

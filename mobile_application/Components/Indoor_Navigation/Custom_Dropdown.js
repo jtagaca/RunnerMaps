@@ -6,11 +6,6 @@ import { setCurrentIndoorNavigationBuilding } from "../../../redux_store/reducer
 export const CustomDropdown = ({ data }) => {
   const [selectedItem, setSelectedItem] = useState(null);
 
-  useEffect(() => {
-    if (selectedItem != null) {
-      console.log("selecteditem " + selectedItem.id);
-    }
-  }, [selectedItem]);
   const dispatch = useDispatch();
   const handleSelection = (building) => {
     dispatch(setCurrentIndoorNavigationBuilding(building));

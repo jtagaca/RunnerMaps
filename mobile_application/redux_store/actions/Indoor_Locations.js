@@ -16,7 +16,6 @@ export const getIndoorLocationsById = createAsyncThunk(
       dataType: "JSON",
       withCredentials: true,
     });
-    console.log("target locations from function", response.data);
     return response.data;
   }
 );
