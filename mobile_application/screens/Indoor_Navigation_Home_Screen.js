@@ -67,6 +67,8 @@ export default function IndoorNavigation({ navigation }) {
     (state) => state.indoor_navigation_properties
   );
   useEffect(() => {
+    // this needs to have a checker do not use run this useState if the user is not in this page
+    // needs redux
     const updateLocation = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -539,7 +541,6 @@ export default function IndoorNavigation({ navigation }) {
         shortest_path2[i].key += 100;
         path.push(shortest_path2[i]);
       }
-      debugger;
       // add the destination to the path array
       path.push({
         key: path[path.length - 1].key + 1,
@@ -563,7 +564,6 @@ export default function IndoorNavigation({ navigation }) {
             String(indoor_navigation_properties.destination_location_id)
           ].name.longitude,
       });
-      debugger;
       dispatch(
         indoor_navigation_properties_actions.setShortestPathDirections(path)
       );
