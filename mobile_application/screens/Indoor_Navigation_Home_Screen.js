@@ -167,6 +167,7 @@ export default function IndoorNavigation({ navigation }) {
       indoor_locations_map[
         String(indoor_navigation_properties.start_location_id)
       ].floorID;
+
     findNearestElevatorOrStairs(null, 0, floor_id);
     return;
   };
@@ -217,6 +218,8 @@ export default function IndoorNavigation({ navigation }) {
     // todo rename change the variable
     // add a variable for this and change it indoor_locations_map[String(indoor_navigation_properties.start_location_id)]
     //   .floorID;
+
+    // selected index bug
     let gridStartRowLength = parseInt(
       indoor_locations_map[
         String(indoor_navigation_properties.start_location_id)
@@ -591,12 +594,17 @@ export default function IndoorNavigation({ navigation }) {
         changeModalVisibility();
       }
 
+      setSelectedIndex(0);
       navigation.push("Indoor Navigation");
     }
   };
   const changeModalVisibility = () => {
     setModalVisible(!modalVisible);
   };
+
+  useEffect(() => {
+    console.log("selected index: " + selectedIndex);
+  }, [selectedIndex]);
 
   return (
     <>
