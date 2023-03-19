@@ -120,6 +120,10 @@ const indoor_navigation_properties_slice = createSlice({
     setShortestPathDirections: (state, action) => {
       state.shortest_path_directions = action.payload;
     },
+    deleteShortestPathDirections: (state) => {
+      state.shortest_path_directions = [];
+      state.chosen_method_to_navigate_between_floors = null;
+    },
   },
 });
 

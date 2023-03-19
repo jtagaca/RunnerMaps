@@ -671,10 +671,6 @@ export default function IndoorNavigation({ navigation }) {
           title="Start Navigation"
           onPress={handleStartNavigation}
         ></Button>
-        <Button
-          title="Go to other page"
-          onPress={goToIndoorNavigationScreen}
-        ></Button>
       </ScrollView>
     </>
   );
