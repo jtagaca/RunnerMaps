@@ -135,8 +135,9 @@ export default function IndoorNavigation({ navigation }) {
       ].floorID;
     findNearestElevatorOrStairs(null, index, floor_id);
   };
+  useEffect(() => console.log("modal state" + modalVisible), [modalVisible]);
   const handleStartNavigation = () => {
-    setModalVisible(!modalVisible);
+    changeModalVisibility();
     if (
       indoor_locations_map[
         String(indoor_navigation_properties.start_location_id)
@@ -335,6 +336,7 @@ export default function IndoorNavigation({ navigation }) {
       dispatch(
         indoor_navigation_properties_actions.setShortestPathDirections(path)
       );
+      changeModalVisibility();
       navigation.push("Indoor Navigation");
       return;
     }
@@ -517,7 +519,7 @@ export default function IndoorNavigation({ navigation }) {
       for (let i = 0; i < markers2.length; i++) {
         map_of_markers2[[markers2[i].row, markers2[i].col]] = markers2[i];
       }
-      shortest_path2 = solveTheGrid(
+      const shortest_path2 = solveTheGrid(
         grid2,
         initializedPosition2,
         map_of_markers2,
@@ -564,25 +566,19 @@ export default function IndoorNavigation({ navigation }) {
             String(indoor_navigation_properties.destination_location_id)
           ].name.longitude,
       });
+
       dispatch(
         indoor_navigation_properties_actions.setShortestPathDirections(path)
       );
+      changeModalVisibility();
 
       navigation.push("Indoor Navigation");
-      // return;
-      // let gridDestinationRowLength =
-      //   indoor_locations_map[
-      //     String(indoor_navigation_properties.destination_location_id)
-      //   ].gridRowLength;
-      // let gridDestinationColumnLength =
-      //   indoor_locations_map[
-      //     String(indoor_navigation_properties.destination_location_id)
-      //   ].gridColumnLength;
     }
   };
-  function goToIndoorNavigationScreen() {
-    navigation.push("Indoor Navigation");
-  }
+  const changeModalVisibility = () => {
+    setModalVisible(!modalVisible);
+  };
+
   return (
     <>
       <ScrollView
@@ -596,7 +592,7 @@ export default function IndoorNavigation({ navigation }) {
           visible={modalVisible}
           onRequestClose={() => {
             Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
+            changeModalVisibility();
           }}
         >
           <View style={styles.centeredView}>
@@ -618,9 +614,7 @@ export default function IndoorNavigation({ navigation }) {
 
               <Pressable
                 style={[styles.button, styles.buttonClose]}
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                }}
+                onPress={changeModalVisibility}
               >
                 <Text style={styles.textStyle}>Cancel</Text>
               </Pressable>
