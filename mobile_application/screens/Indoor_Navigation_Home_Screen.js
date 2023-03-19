@@ -17,6 +17,7 @@ import Screen_Functions, {
 } from "../utilities/Indoor_Navigation/Library/Screen_Functions";
 import { solveTheGrid } from "../utilities/Indoor_Navigation/Library/Algorithm_Functions";
 import * as Location from "expo-location";
+import { SafeAreaView } from "react-native-safe-area-context";
 const Decimal = require("decimal.js");
 import {
   Button,
@@ -167,6 +168,7 @@ export default function IndoorNavigation({ navigation }) {
       indoor_locations_map[
         String(indoor_navigation_properties.start_location_id)
       ].floorID;
+
     findNearestElevatorOrStairs(null, 0, floor_id);
     return;
   };
@@ -217,6 +219,8 @@ export default function IndoorNavigation({ navigation }) {
     // todo rename change the variable
     // add a variable for this and change it indoor_locations_map[String(indoor_navigation_properties.start_location_id)]
     //   .floorID;
+
+    // selected index bug
     let gridStartRowLength = parseInt(
       indoor_locations_map[
         String(indoor_navigation_properties.start_location_id)
@@ -354,7 +358,7 @@ export default function IndoorNavigation({ navigation }) {
       if (modalVisible == true) {
         changeModalVisibility();
       }
-      navigation.push("Indoor Navigation");
+      navigation.push("Result");
       return;
     }
     if (isStartAndDestinationOnDifferentFloors == true) {
@@ -591,15 +595,20 @@ export default function IndoorNavigation({ navigation }) {
         changeModalVisibility();
       }
 
-      navigation.push("Indoor Navigation");
+      setSelectedIndex(0);
+      navigation.push("Result");
     }
   };
   const changeModalVisibility = () => {
     setModalVisible(!modalVisible);
   };
 
+  useEffect(() => {
+    console.log("selected index: " + selectedIndex);
+  }, [selectedIndex]);
+
   return (
-    <>
+    <SafeAreaView style={{ flex: 1 }}>
       <ScrollView
         style={styles.container}
         contentContainerStyle={{ flex: 1, padding: 24 }}
@@ -697,7 +706,7 @@ export default function IndoorNavigation({ navigation }) {
           }
         ></Button>
       </ScrollView>
-    </>
+    </SafeAreaView>
   );
 }
 

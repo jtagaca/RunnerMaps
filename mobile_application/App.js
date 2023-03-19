@@ -33,7 +33,7 @@ export default function App() {
                 component={HomeScreen}
               />
               <Stack.Screen
-                name="Indoor Navigation"
+                name="Result"
                 component={IndoorNavigation}
                 options={({ navigation }) => ({
                   headerLeft: () => <CustomHeader navigation={navigation} />,
