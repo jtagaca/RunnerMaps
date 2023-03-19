@@ -336,7 +336,9 @@ export default function IndoorNavigation({ navigation }) {
       dispatch(
         indoor_navigation_properties_actions.setShortestPathDirections(path)
       );
-      changeModalVisibility();
+      if (modalVisible == true) {
+        changeModalVisibility();
+      }
       navigation.push("Indoor Navigation");
       return;
     }
@@ -570,7 +572,9 @@ export default function IndoorNavigation({ navigation }) {
       dispatch(
         indoor_navigation_properties_actions.setShortestPathDirections(path)
       );
-      changeModalVisibility();
+      if (modalVisible == true) {
+        changeModalVisibility();
+      }
 
       navigation.push("Indoor Navigation");
     }
@@ -663,7 +667,17 @@ export default function IndoorNavigation({ navigation }) {
             indoor_navigation_properties.destination_location_id == null
           }
           title="Start Navigation"
-          onPress={handleStartNavigation}
+          onPress={
+            indoor_navigation_properties != null &&
+            indoor_locations_map[
+              String(indoor_navigation_properties.start_location_id)
+            ]?.floorID !=
+              indoor_locations_map[
+                String(indoor_navigation_properties.destination_location_id)
+              ]?.floorID
+              ? handleStartNavigation
+              : handleStartNavigationConfirmed
+          }
         ></Button>
       </ScrollView>
     </>
