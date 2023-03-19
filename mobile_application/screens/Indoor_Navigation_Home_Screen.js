@@ -114,10 +114,25 @@ export default function IndoorNavigation({ navigation }) {
     id: building.buildingID.toString(),
   }));
 
-  const indoor_locations_data = indoor_locations.map((location) => ({
-    title: location.name + " " + location.row + " " + location.col,
-    id: [location.floorID, location.row, location.col].join(","),
-  }));
+  const indoor_locations_data = indoor_locations.map((location) => {
+    let title = location.name;
+    if (
+      location.name === "elevator" ||
+      location.name === "stairs" ||
+      location.name == "restroom" ||
+      location.name === "entrance" ||
+      location.name === "door"
+    ) {
+      title = `floor ${location.floorID} ${location.name}`;
+    } else if (/^\d/.test(location.name)) {
+      title = `room ${location.name} `;
+    }
+    return {
+      title: title,
+      id: [location.floorID, location.row, location.col].join(","),
+    };
+  });
+
   const ways_to_navigate_between_floors = ["Elevator", "Stairs"];
   const empty_query_result = "Please select a building to populate.";
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -664,7 +679,9 @@ export default function IndoorNavigation({ navigation }) {
         <Button
           disabled={
             indoor_navigation_properties.start_location_id == null ||
-            indoor_navigation_properties.destination_location_id == null
+            indoor_navigation_properties.destination_location_id == null ||
+            indoor_navigation_properties.start_location_id ==
+              indoor_navigation_properties.destination_location_id
           }
           title="Start Navigation"
           onPress={
