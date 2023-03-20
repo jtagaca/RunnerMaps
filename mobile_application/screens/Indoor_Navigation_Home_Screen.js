@@ -136,7 +136,7 @@ export default function IndoorNavigation({ navigation }) {
   });
 
   const ways_to_navigate_between_floors = ["Elevator", "Stairs"];
-  const empty_query_result = "Please select a building to populate.";
+  const empty_query_result = "Please select a building";
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleIndexChange = (index) => {

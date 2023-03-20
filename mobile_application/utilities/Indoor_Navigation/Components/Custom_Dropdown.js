@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
-import AntDesign from "@expo/vector-icons/AntDesign";
+import Ionicons from "@expo/vector-icons/Ionicons";
 import { Button } from "react-native-paper";
-
+import tw from "../../../tailwind/CustomTailwind";
 const CustomDropdown = ({
   data,
   handleSelection,
@@ -27,10 +27,10 @@ const CustomDropdown = ({
       <View style={styles.item}>
         <Text style={styles.textItem}>{item.label}</Text>
         {item.value === selectedItem?.value && (
-          <AntDesign
+          <Ionicons
             style={styles.icon}
-            color="black"
-            name="Safety"
+            color="white"
+            name="location"
             size={20}
           />
         )}
@@ -39,34 +39,47 @@ const CustomDropdown = ({
   };
 
   return (
-    <View>
+    <View
+      style={tw`flex flex-row items-center justify-center content-center bg-blue-500 rounded-lg my-2 p-2 text-white`}
+    >
       <Dropdown
-        style={styles.dropdown}
-        placeholderStyle={styles.placeholderStyle}
-        selectedTextStyle={styles.selectedTextStyle}
+        style={(styles.dropdown, tw`w-8/10 my-4 mr-0 h-1/30 `)}
+        placeholderStyle={tw`text-white `}
+        selectedTextStyle={tw`text-white `}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
         data={data}
         search
+        iconColor="white"
         autoScroll={false}
         maxHeight={300}
         labelField="label"
         valueField="value"
-        placeholder="Select item"
+        placeholder={
+          data && data.length === 0
+            ? "Please select a building first"
+            : type == "building"
+            ? "Select Building"
+            : "Select Location"
+        }
         searchPlaceholder="Search..."
         value={selectedItem}
         onChange={(item) => handleSelectionLocal(item)}
         renderLeftIcon={() => (
-          <AntDesign
+          <Ionicons
             style={styles.icon}
-            color="black"
-            name="Safety"
+            color="white"
+            name="location"
             size={20}
           />
         )}
         renderItem={renderItem}
       />
-      <Button onPress={handleClearLocal}>Clear</Button>
+      <View style={tw`flex-1 items-center justify-center `}>
+        <Button textColor="white" onPress={handleClearLocal}>
+          Clear
+        </Button>
+      </View>
     </View>
   );
 };
@@ -75,9 +88,6 @@ export default CustomDropdown;
 
 const styles = StyleSheet.create({
   dropdown: {
-    margin: 16,
-    height: 50,
-    backgroundColor: "white",
     borderRadius: 12,
     padding: 12,
     shadowColor: "#000",
@@ -87,7 +97,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.2,
     shadowRadius: 1.41,
-
     elevation: 2,
   },
   icon: {
@@ -104,14 +113,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   placeholderStyle: {
+    color: "white",
     fontSize: 16,
   },
   selectedTextStyle: {
     fontSize: 16,
+    color: "white",
   },
   iconStyle: {
     width: 20,
     height: 20,
+    color: "white",
   },
   inputSearchStyle: {
     height: 40,
