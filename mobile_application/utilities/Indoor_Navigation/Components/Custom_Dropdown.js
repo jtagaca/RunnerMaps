@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -22,6 +22,13 @@ const CustomDropdown = ({
     handleClear(type);
     setSelectedItem(null);
   };
+  useEffect(() => {
+    if (selectedItem === null) {
+      return;
+    }
+    console.log("selectedItem", selectedItem);
+  }, [selectedItem]);
+
   const renderItem = (item) => {
     return (
       <View style={styles.item}>
@@ -50,6 +57,7 @@ const CustomDropdown = ({
         iconStyle={styles.iconStyle}
         data={data}
         search
+        searchField="label"
         iconColor="white"
         autoScroll={false}
         maxHeight={300}
