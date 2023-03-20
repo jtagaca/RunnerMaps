@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { getBuildings } from "../redux_store/actions/Building_Locations";
 import { getIndoorLocationsById } from "../redux_store/actions/Indoor_Locations";
 import tw from "../tailwind/CustomTailwind";
-import { CustomDropdown } from "../utilities/Indoor_Navigation/Components/Custom_Dropdown";
+
+import CustomDropdown from "../utilities/Indoor_Navigation/Components/Custom_Dropdown";
+
 import {
   indoor_locations_actions,
   indoor_navigation_properties_actions,
@@ -18,7 +20,6 @@ import Screen_Functions, {
 import { solveTheGrid } from "../utilities/Indoor_Navigation/Library/Algorithm_Functions";
 import * as Location from "expo-location";
 import { SafeAreaView } from "react-native-safe-area-context";
-const Decimal = require("decimal.js");
 import {
   Button,
   Alert,
@@ -111,8 +112,8 @@ export default function IndoorNavigation({ navigation }) {
     }
   }, [indoor_locations]);
   const data = buildings.map((building) => ({
-    title: building.buildingName,
-    id: building.buildingID.toString(),
+    label: building.buildingName,
+    value: building.buildingID.toString(),
   }));
 
   const indoor_locations_data = indoor_locations.map((location) => {
@@ -129,8 +130,8 @@ export default function IndoorNavigation({ navigation }) {
       title = `room ${location.name} `;
     }
     return {
-      title: title,
-      id: [location.floorID, location.row, location.col].join(","),
+      label: title,
+      value: [location.floorID, location.row, location.col].join(","),
     };
   });
 
@@ -660,6 +661,13 @@ export default function IndoorNavigation({ navigation }) {
         </Modal>
         <Text>Building Selected:</Text>
         {data.length > 0 ? (
+          // <CustomDropdown
+          //   data={data}
+          //   handleSelection={handleSelectionBuilding}
+          //   handleClear={handleClearIndoorNavigationProperties}
+          //   type={"building"}
+          // />
+
           <CustomDropdown
             data={data}
             handleSelection={handleSelectionBuilding}
@@ -668,7 +676,6 @@ export default function IndoorNavigation({ navigation }) {
           />
         ) : null}
         <Text>Start Location:</Text>
-
         <CustomDropdown
           data={indoor_locations_data}
           handleSelection={handleSelectionStartLocation}

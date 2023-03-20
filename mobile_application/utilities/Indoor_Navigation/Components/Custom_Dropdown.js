@@ -1,10 +1,10 @@
-import React, { useState, useRef, useEffect, useCallback } from "react";
-import { View } from "react-native";
-import { AutocompleteDropdown } from "react-native-autocomplete-dropdown";
-import { useDispatch } from "react-redux";
-import { setCurrentIndoorNavigationBuilding } from "../../../redux_store/reducers";
+import React, { useState } from "react";
+import { StyleSheet, View, Text } from "react-native";
+import { Dropdown } from "react-native-element-dropdown";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import { Button } from "react-native-paper";
 
-export const CustomDropdown = ({
+const CustomDropdown = ({
   data,
   handleSelection,
   handleClear,
@@ -22,42 +22,99 @@ export const CustomDropdown = ({
     handleClear(type);
     setSelectedItem(null);
   };
-  const dropdownController = useRef(null);
-
-  const searchRef = useRef(null);
-  return (
-    data != null && (
-      <AutocompleteDropdown
-        ref={searchRef}
-        controller={(controller) => {
-          dropdownController.current = controller;
-        }}
-        clearOnFocus={false}
-        onSelectItem={(item) => item && handleSelectionLocal(item)}
-        dataSet={data}
-        textInputProps={{
-          autoCorrect: false,
-          autoCapitalize: "none",
-          style: {
-            borderRadius: 25,
-            color: "black",
-            paddingLeft: 18,
-          },
-        }}
-        closeOnBlur={true}
-        emptyResultText={empty_query_result}
-        onClear={handleClearLocal}
-        ItemSeparatorComponent={
-          <View
-            style={{ height: 1, width: "100%", backgroundColor: "#d8e1e6" }}
+  const renderItem = (item) => {
+    return (
+      <View style={styles.item}>
+        <Text style={styles.textItem}>{item.label}</Text>
+        {item.value === selectedItem?.value && (
+          <AntDesign
+            style={styles.icon}
+            color="black"
+            name="Safety"
+            size={20}
           />
-        }
-        getItemLayout={(data, index) => ({
-          length: 50,
-          offset: 50 * index,
-          index,
-        })}
+        )}
+      </View>
+    );
+  };
+
+  return (
+    <View>
+      <Dropdown
+        style={styles.dropdown}
+        placeholderStyle={styles.placeholderStyle}
+        selectedTextStyle={styles.selectedTextStyle}
+        inputSearchStyle={styles.inputSearchStyle}
+        iconStyle={styles.iconStyle}
+        data={data}
+        search
+        autoScroll={false}
+        maxHeight={300}
+        labelField="label"
+        valueField="value"
+        placeholder="Select item"
+        searchPlaceholder="Search..."
+        value={selectedItem}
+        onChange={(item) => handleSelectionLocal(item)}
+        renderLeftIcon={() => (
+          <AntDesign
+            style={styles.icon}
+            color="black"
+            name="Safety"
+            size={20}
+          />
+        )}
+        renderItem={renderItem}
       />
-    )
+      <Button onPress={handleClearLocal}>Clear</Button>
+    </View>
   );
 };
+
+export default CustomDropdown;
+
+const styles = StyleSheet.create({
+  dropdown: {
+    margin: 16,
+    height: 50,
+    backgroundColor: "white",
+    borderRadius: 12,
+    padding: 12,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 1,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 1.41,
+
+    elevation: 2,
+  },
+  icon: {
+    marginRight: 5,
+  },
+  item: {
+    padding: 17,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  textItem: {
+    flex: 1,
+    fontSize: 16,
+  },
+  placeholderStyle: {
+    fontSize: 16,
+  },
+  selectedTextStyle: {
+    fontSize: 16,
+  },
+  iconStyle: {
+    width: 20,
+    height: 20,
+  },
+  inputSearchStyle: {
+    height: 40,
+    fontSize: 16,
+  },
+});
