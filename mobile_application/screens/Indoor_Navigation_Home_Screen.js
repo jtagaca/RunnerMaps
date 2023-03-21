@@ -720,7 +720,19 @@ export default function IndoorNavigation({ navigation }) {
                     ? "bg-gray-300"
                     : "bg-green-300"
                 } `}
-                labelStyle={tw` font-bold text-[1rem] text-black`}
+                labelStyle={tw` 
+                ${
+                  indoor_locations_data == null ||
+                  indoor_locations_data.length == 0 ||
+                  indoor_navigation_properties.start_location_id == null ||
+                  indoor_navigation_properties.destination_location_id ==
+                    null ||
+                  indoor_navigation_properties.start_location_id ==
+                    indoor_navigation_properties.destination_location_id
+                    ? "text-gray-500"
+                    : "font-bold text-[1rem] text-black"
+                }
+                `}
                 disabled={
                   indoor_locations_data == null ||
                   indoor_locations_data.length == 0 ||
