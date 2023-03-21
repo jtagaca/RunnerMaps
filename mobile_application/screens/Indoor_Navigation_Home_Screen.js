@@ -20,8 +20,9 @@ import Screen_Functions, {
 import { solveTheGrid } from "../utilities/Indoor_Navigation/Library/Algorithm_Functions";
 import * as Location from "expo-location";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Button } from "react-native-paper";
+
 import {
-  Button,
   Alert,
   Modal,
   StyleSheet,
@@ -152,7 +153,6 @@ export default function IndoorNavigation({ navigation }) {
       ].floorID;
     findNearestElevatorOrStairs(null, index, floor_id);
   };
-  useEffect(() => console.log("modal state" + modalVisible), [modalVisible]);
   const handleStartNavigation = () => {
     changeModalVisibility();
     if (
@@ -608,7 +608,7 @@ export default function IndoorNavigation({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={tw`flex flex-1 bg-yellow-100`}>
       <ScrollView
         style={[
           styles.container,
@@ -666,50 +666,87 @@ export default function IndoorNavigation({ navigation }) {
 
         {data.length == 0 ? null : (
           <>
-            <Text>Building Selected:</Text>
-            <CustomDropdown
-              data={data}
-              handleSelection={handleSelectionBuilding}
-              handleClear={handleClearIndoorNavigationProperties}
-              type={"building"}
-            />
-            <Text>Start Location:</Text>
-            <CustomDropdown
-              data={indoor_locations_data}
-              handleSelection={handleSelectionStartLocation}
-              handleClear={handleClearIndoorNavigationProperties}
-              type={"start_location"}
-              empty_query_result={empty_query_result}
-            />
-            <Text>Destination Location:</Text>
-            <CustomDropdown
-              data={indoor_locations_data}
-              handleSelection={handleSelectionDestinationLocation}
-              handleClear={handleClearIndoorNavigationProperties}
-              type={"destination_location"}
-              empty_query_result={empty_query_result}
-            />
-
-            <Button
-              disabled={
-                indoor_navigation_properties.start_location_id == null ||
-                indoor_navigation_properties.destination_location_id == null ||
-                indoor_navigation_properties.start_location_id ==
-                  indoor_navigation_properties.destination_location_id
-              }
-              title="Start Navigation"
-              onPress={
-                indoor_navigation_properties != null &&
-                indoor_locations_map[
-                  String(indoor_navigation_properties.start_location_id)
-                ]?.floorID !=
+            <View style={tw`flex-1 flex-col`}>
+              <Text
+                style={tw` font-bold text-left shadow-md  my-1 text-lg px-1 py-2 bg-yellow-300 rounded-md w-5/10`}
+              >
+                Building Selected:
+              </Text>
+              <CustomDropdown
+                data={data}
+                handleSelection={handleSelectionBuilding}
+                handleClear={handleClearIndoorNavigationProperties}
+                type={"building"}
+              />
+            </View>
+            <View style={tw`flex-1 flex-col`}>
+              <Text
+                style={tw` font-bold text-left shadow-md  my-1 text-lg px-1 py-2 bg-yellow-300 rounded-md w-4/10`}
+              >
+                Start Location:
+              </Text>
+              <CustomDropdown
+                data={indoor_locations_data}
+                handleSelection={handleSelectionStartLocation}
+                handleClear={handleClearIndoorNavigationProperties}
+                type={"start_location"}
+                empty_query_result={empty_query_result}
+              />
+            </View>
+            <View style={tw`flex-1 flex-col`}>
+              <Text
+                style={tw` font-bold text-left shadow-md  my-1 text-lg px-1 py-2 bg-yellow-300 rounded-md w-6/10`}
+              >
+                Destination Location:
+              </Text>
+              <CustomDropdown
+                data={indoor_locations_data}
+                handleSelection={handleSelectionDestinationLocation}
+                handleClear={handleClearIndoorNavigationProperties}
+                type={"destination_location"}
+                empty_query_result={empty_query_result}
+              />
+            </View>
+            <View style={tw`flex justify-center items-center`}>
+              <Button
+                style={tw`w-5/10 ${
+                  indoor_locations_data == null ||
+                  indoor_locations_data.length == 0 ||
+                  indoor_navigation_properties.start_location_id == null ||
+                  indoor_navigation_properties.destination_location_id ==
+                    null ||
+                  indoor_navigation_properties.start_location_id ==
+                    indoor_navigation_properties.destination_location_id
+                    ? "bg-gray-300"
+                    : "bg-green-300"
+                } `}
+                labelStyle={tw` font-bold text-[1rem] text-black`}
+                disabled={
+                  indoor_locations_data == null ||
+                  indoor_locations_data.length == 0 ||
+                  indoor_navigation_properties.start_location_id == null ||
+                  indoor_navigation_properties.destination_location_id ==
+                    null ||
+                  indoor_navigation_properties.start_location_id ==
+                    indoor_navigation_properties.destination_location_id
+                }
+                onPress={
+                  indoor_navigation_properties != null &&
                   indoor_locations_map[
-                    String(indoor_navigation_properties.destination_location_id)
-                  ]?.floorID
-                  ? handleStartNavigation
-                  : handleStartNavigationConfirmed
-              }
-            ></Button>
+                    String(indoor_navigation_properties.start_location_id)
+                  ]?.floorID !=
+                    indoor_locations_map[
+                      String(
+                        indoor_navigation_properties.destination_location_id
+                      )
+                    ]?.floorID
+                    ? handleStartNavigation
+                    : handleStartNavigationConfirmed
+                }
+              >
+                Start Navigation
+              </Button>
+            </View>
           </>
         )}
       </ScrollView>
