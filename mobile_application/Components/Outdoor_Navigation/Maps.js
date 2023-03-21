@@ -30,7 +30,6 @@ export default function Maps () {
       }, []);
 
       const handleGetDirections = async () => {
-        const apiKey = api_key;
         const location = await Location.getCurrentPositionAsync({});
         const origin = {
           latitude: location.coords.latitude,
@@ -39,7 +38,7 @@ export default function Maps () {
         const destinationStr = `${destination.latitude},${destination.longitude}`;
         const originStr = `${origin.latitude},${origin.longitude}`;
         const directionsUrl = `https://maps.googleapis.com/maps/api/directions/json?
-        origin=${originStr}&destination=${destinationStr}&key=${apiKey}`;
+        origin=${originStr}&destination=${destinationStr}&key=${api_key}`;
         try {
           const response = await fetch(directionsUrl);
           const result = await response.json();
