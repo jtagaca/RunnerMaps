@@ -4,14 +4,23 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import IndoorNavigationHomeScreen from "./Indoor_Navigation_Home_Screen";
 import OutdoorNavigationScreen from "./Outdoor_Navigation";
 import Icon from "react-native-vector-icons/FontAwesome";
-
 const Tab = createBottomTabNavigator();
-
+import tw from "../tailwind/CustomTailwind";
 export default function Home_Screen() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      screenOptions={{
+        tabBarStyle: { backgroundColor: "#FEF3C7" },
+        tabBarActiveTintColor: "#3B82F6",
+        tabBarLabelStyle: { fontWeight: "bold" },
+        headerTitleAlign: "center",
+        headerStyle: { backgroundColor: "#FEF3C7" },
+        headerTintColor: "#3B82F6",
+        headerShown: false,
+      }}
+    >
       <Tab.Screen
-        name="Indoor Navigation Home"
+        name="Indoor Navigation"
         component={IndoorNavigationHomeScreen}
         options={{
           tabBarIcon: ({ color, size }) => (

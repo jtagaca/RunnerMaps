@@ -3,7 +3,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { getBuildings } from "../redux_store/actions/Building_Locations";
 import { getIndoorLocationsById } from "../redux_store/actions/Indoor_Locations";
 import tw from "../tailwind/CustomTailwind";
-import { CustomDropdown } from "../utilities/Indoor_Navigation/Components/Custom_Dropdown";
+
+import CustomDropdown from "../utilities/Indoor_Navigation/Components/Custom_Dropdown";
+
 import {
   indoor_locations_actions,
   indoor_navigation_properties_actions,
@@ -17,7 +19,7 @@ import Screen_Functions, {
 } from "../utilities/Indoor_Navigation/Library/Screen_Functions";
 import { solveTheGrid } from "../utilities/Indoor_Navigation/Library/Algorithm_Functions";
 import * as Location from "expo-location";
-const Decimal = require("decimal.js");
+import { SafeAreaView } from "react-native-safe-area-context";
 import {
   Button,
   Alert,
@@ -27,6 +29,7 @@ import {
   Pressable,
   View,
   ScrollView,
+  ActivityIndicator,
 } from "react-native";
 
 export default function IndoorNavigation({ navigation }) {
@@ -46,6 +49,7 @@ export default function IndoorNavigation({ navigation }) {
     handleSelectionDestinationLocation,
     handleClearIndoorNavigationProperties,
   } = Screen_Functions();
+  const [is_loading, set_is_loading] = useState(false);
   const buildings = useSelector((state) => state.buildings.data);
   const status = useSelector((state) => state.buildings.status);
   const error = useSelector((state) => state.buildings.error);
@@ -60,8 +64,6 @@ export default function IndoorNavigation({ navigation }) {
   const indoor_locations_stairs = useSelector(
     (state) => state.indoor_locations.stairs
   );
-  const indoor_status = useSelector((state) => state.indoor_locations.status);
-  const indoor_error = useSelector((state) => state.indoor_locations.error);
 
   const indoor_navigation_properties = useSelector(
     (state) => state.indoor_navigation_properties
@@ -110,16 +112,31 @@ export default function IndoorNavigation({ navigation }) {
     }
   }, [indoor_locations]);
   const data = buildings.map((building) => ({
-    title: building.buildingName,
-    id: building.buildingID.toString(),
+    label: building.buildingName,
+    value: building.buildingID.toString(),
   }));
 
-  const indoor_locations_data = indoor_locations.map((location) => ({
-    title: location.name + " " + location.row + " " + location.col,
-    id: [location.floorID, location.row, location.col].join(","),
-  }));
+  const indoor_locations_data = indoor_locations.map((location) => {
+    let title = location.name;
+    if (
+      location.name === "elevator" ||
+      location.name === "stairs" ||
+      location.name == "restroom" ||
+      location.name === "entrance" ||
+      location.name === "door"
+    ) {
+      title = `floor ${location.floorID} ${location.name}`;
+    } else if (/^\d/.test(location.name)) {
+      title = `room ${location.name} `;
+    }
+    return {
+      label: title,
+      value: [location.floorID, location.row, location.col].join(","),
+    };
+  });
+
   const ways_to_navigate_between_floors = ["Elevator", "Stairs"];
-  const empty_query_result = "Please select a building to populate.";
+  const empty_query_result = "Please select a building";
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleIndexChange = (index) => {
@@ -135,8 +152,9 @@ export default function IndoorNavigation({ navigation }) {
       ].floorID;
     findNearestElevatorOrStairs(null, index, floor_id);
   };
+  useEffect(() => console.log("modal state" + modalVisible), [modalVisible]);
   const handleStartNavigation = () => {
-    setModalVisible(!modalVisible);
+    changeModalVisibility();
     if (
       indoor_locations_map[
         String(indoor_navigation_properties.start_location_id)
@@ -151,6 +169,7 @@ export default function IndoorNavigation({ navigation }) {
       indoor_locations_map[
         String(indoor_navigation_properties.start_location_id)
       ].floorID;
+
     findNearestElevatorOrStairs(null, 0, floor_id);
     return;
   };
@@ -201,6 +220,13 @@ export default function IndoorNavigation({ navigation }) {
     // todo rename change the variable
     // add a variable for this and change it indoor_locations_map[String(indoor_navigation_properties.start_location_id)]
     //   .floorID;
+
+    // selected index bug
+    if (modalVisible == true) {
+      changeModalVisibility();
+    }
+    set_is_loading(true);
+
     let gridStartRowLength = parseInt(
       indoor_locations_map[
         String(indoor_navigation_properties.start_location_id)
@@ -335,7 +361,9 @@ export default function IndoorNavigation({ navigation }) {
       dispatch(
         indoor_navigation_properties_actions.setShortestPathDirections(path)
       );
-      navigation.push("Indoor Navigation");
+
+      set_is_loading(false);
+      navigation.push("Result");
       return;
     }
     if (isStartAndDestinationOnDifferentFloors == true) {
@@ -517,7 +545,7 @@ export default function IndoorNavigation({ navigation }) {
       for (let i = 0; i < markers2.length; i++) {
         map_of_markers2[[markers2[i].row, markers2[i].col]] = markers2[i];
       }
-      shortest_path2 = solveTheGrid(
+      const shortest_path2 = solveTheGrid(
         grid2,
         initializedPosition2,
         map_of_markers2,
@@ -564,39 +592,40 @@ export default function IndoorNavigation({ navigation }) {
             String(indoor_navigation_properties.destination_location_id)
           ].name.longitude,
       });
+
       dispatch(
         indoor_navigation_properties_actions.setShortestPathDirections(path)
       );
 
-      navigation.push("Indoor Navigation");
-      // return;
-      // let gridDestinationRowLength =
-      //   indoor_locations_map[
-      //     String(indoor_navigation_properties.destination_location_id)
-      //   ].gridRowLength;
-      // let gridDestinationColumnLength =
-      //   indoor_locations_map[
-      //     String(indoor_navigation_properties.destination_location_id)
-      //   ].gridColumnLength;
+      set_is_loading(false);
+
+      setSelectedIndex(0);
+      navigation.push("Result");
     }
   };
-  function goToIndoorNavigationScreen() {
-    navigation.push("Indoor Navigation");
-  }
+  const changeModalVisibility = () => {
+    setModalVisible(!modalVisible);
+  };
+
   return (
-    <>
+    <SafeAreaView style={{ flex: 1 }}>
       <ScrollView
-        style={styles.container}
-        contentContainerStyle={{ flex: 1, padding: 24 }}
+        style={[
+          styles.container,
+          tw`flex-col`,
+          { opacity: is_loading ? 0 : 1 },
+        ]}
+        contentContainerStyle={{ padding: 24 }}
         keyboardShouldPersistTaps="handled"
       >
         <Modal
           animationType="slide"
           transparent={true}
           visible={modalVisible}
+          style={[{ opacity: is_loading ? 0 : 1 }]}
           onRequestClose={() => {
             Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
+            changeModalVisibility();
           }}
         >
           <View style={styles.centeredView}>
@@ -618,9 +647,7 @@ export default function IndoorNavigation({ navigation }) {
 
               <Pressable
                 style={[styles.button, styles.buttonClose]}
-                onPress={() => {
-                  setModalVisible(!modalVisible);
-                }}
+                onPress={changeModalVisibility}
               >
                 <Text style={styles.textStyle}>Cancel</Text>
               </Pressable>
@@ -636,47 +663,62 @@ export default function IndoorNavigation({ navigation }) {
             </View>
           </View>
         </Modal>
-        <Text>Building Selected:</Text>
-        {data.length > 0 ? (
-          <CustomDropdown
-            data={data}
-            handleSelection={handleSelectionBuilding}
-            handleClear={handleClearIndoorNavigationProperties}
-            type={"building"}
-          />
-        ) : null}
-        <Text>Start Location:</Text>
 
-        <CustomDropdown
-          data={indoor_locations_data}
-          handleSelection={handleSelectionStartLocation}
-          handleClear={handleClearIndoorNavigationProperties}
-          type={"start_location"}
-          empty_query_result={empty_query_result}
-        />
-        <Text>Destination Location:</Text>
-        <CustomDropdown
-          data={indoor_locations_data}
-          handleSelection={handleSelectionDestinationLocation}
-          handleClear={handleClearIndoorNavigationProperties}
-          type={"destination_location"}
-          empty_query_result={empty_query_result}
-        />
+        {data.length == 0 ? null : (
+          <>
+            <Text>Building Selected:</Text>
+            <CustomDropdown
+              data={data}
+              handleSelection={handleSelectionBuilding}
+              handleClear={handleClearIndoorNavigationProperties}
+              type={"building"}
+            />
+            <Text>Start Location:</Text>
+            <CustomDropdown
+              data={indoor_locations_data}
+              handleSelection={handleSelectionStartLocation}
+              handleClear={handleClearIndoorNavigationProperties}
+              type={"start_location"}
+              empty_query_result={empty_query_result}
+            />
+            <Text>Destination Location:</Text>
+            <CustomDropdown
+              data={indoor_locations_data}
+              handleSelection={handleSelectionDestinationLocation}
+              handleClear={handleClearIndoorNavigationProperties}
+              type={"destination_location"}
+              empty_query_result={empty_query_result}
+            />
 
-        <Button
-          disabled={
-            indoor_navigation_properties.start_location_id == null ||
-            indoor_navigation_properties.destination_location_id == null
-          }
-          title="Start Navigation"
-          onPress={handleStartNavigation}
-        ></Button>
-        <Button
-          title="Go to other page"
-          onPress={goToIndoorNavigationScreen}
-        ></Button>
+            <Button
+              disabled={
+                indoor_navigation_properties.start_location_id == null ||
+                indoor_navigation_properties.destination_location_id == null ||
+                indoor_navigation_properties.start_location_id ==
+                  indoor_navigation_properties.destination_location_id
+              }
+              title="Start Navigation"
+              onPress={
+                indoor_navigation_properties != null &&
+                indoor_locations_map[
+                  String(indoor_navigation_properties.start_location_id)
+                ]?.floorID !=
+                  indoor_locations_map[
+                    String(indoor_navigation_properties.destination_location_id)
+                  ]?.floorID
+                  ? handleStartNavigation
+                  : handleStartNavigationConfirmed
+              }
+            ></Button>
+          </>
+        )}
       </ScrollView>
-    </>
+      {(is_loading || data.length === 0) && (
+        <View style={[tw`absolute inset-0 flex items-center justify-center`]}>
+          <ActivityIndicator animating={true} size="large" color="#3B82F6" />
+        </View>
+      )}
+    </SafeAreaView>
   );
 }
 

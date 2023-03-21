@@ -28,6 +28,7 @@ const indoor_locations_slice = createSlice({
       state.data = [];
       state.status = "idle";
       state.error = null;
+      state.map = {};
     },
     buildIndoorLocationLookUpMap: (state) => {
       state.map = {};
@@ -100,16 +101,16 @@ const indoor_navigation_properties_slice = createSlice({
   },
   reducers: {
     setSelectedBuildingToIndoorNavigate: (state, action) => {
-      state.building_id = action.payload.id;
-      state.building_name = action.payload.title;
+      state.building_id = action.payload.value;
+      state.building_name = action.payload.label;
     },
     setSelectedStartLocationToIndoorNavigate: (state, action) => {
-      state.start_location = action.payload.title;
-      state.start_location_id = action.payload.id;
+      state.start_location = action.payload.label;
+      state.start_location_id = action.payload.value;
     },
     setSelectedDestinationLocationToIndoorNavigate: (state, action) => {
-      state.destination_location = action.payload.title;
-      state.destination_location_id = action.payload.id;
+      state.destination_location = action.payload.label;
+      state.destination_location_id = action.payload.value;
     },
     setChosenMethodToNavigateBetweenFloors: (state, action) => {
       state.chosen_method_to_navigate_between_floors = action.payload;
@@ -119,6 +120,10 @@ const indoor_navigation_properties_slice = createSlice({
     },
     setShortestPathDirections: (state, action) => {
       state.shortest_path_directions = action.payload;
+    },
+    deleteShortestPathDirections: (state) => {
+      state.shortest_path_directions = [];
+      state.chosen_method_to_navigate_between_floors = null;
     },
   },
 });
