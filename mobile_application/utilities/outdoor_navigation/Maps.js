@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, StyleSheet, View, Text, Button } from 'react-native';
+import { Alert, StyleSheet, Linking, View, Text, Button } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import MapViewDirections from 'react-native-maps-directions';
 import apiKey from './config_dev.js';
+import {getDistance} from 'geolib';
 
 export default function Maps () {
     const [region, setRegion] = useState(null);
@@ -37,13 +38,13 @@ export default function Maps () {
         };
         const destinationStr = `${destination.latitude},${destination.longitude}`;
         const originStr = `${origin.latitude},${origin.longitude}`;
+        console.log(getDistance(origin, destination));
         const directionsUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${originStr}&destination=${destinationStr}&key=${apiKey}`;
         try {
           const response = await fetch(directionsUrl);
           const result = await response.json();
           if (result.status === 'OK' && result.routes.length > 0) {
             const polyline = result.routes[0].overview_polyline.points;
-            console.log(polyline)
             const url = `https://www.google.com/maps/dir/?api=1&destination=${destinationStr}&travelmode=driving&dir_action=navigate&polyline=${polyline}`;
             Linking.openURL(url);
           } else {
