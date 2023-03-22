@@ -624,42 +624,53 @@ export default function IndoorNavigation({ navigation }) {
           visible={modalVisible}
           style={[{ opacity: is_loading ? 0 : 1 }]}
           onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
             changeModalVisibility();
           }}
         >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
+          <View style={tw`flex-col justify-center content-center flex-1`}>
+            <View
+              style={tw`m-[20px] bg-white rounded-2xl p-10 items-center h-1/2 shadow-md flex-col justify-start`}
+            >
               {isStartAndDestinationOnDifferentFloors == true ? (
                 <>
-                  <Text>
-                    Your start location and destination location are on
-                    different floors{" "}
-                  </Text>
-                  <Text>Choose your preferred method</Text>
+                  <View style={tw`my-3 w-full`}>
+                    <Text style={tw`text-lg text-left`}>
+                      Your start location and destination location are on
+                      different floors{" "}
+                    </Text>
+                  </View>
+                  <View style={tw`my-3 w-full`}>
+                    <Text style={tw`text-lg text-left`}>
+                      Choose your preferred method
+                    </Text>
+                  </View>
                   <SegmentedControlTab
+                    tabsContainerStyle={tw`bg-blue-500 my-3`}
+                    tabTextStyle={tw`text-lg`}
                     values={ways_to_navigate_between_floors}
                     selectedIndex={selectedIndex}
                     onTabPress={handleIndexChange}
                   />
                 </>
               ) : null}
-
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={changeModalVisibility}
+              <View
+                style={tw`flex-1 flex-row justify-center justify-between m-3 items-center  flex-wrap`}
               >
-                <Text style={styles.textStyle}>Cancel</Text>
-              </Pressable>
-
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => {
-                  handleStartNavigationConfirmed();
-                }}
-              >
-                <Text style={styles.textStyle}>Start</Text>
-              </Pressable>
+                <Button
+                  style={tw`bg-red-500 mx-2 flex-grow`}
+                  labelStyle={tw`text-white text-lg`}
+                  onPress={changeModalVisibility}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  style={tw`bg-green-700 mx-2 flex-grow`}
+                  labelStyle={tw`text-white text-lg`}
+                  onPress={handleStartNavigationConfirmed}
+                >
+                  Start
+                </Button>
+              </View>
             </View>
           </View>
         </Modal>
@@ -718,7 +729,7 @@ export default function IndoorNavigation({ navigation }) {
                   indoor_navigation_properties.start_location_id ==
                     indoor_navigation_properties.destination_location_id
                     ? "bg-gray-300"
-                    : "bg-green-300"
+                    : "bg-green-700"
                 } `}
                 labelStyle={tw` 
                 ${
@@ -730,7 +741,7 @@ export default function IndoorNavigation({ navigation }) {
                   indoor_navigation_properties.start_location_id ==
                     indoor_navigation_properties.destination_location_id
                     ? "text-gray-500"
-                    : "font-bold text-[1rem] text-black"
+                    : "font-bold text-[1rem] text-white"
                 }
                 `}
                 disabled={
@@ -776,7 +787,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    // marginTop: 22,
   },
   modalView: {
     margin: 20,
@@ -784,6 +795,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
+    height: "50%",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,
