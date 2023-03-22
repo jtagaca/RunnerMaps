@@ -3,10 +3,9 @@ import { Alert, StyleSheet, View, Text, Button } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import MapViewDirections from 'react-native-maps-directions';
-import {config} from'./config_dev.js';
+import apiKey from './config_dev.js';
 
 export default function Maps () {
-    const apiKey = config.gMaps.apiKey;
     const [region, setRegion] = useState(null);
     const [destination, setDestination] = useState({
         //Science 3 Entrance 1
@@ -38,14 +37,14 @@ export default function Maps () {
         };
         const destinationStr = `${destination.latitude},${destination.longitude}`;
         const originStr = `${origin.latitude},${origin.longitude}`;
-        const directionsUrl = `https://maps.googleapis.com/maps/api/directions/json?
-        origin=${originStr}&destination=${destinationStr}&key=${apiKey}`;
+        const directionsUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${originStr}&destination=${destinationStr}&key=${apiKey}`;
         try {
           const response = await fetch(directionsUrl);
           const result = await response.json();
           if (result.status === 'OK' && result.routes.length > 0) {
             const polyline = result.routes[0].overview_polyline.points;
-            const url = `https://www.google.com/maps/dir/?api=1&destination=${destination}&travelmode=driving&dir_action=navigate&polyline=${polyline}`;
+            console.log(polyline)
+            const url = `https://www.google.com/maps/dir/?api=1&destination=${destinationStr}&travelmode=driving&dir_action=navigate&polyline=${polyline}`;
             Linking.openURL(url);
           } else {
             Alert.alert('Error', 'Directions not found');
@@ -55,6 +54,7 @@ export default function Maps () {
           Alert.alert('Error', error.message);
         }
         const points = MapViewDirections.processPolyline(result.routes[0].overview_polyline.points);
+        console.log(points)
         setDestination({
           latitude: result.routes[0].legs[0].end_location.lat,
           longitude: result.routes[0].legs[0].end_location.lng,
