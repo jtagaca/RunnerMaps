@@ -55,7 +55,6 @@ export default function Maps () {
           Alert.alert('Error', error.message);
         }
         const points = MapViewDirections.processPolyline(result.routes[0].overview_polyline.points);
-        console.log(points)
         setDestination({
           latitude: result.routes[0].legs[0].end_location.lat,
           longitude: result.routes[0].legs[0].end_location.lng,
