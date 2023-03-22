@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, Linking, StyleSheet, View, Text, Button } from 'react-native';
-import MapView, {Polyline, Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { Alert, StyleSheet, View, Text, Button } from 'react-native';
+import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import MapViewDirections from 'react-native-maps-directions';
+import {config} from'./config_dev.js';
 
 export default function Maps () {
+    const apiKey = config.gMaps.apiKey;
     const [region, setRegion] = useState(null);
     const [destination, setDestination] = useState({
         //Science 3 Entrance 1
         latitude: 35.348883,
         longitude: -119.103437,
     });
-    const [routeCoordinates, setRouteCoordinates] = useState([]);
     useEffect(() => {
         (async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
@@ -30,7 +31,6 @@ export default function Maps () {
       }, []);
 
       const handleGetDirections = async () => {
-        const apiKey = "AIzaSyAJVYqFZxP1cE040AZVjzRHNVAX10jUORI";
         const location = await Location.getCurrentPositionAsync({});
         const origin = {
           latitude: location.coords.latitude,
@@ -40,7 +40,6 @@ export default function Maps () {
         const originStr = `${origin.latitude},${origin.longitude}`;
         const directionsUrl = `https://maps.googleapis.com/maps/api/directions/json?
         origin=${originStr}&destination=${destinationStr}&key=${apiKey}`;
-        const directions1 = "https://maps.googleapis.com/maps/api/directions/json?origin=35.3500328,-119.126109&destination=35.348883,-119.103437&key=AIzaSyAJVYqFZxP1cE040AZVjzRHNVAX10jUORI"
         try {
           const response = await fetch(directionsUrl);
           const result = await response.json();
@@ -55,15 +54,15 @@ export default function Maps () {
         catch (error) {
           Alert.alert('Error', error.message);
         }
-        // const points = MapViewDirections.processPolyline(result.routes[0].overview_polyline.points);
-        // setDestination({
-        //   latitude: result.routes[0].legs[0].end_location.lat,
-        //   longitude: result.routes[0].legs[0].end_location.lng,
-        // });
-        // this.map.fitToCoordinates(points.coordinates, {
-        //   edgePadding: { top: 20, right: 20, bottom: 20, left: 20 },
-        //   animated: true,
-        // });
+        const points = MapViewDirections.processPolyline(result.routes[0].overview_polyline.points);
+        setDestination({
+          latitude: result.routes[0].legs[0].end_location.lat,
+          longitude: result.routes[0].legs[0].end_location.lng,
+        });
+        this.map.fitToCoordinates(points.coordinates, {
+          edgePadding: { top: 20, right: 20, bottom: 20, left: 20 },
+          animated: true,
+        });
       }
 
       return (
@@ -76,11 +75,10 @@ export default function Maps () {
               <MapViewDirections
                 origin={region}
                 destination={destination}
-                apikey="AIzaSyAJVYqFZxP1cE040AZVjzRHNVAX10jUORI"
+                apikey={apiKey}
                 strokeWidth={3}
                 strokeColor="red"
               />
-              <Polyline coordinates={routeCoordinates} strokeColor="#FF0000" strokeWidth={3} />
             </MapView>
           ) : (
             <Text>Loading...</Text>
