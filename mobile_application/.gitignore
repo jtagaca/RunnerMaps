@@ -10,6 +10,6 @@ npm-debug.*
 *.orig.*
 *.env
 web-build/
-
+./utilities/Outdoor_Navigation/config_dev.js
 # macOS
 .DS_Store
