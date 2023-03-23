@@ -50,6 +50,8 @@ const CustomDropdown = ({
       style={tw`flex flex-row items-center justify-center content-center bg-blue-500 rounded-lg my-2 p-2 text-white`}
     >
       <Dropdown
+        dropdownPosition="auto"
+        showsVerticalScrollIndicator={true}
         style={(styles.dropdown, tw`w-8/10 my-4 mr-0 h-1/30 `)}
         placeholderStyle={tw`text-white `}
         selectedTextStyle={tw`text-white `}

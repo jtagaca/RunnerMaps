@@ -657,15 +657,15 @@ export default function IndoorNavigation({ navigation }) {
                 style={tw`flex-1 flex-row justify-center justify-between m-3 items-center  flex-wrap`}
               >
                 <Button
-                  style={tw`bg-red-500 mx-2 flex-grow`}
+                  style={tw`bg-red-500 mx-2 w-4/10`}
                   labelStyle={tw`text-white text-lg`}
                   onPress={changeModalVisibility}
                 >
                   Cancel
                 </Button>
                 <Button
-                  style={tw`bg-green-700 mx-2 flex-grow`}
-                  labelStyle={tw`text-white text-lg`}
+                  style={tw`bg-green-700 mx-2 w-4/10`}
+                  labelStyle={tw`text-white text-lg `}
                   onPress={handleStartNavigationConfirmed}
                 >
                   Start
