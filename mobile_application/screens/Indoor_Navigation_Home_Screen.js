@@ -20,8 +20,9 @@ import Screen_Functions, {
 import { solveTheGrid } from "../utilities/Indoor_Navigation/Library/Algorithm_Functions";
 import * as Location from "expo-location";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Button } from "react-native-paper";
+
 import {
-  Button,
   Alert,
   Modal,
   StyleSheet,
@@ -152,7 +153,6 @@ export default function IndoorNavigation({ navigation }) {
       ].floorID;
     findNearestElevatorOrStairs(null, index, floor_id);
   };
-  useEffect(() => console.log("modal state" + modalVisible), [modalVisible]);
   const handleStartNavigation = () => {
     changeModalVisibility();
     if (
@@ -608,7 +608,7 @@ export default function IndoorNavigation({ navigation }) {
   };
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={tw`flex flex-1 bg-yellow-100`}>
       <ScrollView
         style={[
           styles.container,
@@ -624,92 +624,152 @@ export default function IndoorNavigation({ navigation }) {
           visible={modalVisible}
           style={[{ opacity: is_loading ? 0 : 1 }]}
           onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
             changeModalVisibility();
           }}
         >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
+          <View style={tw`flex-col justify-center content-center flex-1`}>
+            <View
+              style={tw`m-[20px] bg-white rounded-2xl p-10 items-center h-1/2 shadow-md flex-col justify-start`}
+            >
               {isStartAndDestinationOnDifferentFloors == true ? (
                 <>
-                  <Text>
-                    Your start location and destination location are on
-                    different floors{" "}
-                  </Text>
-                  <Text>Choose your preferred method</Text>
+                  <View style={tw`my-3 w-full`}>
+                    <Text style={tw`text-lg text-left`}>
+                      Your start location and destination location are on
+                      different floors{" "}
+                    </Text>
+                  </View>
+                  <View style={tw`my-3 w-full`}>
+                    <Text style={tw`text-lg text-left`}>
+                      Choose your preferred method
+                    </Text>
+                  </View>
                   <SegmentedControlTab
+                    tabsContainerStyle={tw`bg-blue-500 my-3`}
+                    tabTextStyle={tw`text-lg`}
                     values={ways_to_navigate_between_floors}
                     selectedIndex={selectedIndex}
                     onTabPress={handleIndexChange}
                   />
                 </>
               ) : null}
-
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={changeModalVisibility}
+              <View
+                style={tw`flex-1 flex-row justify-center justify-between m-3 items-center  flex-wrap`}
               >
-                <Text style={styles.textStyle}>Cancel</Text>
-              </Pressable>
-
-              <Pressable
-                style={[styles.button, styles.buttonClose]}
-                onPress={() => {
-                  handleStartNavigationConfirmed();
-                }}
-              >
-                <Text style={styles.textStyle}>Start</Text>
-              </Pressable>
+                <Button
+                  style={tw`bg-red-500 mx-2 flex-grow`}
+                  labelStyle={tw`text-white text-lg`}
+                  onPress={changeModalVisibility}
+                >
+                  Cancel
+                </Button>
+                <Button
+                  style={tw`bg-green-700 mx-2 flex-grow`}
+                  labelStyle={tw`text-white text-lg`}
+                  onPress={handleStartNavigationConfirmed}
+                >
+                  Start
+                </Button>
+              </View>
             </View>
           </View>
         </Modal>
 
         {data.length == 0 ? null : (
           <>
-            <Text>Building Selected:</Text>
-            <CustomDropdown
-              data={data}
-              handleSelection={handleSelectionBuilding}
-              handleClear={handleClearIndoorNavigationProperties}
-              type={"building"}
-            />
-            <Text>Start Location:</Text>
-            <CustomDropdown
-              data={indoor_locations_data}
-              handleSelection={handleSelectionStartLocation}
-              handleClear={handleClearIndoorNavigationProperties}
-              type={"start_location"}
-              empty_query_result={empty_query_result}
-            />
-            <Text>Destination Location:</Text>
-            <CustomDropdown
-              data={indoor_locations_data}
-              handleSelection={handleSelectionDestinationLocation}
-              handleClear={handleClearIndoorNavigationProperties}
-              type={"destination_location"}
-              empty_query_result={empty_query_result}
-            />
-
-            <Button
-              disabled={
-                indoor_navigation_properties.start_location_id == null ||
-                indoor_navigation_properties.destination_location_id == null ||
-                indoor_navigation_properties.start_location_id ==
-                  indoor_navigation_properties.destination_location_id
-              }
-              title="Start Navigation"
-              onPress={
-                indoor_navigation_properties != null &&
-                indoor_locations_map[
-                  String(indoor_navigation_properties.start_location_id)
-                ]?.floorID !=
+            <View style={tw`flex-1 flex-col`}>
+              <Text
+                style={tw` font-bold text-left shadow-md  my-1 text-lg px-1 py-2 bg-yellow-300 rounded-md w-5/10`}
+              >
+                Building Selected:
+              </Text>
+              <CustomDropdown
+                data={data}
+                handleSelection={handleSelectionBuilding}
+                handleClear={handleClearIndoorNavigationProperties}
+                type={"building"}
+              />
+            </View>
+            <View style={tw`flex-1 flex-col`}>
+              <Text
+                style={tw` font-bold text-left shadow-md  my-1 text-lg px-1 py-2 bg-yellow-300 rounded-md w-4/10`}
+              >
+                Start Location:
+              </Text>
+              <CustomDropdown
+                data={indoor_locations_data}
+                handleSelection={handleSelectionStartLocation}
+                handleClear={handleClearIndoorNavigationProperties}
+                type={"start_location"}
+                empty_query_result={empty_query_result}
+              />
+            </View>
+            <View style={tw`flex-1 flex-col`}>
+              <Text
+                style={tw` font-bold text-left shadow-md  my-1 text-lg px-1 py-2 bg-yellow-300 rounded-md w-6/10`}
+              >
+                Destination Location:
+              </Text>
+              <CustomDropdown
+                data={indoor_locations_data}
+                handleSelection={handleSelectionDestinationLocation}
+                handleClear={handleClearIndoorNavigationProperties}
+                type={"destination_location"}
+                empty_query_result={empty_query_result}
+              />
+            </View>
+            <View style={tw`flex justify-center items-center`}>
+              <Button
+                style={tw`w-5/10 ${
+                  indoor_locations_data == null ||
+                  indoor_locations_data.length == 0 ||
+                  indoor_navigation_properties.start_location_id == null ||
+                  indoor_navigation_properties.destination_location_id ==
+                    null ||
+                  indoor_navigation_properties.start_location_id ==
+                    indoor_navigation_properties.destination_location_id
+                    ? "bg-gray-300"
+                    : "bg-green-700"
+                } `}
+                labelStyle={tw` 
+                ${
+                  indoor_locations_data == null ||
+                  indoor_locations_data.length == 0 ||
+                  indoor_navigation_properties.start_location_id == null ||
+                  indoor_navigation_properties.destination_location_id ==
+                    null ||
+                  indoor_navigation_properties.start_location_id ==
+                    indoor_navigation_properties.destination_location_id
+                    ? "text-gray-500"
+                    : "font-bold text-[1rem] text-white"
+                }
+                `}
+                disabled={
+                  indoor_locations_data == null ||
+                  indoor_locations_data.length == 0 ||
+                  indoor_navigation_properties.start_location_id == null ||
+                  indoor_navigation_properties.destination_location_id ==
+                    null ||
+                  indoor_navigation_properties.start_location_id ==
+                    indoor_navigation_properties.destination_location_id
+                }
+                onPress={
+                  indoor_navigation_properties != null &&
                   indoor_locations_map[
-                    String(indoor_navigation_properties.destination_location_id)
-                  ]?.floorID
-                  ? handleStartNavigation
-                  : handleStartNavigationConfirmed
-              }
-            ></Button>
+                    String(indoor_navigation_properties.start_location_id)
+                  ]?.floorID !=
+                    indoor_locations_map[
+                      String(
+                        indoor_navigation_properties.destination_location_id
+                      )
+                    ]?.floorID
+                    ? handleStartNavigation
+                    : handleStartNavigationConfirmed
+                }
+              >
+                Start Navigation
+              </Button>
+            </View>
           </>
         )}
       </ScrollView>
@@ -727,7 +787,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 22,
+    // marginTop: 22,
   },
   modalView: {
     margin: 20,
@@ -735,6 +795,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 35,
     alignItems: "center",
+    height: "50%",
     shadowColor: "#000",
     shadowOffset: {
       width: 0,

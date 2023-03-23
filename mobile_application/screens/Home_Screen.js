@@ -10,11 +10,11 @@ export default function Home_Screen() {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarStyle: { backgroundColor: "#FEF3C7" },
+        tabBarStyle: { backgroundColor: "#f7db69" },
         tabBarActiveTintColor: "#3B82F6",
         tabBarLabelStyle: { fontWeight: "bold" },
         headerTitleAlign: "center",
-        headerStyle: { backgroundColor: "#FEF3C7" },
+        headerStyle: { backgroundColor: "#f7db69" },
         headerTintColor: "#3B82F6",
         headerShown: false,
       }}
