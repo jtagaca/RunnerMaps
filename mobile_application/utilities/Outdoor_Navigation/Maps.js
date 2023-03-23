@@ -45,7 +45,7 @@ export default function Maps () {
           const result = await response.json();
           if (result.status === 'OK' && result.routes.length > 0) {
             const polyline = result.routes[0].overview_polyline.points;
-            const url = `https://www.google.com/maps/dir/?api=1&destination=${destinationStr}&travelmode=driving&dir_action=navigate&polyline=${polyline}`;
+            const url = `https://www.google.com/maps/dir/?api=1&destination=${destinationStr}&travelmode=walking&dir_action=navigate&polyline=${polyline}`;
             Linking.openURL(url);
           } else {
             Alert.alert('Error', 'Directions not found');
