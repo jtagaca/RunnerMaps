@@ -8,11 +8,7 @@ import {getDistance} from 'geolib';
 
 export default function Maps () {
     const [region, setRegion] = useState(null);
-    const [destination, setDestination] = useState({
-        //Science 3 Entrance 1
-        latitude: 35.348883,
-        longitude: -119.103437,
-    });
+    const [destination, setDestination] = useState(null);
     useEffect(() => {
         (async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
@@ -36,9 +32,29 @@ export default function Maps () {
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
         };
+        const destinations = {
+          1: { latitude: 35.348883, longitude: -119.103437 },
+          2: { latitude: 35.348886, longitude: -119.103911 },
+          3: { latitude: 35.348957, longitude: -119.104085 }
+        };
+
+        const closestDestination = (obj) => {
+          let minDistance = Infinity;
+          let closestDest = obj[0];
+          Object.keys(obj).forEach(function(key) {
+            let distance = getDistance(origin, obj[key]);
+            if (distance < minDistance) {
+              minDistance = distance;
+              closestDest = obj[key];
+            }
+          });
+          return closestDest;
+        }
+        let destination = closestDestination(destinations);
+        setDestination(destination);
+        
         const destinationStr = `${destination.latitude},${destination.longitude}`;
         const originStr = `${origin.latitude},${origin.longitude}`;
-        console.log(getDistance(origin, destination));
         const directionsUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${originStr}&destination=${destinationStr}&key=${apiKey}`;
         try {
           const response = await fetch(directionsUrl);
