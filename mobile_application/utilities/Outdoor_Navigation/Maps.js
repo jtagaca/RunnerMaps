@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, StyleSheet, Linking, View, Text, Button } from 'react-native';
+import { Alert, StyleSheet, View, Text, Button, Linking } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import MapViewDirections from 'react-native-maps-directions';
@@ -54,17 +54,7 @@ export default function Maps () {
         catch (error) {
           Alert.alert('Error', error.message);
         }
-        const points = MapViewDirections.processPolyline(result.routes[0].overview_polyline.points);
-        setDestination({
-          latitude: result.routes[0].legs[0].end_location.lat,
-          longitude: result.routes[0].legs[0].end_location.lng,
-        });
-        this.map.fitToCoordinates(points.coordinates, {
-          edgePadding: { top: 20, right: 20, bottom: 20, left: 20 },
-          animated: true,
-        });
       }
-
       return (
         <View style={styles.container}>
         <Text style={styles.titleText}>Runner Maps</Text>
