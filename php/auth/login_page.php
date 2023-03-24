@@ -1,6 +1,12 @@
 <?php
 session_start();
 
+if (isset($_SESSION["authorized"])) {
+    if ($_SESSION["authorized"] === true) {
+        header("Location: ../home/hub.php");
+    }
+}
+
 if (isset($_SESSION["error"])) {
     $errorMsg = $_SESSION["error"];
 }

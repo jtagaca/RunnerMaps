@@ -113,7 +113,7 @@ function login($username, $password) {
                 $_SESSION["userType"] = $userType;
                 $_SESSION["departmentID"] = $deptID;
                 
-                // header("Location: hub.php");
+                // header("Location: ../home/hub.php");
 
             }
             else {
