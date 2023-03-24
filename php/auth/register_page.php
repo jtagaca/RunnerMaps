@@ -1,5 +1,3 @@
-<?php session_start(); ?>
-
 <?php
 session_start();
 
@@ -49,7 +47,7 @@ if (isset($_SESSION["success_message"])) {
         <p style="color:red"><?=$errorMsg?></p>
         <p style="color:green"><?=$success_message?></p>
         <br> <br>
-        <a href="../index.php"> Log In Instead </a>
+        <a href="login_page.php"> Log In Instead </a>
 
         <?php 
         unset($_SESSION["error"]); 
