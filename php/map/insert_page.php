@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once("../auth/logout.php");
 
 if (isset($_SESSION["error"])) {
     $errorMsg = $_SESSION["error"];
@@ -7,6 +8,9 @@ if (isset($_SESSION["error"])) {
 if (isset($_SESSION["success_message"])) {
     $success_message = $_SESSION["success_message"];
 }
+
+// echo $_SESSION["authorized"];
+
 ?>
 
 
@@ -21,9 +25,13 @@ if (isset($_SESSION["success_message"])) {
     </head>
 
     <body>
+        <h3>
+        <a href="../home/hub.php"> Back to Hub </a>
+        </h3>
+        <br><br>
+
         <h1>Campus Map</h1>
         <h2>Insert a Map</h2>
-        
         <!-- https://gomakethings.com/how-to-upload-and-process-a-json-file-with-vanilla-js/ -->
         <!-- https://www.php.net/manual/en/features.file-upload.post-method.php -->
         <form action="insert_ops.php" method="POST" enctype="multipart/form-data">

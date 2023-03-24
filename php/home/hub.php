@@ -1,3 +1,8 @@
+<?php
+session_start();
+require_once("../auth/logout.php");
+?>
+
 <!DOCTYPE html>
 
 <html lang="en">
