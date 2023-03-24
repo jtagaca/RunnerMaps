@@ -4,7 +4,7 @@
 -- DROP TABLE IF EXISTS `walls`;
 -- DROP TABLE IF EXISTS `indoorLocations`;
 
-DROP TABLE IF EXISTS `wall`;
+DROP TABLE IF EXISTS `walls`;
 DROP TABLE IF EXISTS `indoor_locations`;
 DROP TABLE IF EXISTS `markers`;
 DROP TABLE IF EXISTS `users`;
