@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once("../config/config.php");
+require_once("validation_functions.php");
 
 // function register($username, $password, $userType, $email_username, $email_domain) {
 function register($username, $password, $userType, $email) {
@@ -73,17 +74,46 @@ if (isset($_POST["register"])) {
         $password = $_POST["password"];
         $password_confirm = $_POST["password_confirm"];
 
-        if ($password !== $password_confirm) {
-            $_SESSION["error"] = 
-                "the retyped password and password do not match <br>";
-        } 
-        else {
-            $userType = "supervisor";
 
-            echo "before calling register <br>";
-            register($username, $password, $userType, $email);
-            echo "after calling register <br>";
-            // $_SESSION["success_message"] = "Account successfully created. Username: $username";
+        $usernameNotBlank = blankTest($username);
+        $passwordNotBlank = blankTest($password);
+        $emailNotBlank = blankTest($email);
+        $usernameLengthValid = lengthTest($username, 4, 12);
+        $passwordLengthValid = lengthTest($password, 6, 20);
+
+        if (!$usernameNotBlank || !$passwordNotBlank || !$emailNotBlank ||
+            !$usernameLengthValid || !$passwordLengthValid) {
+        
+            if (!$usernameNotBlank || !$passwordNotBlank || !$emailNotBlank) {
+                $_SESSION["error"] = "Make sure all fields are entered <br>";
+            }
+
+            if (!$usernameLengthValid) {
+                $_SESSION["error"] = $_SESSION["error"] . 
+                                    "Usernames need to be 4-12 characters long<br>";
+
+            }
+
+            if (!$usernameLengthValid || !$passwordLengthValid) {
+                $_SESSION["error"] = $_SESSION["error"] . 
+                                    "passwords need to be 6-20 characters long <br>";
+
+            }
+        }
+
+        else {
+            if ($password !== $password_confirm) {
+                $_SESSION["error"] = $_SESSION["error"] . 
+                    "the retyped password and password do not match <br>";
+            } 
+            else {
+                $userType = "supervisor";
+
+                echo "before calling register <br>";
+                register($username, $password, $userType, $email);
+                echo "after calling register <br>";
+                // $_SESSION["success_message"] = "Account successfully created. Username: $username";
+            }
         }
     }
     else {
