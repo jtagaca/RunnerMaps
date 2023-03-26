@@ -1,12 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import {
-  View,
-  Text,
-  Dimensions,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, Dimensions, StyleSheet, Image } from "react-native";
 import { Card, Title, Paragraph } from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import Swiper from "react-native-deck-swiper";
@@ -17,6 +10,9 @@ import tw from "../tailwind/CustomTailwind";
 import { Button } from "react-native-paper";
 
 export default function Indoor_Navigation({ navigation }) {
+  const handleImageLoad = () => {
+    setIsLoading(false);
+  };
   const dispatch = useDispatch();
   const shortest_path = useSelector(
     (state) => state.indoor_navigation_properties.shortest_path_directions
@@ -110,11 +106,13 @@ export default function Indoor_Navigation({ navigation }) {
                         {card.image &&
                         card.image != null &&
                         card.image != "" ? (
-                          <Card.Cover
-                            style={tw`h-8/10 m-5`}
-                            source={{ uri: card.image }}
-                            resizeMode="contain"
-                          />
+                          <>
+                            <Card.Cover
+                              style={tw`h-8/10 m-5`}
+                              source={{ uri: card.image }}
+                              resizeMode="contain"
+                            />
+                          </>
                         ) : (
                           <View
                             style={tw`flex flex-col items-center justify-center h-full`}
