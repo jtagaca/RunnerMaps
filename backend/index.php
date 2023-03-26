@@ -25,6 +25,40 @@ if (isset($_POST['get_list_of_indoor_locations_by_building_id'])) {
 
     echo json_encode($list_of_indoor_locations);
 
+} else if ($_POST['get_list_of_all_indoor_locations']) {
+
+    $connection = get_connection();
+
+    $query = "SELECT 
+    indoor_locations.*,
+    categories.services,
+    joined_floors_buildings.buildingID,
+    joined_floors_buildings.buildingName,
+    joined_floors_buildings.gridRowLength, joined_floors_buildings.gridColumnLength  
+    FROM
+    indoor_locations
+        JOIN
+    (SELECT 
+        floors.floorID, buildings.buildingID, buildings.buildingName, floors.gridRowLength, floors.gridColumnLength
+    FROM
+        floors
+    JOIN buildings ON floors.buildingID = buildings.buildingID) AS joined_floors_buildings ON indoor_locations.floorId = joined_floors_buildings.floorID
+        LEFT JOIN
+    categories ON indoor_locations.categoryID = categories.categoryID;
+    ";
+
+    $statement = mysqli_prepare($connection, $query);
+    mysqli_stmt_execute($statement);
+
+    $result = mysqli_stmt_get_result($statement);
+
+    $list_of_indoor_locations = array();
+    while ($row = mysqli_fetch_assoc($result)) {
+        $list_of_indoor_locations[] = $row;
+    }
+
+    echo json_encode($list_of_indoor_locations);
+
 } else if (isset($_POST['get_list_of_buildings'])) {
     $connection = get_connection();
 
