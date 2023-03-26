@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getBuildings } from "./actions/Building_Locations";
 import { getIndoorLocationsById } from "./actions/Indoor_Locations";
-import { getAllIndoorLocations } from "./actions/Indoor_Locations";
+import { getAllIndoorLocations } from "./actions/All_Indoor_Locations";
 
 // to be edited
 const closestLocationsSlice = createSlice({
@@ -164,6 +164,7 @@ const all_indoor_locations_slice = createSlice({
   },
 });
 
+export const all_indoor_locations_actions = all_indoor_locations_slice.actions;
 export const { setClosestLocations } = closestLocationsSlice.actions;
 export const { setCurrentGeolocationProperties } =
   current_geolocation_slice.actions;
@@ -177,4 +178,5 @@ export default {
   buildings: buildings_slice.reducer,
   currentLocation: current_geolocation_slice.reducer,
   indoor_navigation_properties: indoor_navigation_properties_slice.reducer,
+  all_indoor_locations: all_indoor_locations_slice.reducer,
 };
