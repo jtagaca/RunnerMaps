@@ -25,7 +25,7 @@ if (isset($_POST['get_list_of_indoor_locations_by_building_id'])) {
 
     echo json_encode($list_of_indoor_locations);
 
-} else if ($_POST['get_list_of_all_indoor_locations']) {
+} else if (isset($_POST['get_list_of_all_indoor_locations'])) {
 
     $connection = get_connection();
 

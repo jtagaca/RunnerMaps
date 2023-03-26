@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { getBuildings } from "./actions/Building_Locations";
 import { getIndoorLocationsById } from "./actions/Indoor_Locations";
+import { getAllIndoorLocations } from "./actions/Indoor_Locations";
 
 // to be edited
 const closestLocationsSlice = createSlice({
@@ -136,6 +137,30 @@ const current_geolocation_slice = createSlice({
     setCurrentGeolocationProperties: (state, action) => {
       return action.payload;
     },
+  },
+});
+
+const all_indoor_locations_slice = createSlice({
+  name: "all_indoor_locations",
+  initialState: {
+    data: [],
+    status: "idle",
+    error: null,
+  },
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      .addCase(getAllIndoorLocations.pending, (state) => {
+        state.status = "pending";
+      })
+      .addCase(getAllIndoorLocations.fulfilled, (state, action) => {
+        state.status = "fulfilled";
+        state.data = action.payload;
+      })
+      .addCase(getAllIndoorLocations.rejected, (state, action) => {
+        state.status = "rejected";
+        state.error = action.error.message;
+      });
   },
 });
 
