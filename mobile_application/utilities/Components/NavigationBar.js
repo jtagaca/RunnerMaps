@@ -8,7 +8,7 @@ import OutdoorNavigationScreen from "../../screens/Outdoor_Navigation";
 import Icon from "react-native-vector-icons/FontAwesome";
 const Tab = createBottomTabNavigator();
 import tw from "../../tailwind/CustomTailwind";
-export default function NavBar() {
+export default function NavigationBar() {
   return (
     <Tab.Navigator
       initialRouteName="Home"

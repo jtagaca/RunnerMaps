@@ -7,12 +7,12 @@ import store from "./redux_store/store";
 import React from "react";
 import { Provider as PaperProvider, Button } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
-import NavBar from "./utilities/Components/Nav_Bar";
+import NavigationBar from "./utilities/Components/NavigationBar";
 import IndoorNavigation from "./screens/Indoor_Navigation";
 
 import { createStackNavigator } from "@react-navigation/stack";
 const Stack = createStackNavigator();
-import CustomHeader from "./utilities/Indoor_Navigation/Components/Custom_BackButton";
+import CustomHeader from "./utilities/Indoor_Navigation/Components/CustomBackButton";
 
 export default function App() {
   return (
@@ -24,7 +24,7 @@ export default function App() {
               <Stack.Screen
                 options={{ headerShown: false }}
                 name="Nav Bar"
-                component={NavBar}
+                component={NavigationBar}
               />
               <Stack.Screen
                 name="Result"

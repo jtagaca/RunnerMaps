@@ -21,7 +21,7 @@ import {
   Searchbar,
   IconButton,
 } from "react-native-paper";
-import LoadingImage from "../utilities/Components/Loading_Image";
+import LoadingImage from "../utilities/Components/LoadingImage";
 export default function HomeScreen() {
   const dispatch = useDispatch();
 

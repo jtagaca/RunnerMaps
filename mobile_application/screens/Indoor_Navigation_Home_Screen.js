@@ -4,7 +4,7 @@ import { getBuildings } from "../redux_store/actions/Building_Locations";
 import { getIndoorLocationsById } from "../redux_store/actions/Indoor_Locations";
 import tw from "../tailwind/CustomTailwind";
 
-import CustomDropdown from "../utilities/Indoor_Navigation/Components/Custom_Dropdown";
+import CustomDropdown from "../utilities/Indoor_Navigation/Components/CustomDropdown";
 
 import {
   indoor_locations_actions,
