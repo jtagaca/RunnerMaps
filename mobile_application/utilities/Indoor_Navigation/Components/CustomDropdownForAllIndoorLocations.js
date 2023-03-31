@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Button } from "react-native-paper";
 import tw from "../../../tailwind/CustomTailwind";
+import AllIndoorLocationContext from "../Contexts/AllIndoorLocations";
+
 const CustomDropdownForAllIndoorLocations = ({
   data,
   handleSelection,
@@ -11,8 +13,9 @@ const CustomDropdownForAllIndoorLocations = ({
   type,
   empty_query_result,
 }) => {
-  const [selectedItem, setSelectedItem] = useState(null);
-
+  const { selectedItem, setSelectedItem } = useContext(
+    AllIndoorLocationContext
+  );
   const handleSelectionLocal = (item) => {
     // handleSelection(item);
     setSelectedItem(item);
