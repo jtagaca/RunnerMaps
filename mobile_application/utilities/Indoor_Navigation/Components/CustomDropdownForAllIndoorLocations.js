@@ -5,6 +5,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Button } from "react-native-paper";
 import tw from "../../../tailwind/CustomTailwind";
 import AllIndoorLocationContext from "../Contexts/AllIndoorLocations";
+import { Dimensions } from "react-native";
 
 const CustomDropdownForAllIndoorLocations = ({
   data,
@@ -50,13 +51,13 @@ const CustomDropdownForAllIndoorLocations = ({
 
   return (
     <View
-      style={tw`flex flex-row items-center justify-center content-center bg-blue-500 rounded-lg mt-2 p-2 text-white`}
+      style={tw`flex flex-row items-center justify-center content-center bg-blue-500 rounded-lg mt-10 p-4 text-white`}
     >
       <Dropdown
         dropdownPosition="auto"
         showsVerticalScrollIndicator={true}
-        style={(styles.dropdown, tw`w-8/10 my-4 mr-0 h-1/30 `)}
-        placeholderStyle={tw`text-white h-11/10 flex-wrap`}
+        style={(styles.dropdown, tw`w-8/10 my-4 mr-0 h-2/30 `)}
+        placeholderStyle={tw`text-white leading-[40px] flex-wrap justify-center`}
         selectedTextStyle={tw`text-white`}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
@@ -71,7 +72,7 @@ const CustomDropdownForAllIndoorLocations = ({
         placeholder={
           data && data.length === 0
             ? "Error happened"
-            : "Please select a destination location"
+            : "Search your destination"
         }
         searchPlaceholder="Search..."
         value={selectedItem}
