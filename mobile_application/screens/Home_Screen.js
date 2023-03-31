@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Image,
+  ScrollView,
 } from "react-native";
 import React, { useEffect, useState } from "react";
 import { getAllIndoorLocations } from "../redux_store/actions/All_Indoor_Locations";
@@ -21,6 +22,8 @@ import {
   Searchbar,
   IconButton,
 } from "react-native-paper";
+import CustomDropdownForAllIndoorLocations from "../utilities/Indoor_Navigation/Components/CustomDropdownForAllIndoorLocations";
+
 import LoadingImage from "../utilities/Components/LoadingImage";
 export default function HomeScreen() {
   const dispatch = useDispatch();
@@ -29,123 +32,153 @@ export default function HomeScreen() {
     dispatch(getAllIndoorLocations());
   }, [dispatch]);
 
-  const [is_loading, setIsLoading] = useState(false);
   const all_indoor_locations_data = useSelector(
     (state) => state.all_indoor_locations.data
   );
-  return (
-    <SafeAreaView style={tw`flex flex-1 bg-yellow-100`}>
-      <FadeInFlatList
-        initialDelay={0}
-        durationPerItem={500}
-        parallelItems={5}
-        itemsToFadeIn={10}
-        data={all_indoor_locations_data}
-        renderItem={({ item, index, separators }) => (
-          <View>
-            <Card style={(styles.card, styles.spacing)}>
-              <Card.Content>
-                <Title>{item.name}</Title>
-              </Card.Content>
-              <TouchableOpacity
-              // onPress={() =>
-              //   props.navigation.navigate("RestaurantDetails", {
-              //     name: item.name,
-              //     restaurant: item,
-              //   })
-              // }
-              >
-                <LoadingImage uri={item.image ? item.image : null} />
-              </TouchableOpacity>
-              <Card.Actions style={styles.actionContainer}>
-                <View style={{ flexDirection: "row" }}>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      marginRight: 40,
-                      // backgroundColor: "grey",
-                    }}
-                  >
-                    <View
-                      style={{
-                        marginRight: 20,
-                        marginLeft: 10,
-                        padding: 10,
-                      }}
-                    >
-                      <TouchableOpacity
-                        style={
-                          (styles.buttonContainer,
-                          {
-                            borderWidth: 2,
 
-                            // backgroundColor: theme.colors.primary,
-                            borderRadius: 20,
-                            // borderColor: theme.colors.primary,
-                          })
-                        }
+  const data = all_indoor_locations_data.map((location) => {
+    let title = location.name;
+    if (
+      location.name === "elevator" ||
+      location.name === "stairs" ||
+      location.name == "restroom" ||
+      location.name === "entrance" ||
+      location.name === "door"
+    ) {
+      title = `floor ${location.floorID} ${location.name}`;
+    } else if (/^\d/.test(location.name)) {
+      title = `room ${location.name} `;
+    }
+    return {
+      label: title,
+      value: [location.floorID, location.row, location.col].join(","),
+    };
+  });
+  return (
+    <SafeAreaView style={tw`flex-col flex-1 bg-yellow-100`}>
+      {all_indoor_locations_data && all_indoor_locations_data.length > 0 ? (
+        <>
+          <View style={tw`mt-10 mx-1`}>
+            <CustomDropdownForAllIndoorLocations
+              data={data}
+              // handleSelection={handleSelectionBuilding}
+              // handleClear={handleClearIndoorNavigationProperties}
+            />
+          </View>
+
+          <FadeInFlatList
+            initialDelay={0}
+            durationPerItem={500}
+            parallelItems={5}
+            itemsToFadeIn={10}
+            data={all_indoor_locations_data}
+            renderItem={({ item, index, separators }) => (
+              <View>
+                <Card style={(styles.card, styles.spacing)}>
+                  <Card.Content>
+                    <Title>{item.name}</Title>
+                  </Card.Content>
+                  <TouchableOpacity
+                  // onPress={() =>
+                  //   props.navigation.navigate("RestaurantDetails", {
+                  //     name: item.name,
+                  //     restaurant: item,
+                  //   })
+                  // }
+                  >
+                    <LoadingImage uri={item.image ? item.image : null} />
+                  </TouchableOpacity>
+                  <Card.Actions style={styles.actionContainer}>
+                    <View style={{ flexDirection: "row" }}>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          marginRight: 40,
+                          // backgroundColor: "grey",
+                        }}
                       >
-                        <IconButton
-                          icon="phone"
-                          // color={theme.colors.background}
-                          onPress={() => CallNum(item.display_phone)}
+                        <View
+                          style={{
+                            marginRight: 20,
+                            marginLeft: 10,
+                            padding: 10,
+                          }}
                         >
-                          {/* <Icon
+                          <TouchableOpacity
+                            style={
+                              (styles.buttonContainer,
+                              {
+                                borderWidth: 2,
+
+                                // backgroundColor: theme.colors.primary,
+                                borderRadius: 20,
+                                // borderColor: theme.colors.primary,
+                              })
+                            }
+                          >
+                            <IconButton
+                              icon="phone"
+                              // color={theme.colors.background}
+                              onPress={() => CallNum(item.display_phone)}
+                            >
+                              {/* <Icon
                           style={{ color: theme.colors.background }}
                           name="phone"
                           size={19}
                         /> */}
-                        </IconButton>
-                      </TouchableOpacity>
+                            </IconButton>
+                          </TouchableOpacity>
+                        </View>
+                        <View
+                          style={{
+                            marginLeft: 20,
+                            marginRight: 10,
+                            padding: 10,
+                          }}
+                        >
+                          <TouchableOpacity
+                            style={
+                              (styles.buttonContainer,
+                              {
+                                borderWidth: 2,
+                                borderRadius: 20,
+                                // backgroundColor: theme.colors.primary,
+                                // borderColor: theme.colors.primary,
+                              })
+                            }
+                          >
+                            <IconButton
+                              onPress={() =>
+                                openMap({
+                                  end:
+                                    item.location.address1 +
+                                    ", " +
+                                    item.location.city,
+                                })
+                              }
+                              // color={theme.colors.background}
+                              icon="directions"
+                            ></IconButton>
+                          </TouchableOpacity>
+                        </View>
+                        {/* need to move  */}
+                        <View style={styles.buttonContainer}></View>
+                      </View>
+                      <View
+                        style={{
+                          flexDirection: "row",
+                          alignSelf: "center",
+                        }}
+                      ></View>
                     </View>
-                    <View
-                      style={{
-                        marginLeft: 20,
-                        marginRight: 10,
-                        padding: 10,
-                      }}
-                    >
-                      <TouchableOpacity
-                        style={
-                          (styles.buttonContainer,
-                          {
-                            borderWidth: 2,
-                            borderRadius: 20,
-                            // backgroundColor: theme.colors.primary,
-                            // borderColor: theme.colors.primary,
-                          })
-                        }
-                      >
-                        <IconButton
-                          onPress={() =>
-                            openMap({
-                              end:
-                                item.location.address1 +
-                                ", " +
-                                item.location.city,
-                            })
-                          }
-                          // color={theme.colors.background}
-                          icon="directions"
-                        ></IconButton>
-                      </TouchableOpacity>
-                    </View>
-                    {/* need to move  */}
-                    <View style={styles.buttonContainer}></View>
-                  </View>
-                  <View
-                    style={{
-                      flexDirection: "row",
-                      alignSelf: "center",
-                    }}
-                  ></View>
-                </View>
-              </Card.Actions>
-            </Card>
-          </View>
-        )}
-        keyExtractor={(item) => item.locationID}
-      />
+                  </Card.Actions>
+                </Card>
+              </View>
+            )}
+            keyExtractor={(item) => item.locationID}
+          />
+        </>
+      ) : null}
     </SafeAreaView>
   );
 }

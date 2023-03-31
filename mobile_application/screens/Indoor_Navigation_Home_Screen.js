@@ -610,11 +610,7 @@ export default function IndoorNavigation({ navigation }) {
   return (
     <SafeAreaView style={tw`flex flex-1 bg-yellow-100`}>
       <ScrollView
-        style={[
-          styles.container,
-          tw`flex-col`,
-          { opacity: is_loading ? 0 : 1 },
-        ]}
+        style={[tw`flex-col`, { opacity: is_loading ? 0 : 1 }]}
         contentContainerStyle={{ padding: 24 }}
         keyboardShouldPersistTaps="handled"
       >
