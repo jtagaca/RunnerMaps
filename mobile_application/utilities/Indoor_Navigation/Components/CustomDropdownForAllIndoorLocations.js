@@ -7,23 +7,15 @@ import tw from "../../../tailwind/CustomTailwind";
 import AllIndoorLocationContext from "../Contexts/AllIndoorLocations";
 import { Dimensions } from "react-native";
 
-const CustomDropdownForAllIndoorLocations = ({
-  data,
-  handleSelection,
-  handleClear,
-  type,
-  empty_query_result,
-}) => {
+const CustomDropdownForAllIndoorLocations = ({ data }) => {
   const { selectedItem, setSelectedItem } = useContext(
     AllIndoorLocationContext
   );
   const handleSelectionLocal = (item) => {
-    // handleSelection(item);
     setSelectedItem(item);
   };
 
   const handleClearLocal = () => {
-    // handleClear(type);
     setSelectedItem(null);
   };
   useEffect(() => {
@@ -51,13 +43,13 @@ const CustomDropdownForAllIndoorLocations = ({
 
   return (
     <View
-      style={tw`flex flex-row items-center justify-center content-center bg-blue-500 rounded-lg mt-10 p-4 text-white`}
+      style={tw`flex flex-row items-center justify-center content-center bg-blue-500 rounded-lg mt-10 p-4 text-white shadow-2xl`}
     >
       <Dropdown
         dropdownPosition="auto"
         showsVerticalScrollIndicator={true}
         style={(styles.dropdown, tw`w-8/10 my-4 mr-0 h-2/30 `)}
-        placeholderStyle={tw`text-white leading-[40px] flex-wrap justify-center`}
+        placeholderStyle={tw`text-white flex-wrap justify-center`}
         selectedTextStyle={tw`text-white`}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}

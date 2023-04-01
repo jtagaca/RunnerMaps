@@ -16,7 +16,7 @@ const LoadingImage = ({ uri }) => {
       />
       {isLoading && (
         <View style={tw`absolute inset-0 items-center justify-center`}>
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color="#3B82F6" />
         </View>
       )}
     </View>

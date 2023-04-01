@@ -22,6 +22,8 @@ import {
   Searchbar,
   IconButton,
 } from "react-native-paper";
+import Icon from "react-native-vector-icons/FontAwesome";
+
 import CustomDropdownForAllIndoorLocations from "../utilities/Indoor_Navigation/Components/CustomDropdownForAllIndoorLocations";
 import LoadingImage from "../utilities/Components/LoadingImage";
 import AllIndoorLocationContext from "./../utilities/Indoor_Navigation/Contexts/AllIndoorLocations";
@@ -36,13 +38,12 @@ export default function HomeScreen() {
   const all_indoor_locations_data = useSelector(
     (state) => state.all_indoor_locations.data
   );
-
-  const data = all_indoor_locations_data.map((location) => {
+  const formatTitle = (location) => {
     let title = location.name;
     if (
       location.name === "elevator" ||
       location.name === "stairs" ||
-      location.name == "restroom" ||
+      location.name === "restroom" ||
       location.name === "entrance" ||
       location.name === "door"
     ) {
@@ -50,8 +51,12 @@ export default function HomeScreen() {
     } else if (/^\d/.test(location.name)) {
       title = `room ${location.name} `;
     }
+    return `${location.buildingName} ${title}`;
+  };
+
+  const data = all_indoor_locations_data.map((location) => {
     return {
-      label: title,
+      label: formatTitle(location),
       value: [location.floorID, location.row, location.col].join(","),
     };
   });
@@ -61,6 +66,7 @@ export default function HomeScreen() {
           [item.floorID, item.row, item.col].join(",") === selectedItem.value
       )
     : all_indoor_locations_data;
+
   return (
     <AllIndoorLocationContext.Provider
       value={{ selectedItem, setSelectedItem }}
@@ -68,12 +74,8 @@ export default function HomeScreen() {
       <SafeAreaView style={tw`flex-col flex-1 bg-yellow-100`}>
         {all_indoor_locations_data && all_indoor_locations_data.length > 0 ? (
           <>
-            <View style={tw`mt-10 mx-1`}>
-              <CustomDropdownForAllIndoorLocations
-                data={data}
-                // handleSelection={handleSelectionBuilding}
-                // handleClear={handleClearIndoorNavigationProperties}
-              />
+            <View style={tw`mt-10 mx-1 `}>
+              <CustomDropdownForAllIndoorLocations data={data} />
             </View>
 
             <FadeInFlatList
@@ -85,8 +87,14 @@ export default function HomeScreen() {
               renderItem={({ item, index, separators }) => (
                 <View>
                   <Card style={(styles.card, styles.spacing)}>
-                    <Card.Content>
-                      <Title>{item.name}</Title>
+                    <Card.Content
+                      style={tw`flex-row justify-center items-center mb-3`}
+                    >
+                      <Title
+                        style={tw`bg-yellow-300 rounded-md p-2 shadow-2xl`}
+                      >
+                        {formatTitle(item)}
+                      </Title>
                     </Card.Content>
                     <TouchableOpacity
                     // onPress={() =>
@@ -98,90 +106,24 @@ export default function HomeScreen() {
                     >
                       <LoadingImage uri={item.image ? item.image : null} />
                     </TouchableOpacity>
-                    <Card.Actions style={styles.actionContainer}>
-                      <View style={{ flexDirection: "row" }}>
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            marginRight: 40,
-                            // backgroundColor: "grey",
-                          }}
-                        >
-                          <View
-                            style={{
-                              marginRight: 20,
-                              marginLeft: 10,
-                              padding: 10,
-                            }}
-                          >
-                            <TouchableOpacity
-                              style={
-                                (styles.buttonContainer,
-                                {
-                                  borderWidth: 2,
-
-                                  // backgroundColor: theme.colors.primary,
-                                  borderRadius: 20,
-                                  // borderColor: theme.colors.primary,
-                                })
-                              }
-                            >
-                              <IconButton
-                                icon="phone"
-                                // color={theme.colors.background}
-                                onPress={() => CallNum(item.display_phone)}
-                              >
-                                {/* <Icon
-                          style={{ color: theme.colors.background }}
-                          name="phone"
-                          size={19}
-                        /> */}
-                              </IconButton>
-                            </TouchableOpacity>
-                          </View>
-                          <View
-                            style={{
-                              marginLeft: 20,
-                              marginRight: 10,
-                              padding: 10,
-                            }}
-                          >
-                            <TouchableOpacity
-                              style={
-                                (styles.buttonContainer,
-                                {
-                                  borderWidth: 2,
-                                  borderRadius: 20,
-                                  // backgroundColor: theme.colors.primary,
-                                  // borderColor: theme.colors.primary,
-                                })
-                              }
-                            >
-                              <IconButton
-                                onPress={() =>
-                                  openMap({
-                                    end:
-                                      item.location.address1 +
-                                      ", " +
-                                      item.location.city,
-                                  })
-                                }
-                                // color={theme.colors.background}
-                                icon="directions"
-                              ></IconButton>
-                            </TouchableOpacity>
-                          </View>
-                          {/* need to move  */}
-                          <View style={styles.buttonContainer}></View>
-                        </View>
-                        <View
-                          style={{
-                            flexDirection: "row",
-                            alignSelf: "center",
-                          }}
-                        ></View>
-                      </View>
-                    </Card.Actions>
+                    <View
+                      style={tw`flex-row justify-center items-center justify-evenly py-2 mx-5 my-2`}
+                    >
+                      <TouchableOpacity
+                        style={tw`rounded-2xl flex-row justify-evenly items-center p-1 w-5/10 mx-4 bg-blue-500`}
+                        onPress={() => CallNum(item.display_phone)}
+                      >
+                        <Text style={tw`text-white`}>Indoor Navigate</Text>
+                        <Icon name="street-view" color="white" size={25}></Icon>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={tw`rounded-2xl flex-row justify-evenly items-center p-1 w-5/10 mx-4 bg-blue-500`}
+                        onPress={() => CallNum(item.display_phone)}
+                      >
+                        <Text style={tw`text-white`}>Outdoor Navigate</Text>
+                        <Icon name="compass" color="white" size={25}></Icon>
+                      </TouchableOpacity>
+                    </View>
                   </Card>
                 </View>
               )}
