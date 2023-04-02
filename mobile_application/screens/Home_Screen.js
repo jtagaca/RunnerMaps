@@ -7,6 +7,7 @@ import {
   Image,
   ScrollView,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import React, { useEffect, useState } from "react";
 import { getAllIndoorLocations } from "../redux_store/actions/All_Indoor_Locations";
 import { useDispatch, useSelector } from "react-redux";
@@ -23,14 +24,17 @@ import {
   IconButton,
 } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
-
+import { useNavigation } from "@react-navigation/native";
 import CustomDropdownForAllIndoorLocations from "../utilities/Indoor_Navigation/Components/CustomDropdownForAllIndoorLocations";
 import LoadingImage from "../utilities/Components/LoadingImage";
+import { formatTitle } from "./../utilities/Indoor_Navigation/Library/Screen_Functions";
+
 import AllIndoorLocationContext from "./../utilities/Indoor_Navigation/Contexts/AllIndoorLocations";
+import Screen_Functions from "./../utilities/Indoor_Navigation/Library/Screen_Functions";
 export default function HomeScreen() {
   const dispatch = useDispatch();
   const [selectedItem, setSelectedItem] = useState(null);
-
+  const navigation = useNavigation();
   useEffect(() => {
     dispatch(getAllIndoorLocations());
   }, [dispatch]);
@@ -38,20 +42,16 @@ export default function HomeScreen() {
   const all_indoor_locations_data = useSelector(
     (state) => state.all_indoor_locations.data
   );
-  const formatTitle = (location) => {
-    let title = location.name;
-    if (
-      location.name === "elevator" ||
-      location.name === "stairs" ||
-      location.name === "restroom" ||
-      location.name === "entrance" ||
-      location.name === "door"
-    ) {
-      title = `floor ${location.floorID} ${location.name}`;
-    } else if (/^\d/.test(location.name)) {
-      title = `room ${location.name} `;
-    }
-    return `${location.buildingName} ${title}`;
+
+  const handleIndoorNavigate = (location) => {
+    dispatch(
+      all_indoor_locations_actions.setChosenBuilding({
+        buildingName: location.buildingName,
+        buildingID: location.buildingID,
+      })
+    );
+    dispatch(all_indoor_locations_actions.setDestinationLocation(location));
+    navigation.navigate("Indoor Navigation");
   };
 
   const data = all_indoor_locations_data.map((location) => {
@@ -74,61 +74,72 @@ export default function HomeScreen() {
       <SafeAreaView style={tw`flex-col flex-1 bg-yellow-100`}>
         {all_indoor_locations_data && all_indoor_locations_data.length > 0 ? (
           <>
-            <View style={tw`mt-10 mx-1 `}>
+            <View style={tw`mx-1 mt-10 `}>
               <CustomDropdownForAllIndoorLocations data={data} />
             </View>
 
-            <FadeInFlatList
-              initialDelay={0}
-              durationPerItem={500}
-              parallelItems={5}
-              itemsToFadeIn={10}
-              data={filteredData}
-              renderItem={({ item, index, separators }) => (
-                <View>
-                  <Card style={(styles.card, styles.spacing)}>
-                    <Card.Content
-                      style={tw`flex-row justify-center items-center mb-3`}
-                    >
-                      <Title
-                        style={tw`bg-yellow-300 rounded-md p-2 shadow-2xl`}
+            <View>
+              <FadeInFlatList
+                initialDelay={0}
+                durationPerItem={500}
+                parallelItems={5}
+                itemsToFadeIn={10}
+                data={filteredData}
+                renderItem={({ item, index, separators }) => (
+                  <View style={tw`m-1`}>
+                    <Card mode="elevated" style={(styles.card, styles.spacing)}>
+                      <LinearGradient
+                        colors={["#3B82F6", "#f7db69"]}
+                        style={styles.background}
                       >
-                        {formatTitle(item)}
-                      </Title>
-                    </Card.Content>
-                    <TouchableOpacity
-                    // onPress={() =>
-                    //   props.navigation.navigate("RestaurantDetails", {
-                    //     name: item.name,
-                    //     restaurant: item,
-                    //   })
-                    // }
-                    >
-                      <LoadingImage uri={item.image ? item.image : null} />
-                    </TouchableOpacity>
-                    <View
-                      style={tw`flex-row justify-center items-center justify-evenly py-2 mx-5 my-2`}
-                    >
-                      <TouchableOpacity
-                        style={tw`rounded-2xl flex-row justify-evenly items-center p-1 w-5/10 mx-4 bg-blue-500`}
-                        onPress={() => CallNum(item.display_phone)}
-                      >
-                        <Text style={tw`text-white`}>Indoor Navigate</Text>
-                        <Icon name="street-view" color="white" size={25}></Icon>
-                      </TouchableOpacity>
-                      <TouchableOpacity
-                        style={tw`rounded-2xl flex-row justify-evenly items-center p-1 w-5/10 mx-4 bg-blue-500`}
-                        onPress={() => CallNum(item.display_phone)}
-                      >
-                        <Text style={tw`text-white`}>Outdoor Navigate</Text>
-                        <Icon name="compass" color="white" size={25}></Icon>
-                      </TouchableOpacity>
-                    </View>
-                  </Card>
-                </View>
-              )}
-              keyExtractor={(item) => item.locationID}
-            />
+                        <Card.Content
+                          style={tw`flex-row items-center justify-center mt-2 mb-3 `}
+                        >
+                          <Title
+                            style={tw`p-2 bg-yellow-300 rounded-md shadow-2xl`}
+                          >
+                            {formatTitle(item)}
+                          </Title>
+                        </Card.Content>
+                        <TouchableOpacity
+                        // onPress={() =>
+                        //   props.navigation.navigate("RestaurantDetails", {
+                        //     name: item.name,
+                        //     restaurant: item,
+                        //   })
+                        // }
+                        >
+                          <LoadingImage uri={item.image ? item.image : null} />
+                        </TouchableOpacity>
+                        <View
+                          style={tw`flex-row items-center justify-center py-2 mx-5 my-2 justify-evenly`}
+                        >
+                          <TouchableOpacity
+                            style={tw`flex-row items-center p-1 mx-4 bg-blue-500 rounded-2xl justify-evenly w-5/10`}
+                            onPress={() => handleIndoorNavigate(item)}
+                          >
+                            <Text style={tw`text-white`}>Indoor Navigate</Text>
+                            <Icon
+                              name="street-view"
+                              color="white"
+                              size={25}
+                            ></Icon>
+                          </TouchableOpacity>
+                          <TouchableOpacity
+                            style={tw`flex-row items-center p-1 mx-4 bg-blue-500 rounded-2xl justify-evenly w-5/10`}
+                            onPress={() => CallNum(item.display_phone)}
+                          >
+                            <Text style={tw`text-white`}>Outdoor Navigate</Text>
+                            <Icon name="compass" color="white" size={25}></Icon>
+                          </TouchableOpacity>
+                        </View>
+                      </LinearGradient>
+                    </Card>
+                  </View>
+                )}
+                keyExtractor={(item) => item.locationID}
+              />
+            </View>
           </>
         ) : null}
       </SafeAreaView>
@@ -168,7 +179,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     height: 30,
     width: 10,
-    borderRadius: 1,
+    borderRadius: 10,
     alignSelf: "center",
     marginBottom: 3,
     marginTop: 3,

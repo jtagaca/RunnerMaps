@@ -1,6 +1,8 @@
 import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { indoor_navigation_properties_actions } from "../../../redux_store/reducers";
+import { all_indoor_locations_actions } from "../../../redux_store/reducers";
+
 import qs from "qs";
 import axios from "axios";
 
@@ -33,6 +35,12 @@ const Screen_Functions = () => {
           )
         );
       },
+      handleClearChosenBuilding() {
+        dispatch(all_indoor_locations_actions.deleteChosenBuilding());
+      },
+      handleClearChosenDestinationLocation() {
+        dispatch(all_indoor_locations_actions.deleteDestinationLocation());
+      },
       handleClearIndoorNavigationProperties(type) {
         if (type) {
           if (type === "building") {
@@ -64,7 +72,36 @@ const Screen_Functions = () => {
 };
 
 export default Screen_Functions;
-
+const formatTitle = (location) => {
+  let title = location.name;
+  if (
+    location.name === "elevator" ||
+    location.name === "stairs" ||
+    location.name === "restroom" ||
+    location.name === "entrance" ||
+    location.name === "door"
+  ) {
+    title = `floor ${location.floorID} ${location.name}`;
+  } else if (/^\d/.test(location.name)) {
+    title = `room ${location.name} `;
+  }
+  return `${location.buildingName} ${title}`;
+};
+const formatTitleForIndoorNavigationHome = (location) => {
+  let title = location.name;
+  if (
+    location.name === "elevator" ||
+    location.name === "stairs" ||
+    location.name === "restroom" ||
+    location.name === "entrance" ||
+    location.name === "door"
+  ) {
+    title = `floor ${location.floorID} ${location.name}`;
+  } else if (/^\d/.test(location.name)) {
+    title = `room ${location.name} `;
+  }
+  return `${title}`;
+};
 async function getWallsByFloorId(floorId) {
   const parameters = {
     get_walls_by_floor_id: true,
@@ -106,4 +143,9 @@ async function getMarkersByFloorId(floorId) {
   }
 }
 
-export { getWallsByFloorId, getMarkersByFloorId };
+export {
+  getWallsByFloorId,
+  getMarkersByFloorId,
+  formatTitle,
+  formatTitleForIndoorNavigationHome,
+};

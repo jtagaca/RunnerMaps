@@ -9,6 +9,7 @@ import { Provider as PaperProvider, Button } from "react-native-paper";
 import { SafeAreaProvider } from "react-native-safe-area-context";
 import NavigationBar from "./utilities/Components/NavigationBar";
 import IndoorNavigation from "./screens/Indoor_Navigation";
+import IndoorNavigationHomeScreen from "./screens/Indoor_Navigation_Home_Screen";
 
 import { createStackNavigator } from "@react-navigation/stack";
 const Stack = createStackNavigator();

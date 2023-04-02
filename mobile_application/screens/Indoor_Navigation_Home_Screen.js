@@ -16,6 +16,7 @@ import SegmentedControlTab from "react-native-segmented-control-tab";
 import Screen_Functions, {
   getWallsByFloorId,
   getMarkersByFloorId,
+  formatTitleForIndoorNavigationHome,
 } from "../utilities/Indoor_Navigation/Library/Screen_Functions";
 import { solveTheGrid } from "../utilities/Indoor_Navigation/Library/Algorithm_Functions";
 import * as Location from "expo-location";
@@ -49,6 +50,8 @@ export default function IndoorNavigation({ navigation }) {
     handleSelectionStartLocation,
     handleSelectionDestinationLocation,
     handleClearIndoorNavigationProperties,
+    handleClearChosenBuilding,
+    handleClearChosenDestinationLocation,
   } = Screen_Functions();
   const [is_loading, set_is_loading] = useState(false);
   const buildings = useSelector((state) => state.buildings.data);
@@ -58,6 +61,12 @@ export default function IndoorNavigation({ navigation }) {
   const indoor_locations = useSelector((state) => state.indoor_locations.data);
   const indoor_locations_map = useSelector(
     (state) => state.indoor_locations.map
+  );
+  const home_screen_selected_building = useSelector(
+    (state) => state.all_indoor_locations.chosen_building
+  );
+  const home_screen_selected_destination_location = useSelector(
+    (state) => state.all_indoor_locations.destination_location
   );
   const indoor_locations_elevators = useSelector(
     (state) => state.indoor_locations.elevators
@@ -92,6 +101,13 @@ export default function IndoorNavigation({ navigation }) {
   }, []);
 
   useEffect(() => {
+    console.log(
+      "home_screen_selected_destination_location",
+      home_screen_selected_destination_location
+    );
+  }, [home_screen_selected_destination_location]);
+
+  useEffect(() => {
     dispatch(getBuildings());
   }, [dispatch]);
 
@@ -118,20 +134,8 @@ export default function IndoorNavigation({ navigation }) {
   }));
 
   const indoor_locations_data = indoor_locations.map((location) => {
-    let title = location.name;
-    if (
-      location.name === "elevator" ||
-      location.name === "stairs" ||
-      location.name == "restroom" ||
-      location.name === "entrance" ||
-      location.name === "door"
-    ) {
-      title = `floor ${location.floorID} ${location.name}`;
-    } else if (/^\d/.test(location.name)) {
-      title = `room ${location.name} `;
-    }
     return {
-      label: title,
+      label: formatTitleForIndoorNavigationHome(location),
       value: [location.floorID, location.row, location.col].join(","),
     };
   });
@@ -623,25 +627,25 @@ export default function IndoorNavigation({ navigation }) {
             changeModalVisibility();
           }}
         >
-          <View style={tw`flex-col justify-center content-center flex-1`}>
+          <View style={tw`flex-col content-center justify-center flex-1`}>
             <View
               style={tw`m-[20px] bg-white rounded-2xl p-10 items-center h-1/2 shadow-md flex-col justify-start`}
             >
               {isStartAndDestinationOnDifferentFloors == true ? (
                 <>
-                  <View style={tw`my-3 w-full`}>
+                  <View style={tw`w-full my-3`}>
                     <Text style={tw`text-lg text-left`}>
                       Your start location and destination location are on
                       different floors{" "}
                     </Text>
                   </View>
-                  <View style={tw`my-3 w-full`}>
+                  <View style={tw`w-full my-3`}>
                     <Text style={tw`text-lg text-left`}>
                       Choose your preferred method
                     </Text>
                   </View>
                   <SegmentedControlTab
-                    tabsContainerStyle={tw`bg-blue-500 my-3`}
+                    tabsContainerStyle={tw`my-3 bg-blue-500`}
                     tabTextStyle={tw`text-lg`}
                     values={ways_to_navigate_between_floors}
                     selectedIndex={selectedIndex}
@@ -650,18 +654,18 @@ export default function IndoorNavigation({ navigation }) {
                 </>
               ) : null}
               <View
-                style={tw`flex-1 flex-row justify-center justify-between m-3 items-center  flex-wrap`}
+                style={tw`flex-row flex-wrap items-center justify-center justify-between flex-1 m-3`}
               >
                 <Button
-                  style={tw`bg-red-500 mx-2 w-4/10`}
-                  labelStyle={tw`text-white text-lg`}
+                  style={tw`mx-2 bg-red-500 w-4/10`}
+                  labelStyle={tw`text-lg text-white`}
                   onPress={changeModalVisibility}
                 >
                   Cancel
                 </Button>
                 <Button
-                  style={tw`bg-green-700 mx-2 w-4/10`}
-                  labelStyle={tw`text-white text-lg `}
+                  style={tw`mx-2 bg-green-700 w-4/10`}
+                  labelStyle={tw`text-lg text-white `}
                   onPress={handleStartNavigationConfirmed}
                 >
                   Start
@@ -673,9 +677,9 @@ export default function IndoorNavigation({ navigation }) {
 
         {data.length == 0 ? null : (
           <>
-            <View style={tw`flex-1 flex-col`}>
+            <View style={tw`flex-col flex-1`}>
               <Text
-                style={tw` font-bold text-left shadow-md  my-1 text-lg px-1 py-2 bg-yellow-300 rounded-md w-5/10`}
+                style={tw`px-1 py-2 my-1 text-lg font-bold text-left bg-yellow-300 rounded-md shadow-md w-5/10`}
               >
                 Building Selected:
               </Text>
@@ -684,11 +688,22 @@ export default function IndoorNavigation({ navigation }) {
                 handleSelection={handleSelectionBuilding}
                 handleClear={handleClearIndoorNavigationProperties}
                 type={"building"}
+                default_selected_item={
+                  home_screen_selected_building &&
+                  home_screen_selected_building != null
+                    ? {
+                        label: home_screen_selected_building.buildingName,
+                        value:
+                          home_screen_selected_building.buildingID.toString(),
+                      }
+                    : null
+                }
+                handleClearHomeScreenData={handleClearChosenBuilding}
               />
             </View>
-            <View style={tw`flex-1 flex-col`}>
+            <View style={tw`flex-col flex-1`}>
               <Text
-                style={tw` font-bold text-left shadow-md  my-1 text-lg px-1 py-2 bg-yellow-300 rounded-md w-4/10`}
+                style={tw`px-1 py-2 my-1 text-lg font-bold text-left bg-yellow-300 rounded-md shadow-md w-4/10`}
               >
                 Start Location:
               </Text>
@@ -700,9 +715,9 @@ export default function IndoorNavigation({ navigation }) {
                 empty_query_result={empty_query_result}
               />
             </View>
-            <View style={tw`flex-1 flex-col`}>
+            <View style={tw`flex-col flex-1`}>
               <Text
-                style={tw` font-bold text-left shadow-md  my-1 text-lg px-1 py-2 bg-yellow-300 rounded-md w-6/10`}
+                style={tw`px-1 py-2 my-1 text-lg font-bold text-left bg-yellow-300 rounded-md shadow-md w-6/10`}
               >
                 Destination Location:
               </Text>
@@ -712,9 +727,25 @@ export default function IndoorNavigation({ navigation }) {
                 handleClear={handleClearIndoorNavigationProperties}
                 type={"destination_location"}
                 empty_query_result={empty_query_result}
+                default_selected_item={
+                  home_screen_selected_destination_location &&
+                  home_screen_selected_destination_location != null
+                    ? {
+                        label: formatTitleForIndoorNavigationHome(
+                          home_screen_selected_destination_location
+                        ),
+                        value: [
+                          home_screen_selected_destination_location.floorID,
+                          home_screen_selected_destination_location.row,
+                          home_screen_selected_destination_location.col,
+                        ].join(","),
+                      }
+                    : null
+                }
+                handleClearHomeScreenData={handleClearChosenDestinationLocation}
               />
             </View>
-            <View style={tw`flex justify-center items-center`}>
+            <View style={tw`flex items-center justify-center`}>
               <Button
                 style={tw`w-5/10 ${
                   indoor_locations_data == null ||

@@ -146,8 +146,23 @@ const all_indoor_locations_slice = createSlice({
     data: [],
     status: "idle",
     error: null,
+    chosen_building: null,
+    destination_location: null,
   },
-  reducers: {},
+  reducers: {
+    setChosenBuilding: (state, action) => {
+      state.chosen_building = action.payload;
+    },
+    setDestinationLocation: (state, action) => {
+      state.destination_location = action.payload;
+    },
+    deleteChosenBuilding: (state) => {
+      state.chosen_building = null;
+    },
+    deleteDestinationLocation: (state) => {
+      state.destination_location = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAllIndoorLocations.pending, (state) => {

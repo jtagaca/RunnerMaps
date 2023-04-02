@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, View, Text } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -10,6 +10,8 @@ const CustomDropdown = ({
   handleClear,
   type,
   empty_query_result,
+  default_selected_item,
+  handleClearHomeScreenData,
 }) => {
   const [selectedItem, setSelectedItem] = useState(null);
 
@@ -28,6 +30,12 @@ const CustomDropdown = ({
     }
     console.log("selectedItem", selectedItem);
   }, [selectedItem]);
+  useEffect(() => {
+    if (default_selected_item && default_selected_item != null) {
+      handleSelectionLocal(default_selected_item);
+      handleClearHomeScreenData();
+    }
+  }, [default_selected_item]);
 
   const renderItem = (item) => {
     return (
@@ -47,12 +55,12 @@ const CustomDropdown = ({
 
   return (
     <View
-      style={tw`flex flex-row items-center justify-center content-center bg-blue-500 rounded-lg my-2 p-2 text-white`}
+      style={tw`flex flex-row items-center content-center justify-center p-2 my-2 text-white bg-blue-500 rounded-lg`}
     >
       <Dropdown
         dropdownPosition="auto"
         showsVerticalScrollIndicator={true}
-        style={(styles.dropdown, tw`w-8/10 my-4 mr-0 h-1/30 `)}
+        style={(styles.dropdown, tw`my-4 mr-0 w-8/10 h-1/30 `)}
         placeholderStyle={tw`text-white `}
         selectedTextStyle={tw`text-white `}
         inputSearchStyle={styles.inputSearchStyle}
@@ -85,7 +93,7 @@ const CustomDropdown = ({
         )}
         renderItem={renderItem}
       />
-      <View style={tw`flex-1 items-center justify-center `}>
+      <View style={tw`items-center justify-center flex-1 `}>
         <Button textColor="white" onPress={handleClearLocal}>
           Clear
         </Button>
