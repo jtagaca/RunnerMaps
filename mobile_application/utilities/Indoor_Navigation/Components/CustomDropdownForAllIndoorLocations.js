@@ -7,10 +7,26 @@ import tw from "../../../tailwind/CustomTailwind";
 import AllIndoorLocationContext from "../Contexts/AllIndoorLocations";
 import { Dimensions } from "react-native";
 
-const CustomDropdownForAllIndoorLocations = ({ data }) => {
-  const { selectedItem, setSelectedItem } = useContext(
-    AllIndoorLocationContext
-  );
+const CustomDropdownForAllIndoorLocations = ({ data, type, placeholder }) => {
+  const context = useContext(AllIndoorLocationContext);
+
+  let selectedItem;
+  let setSelectedItem;
+
+  switch (type) {
+    case "building":
+      selectedItem = context.buildingSelectedItem;
+      setSelectedItem = context.setBuildingSelectedItem;
+      break;
+    case "services":
+      selectedItem = context.serviceSelectedItem;
+      setSelectedItem = context.setServiceSelectedItem;
+      break;
+    default:
+      selectedItem = context.selectedItem;
+      setSelectedItem = context.setSelectedItem;
+  }
+
   const handleSelectionLocal = (item) => {
     setSelectedItem(item);
   };
@@ -61,11 +77,7 @@ const CustomDropdownForAllIndoorLocations = ({ data }) => {
         maxHeight={300}
         labelField="label"
         valueField="value"
-        placeholder={
-          data && data.length === 0
-            ? "Error happened"
-            : "Search your destination"
-        }
+        placeholder={data && data.length === 0 ? "Error happened" : placeholder}
         searchPlaceholder="Search..."
         value={selectedItem}
         onChange={(item) => handleSelectionLocal(item)}

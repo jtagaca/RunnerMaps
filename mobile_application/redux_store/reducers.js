@@ -148,6 +148,8 @@ const all_indoor_locations_slice = createSlice({
     error: null,
     chosen_building: null,
     destination_location: null,
+    buildings: [],
+    services: [],
   },
   reducers: {
     setChosenBuilding: (state, action) => {
@@ -155,6 +157,9 @@ const all_indoor_locations_slice = createSlice({
     },
     setDestinationLocation: (state, action) => {
       state.destination_location = action.payload;
+    },
+    setBuildings: (state, action) => {
+      state.buildings = action.payload;
     },
     deleteChosenBuilding: (state) => {
       state.chosen_building = null;
@@ -171,6 +176,36 @@ const all_indoor_locations_slice = createSlice({
       .addCase(getAllIndoorLocations.fulfilled, (state, action) => {
         state.status = "fulfilled";
         state.data = action.payload;
+        const buildingsMap = new Map();
+        const servicesMap = new Map();
+        action.payload.forEach((location) => {
+          if (
+            location.buildingID !== null &&
+            !buildingsMap.has(location.buildingID)
+          ) {
+            buildingsMap.set(location.buildingID, location.buildingName);
+          }
+          if (
+            location.categoryID !== null &&
+            !servicesMap.has(location.categoryID)
+          ) {
+            servicesMap.set(location.categoryID, location.services);
+          }
+        });
+        state.buildings = Array.from(
+          buildingsMap,
+          ([buildingID, buildingName]) => ({
+            buildingID,
+            buildingName,
+          })
+        );
+        state.services = Array.from(
+          servicesMap,
+          ([serviceID, serviceName]) => ({
+            serviceID,
+            serviceName,
+          })
+        );
       })
       .addCase(getAllIndoorLocations.rejected, (state, action) => {
         state.status = "rejected";
