@@ -21,6 +21,7 @@ export default function CustomSwiper() {
   });
   sorted_shortest_path.forEach((element, index) => {
     element.index = index;
+    element.checkpoint = element.latitude && element.longitude ? true : false;
   });
 
   const [current_index_of_swiper, set_current_index_of_swiper] = useState(0);
@@ -29,11 +30,6 @@ export default function CustomSwiper() {
   const [current_end, setCurrentEnd] = useState(null);
   const [current_path, setCurrentPath] = useState([]);
   const [previous_swiper_index, setPreviousSwiperIndex] = useState(0);
-
-  const [current_distance_between_end, setCurrentDistanceBetweenEnd] =
-    useState(0);
-  const [current_percentage_of_distance, setCurrentPercentageOfDistance] =
-    useState(0);
   const [current_array_of_checkpoints, setCurrentArrayOfCheckpoints] = useState(
     []
   );
@@ -145,7 +141,7 @@ export default function CustomSwiper() {
 
   useEffect(() => {
     if (current_start && current_end) {
-      if (current_index_of_swiper == sorted_shortest_path.length - 1) {
+      if (current_index_of_swiper >= sorted_shortest_path.length - 1) {
         setCurrentPath([]);
         setCurrentDifferenceIndexBetweenStartAndEnd(0);
         setCurrentDistanceBetweenStartAndEnd(0);
@@ -237,7 +233,10 @@ export default function CustomSwiper() {
             {current_path.map((item, index) => {
               return (
                 <View key={index} style={tw`bg-yellow-100  m-1 rounded-full`}>
-                  <Text>{item.userDirection + "\n"}</Text>
+                  <Text>
+                    {item.userDirection || item.locationName + "\n"}
+                    {item.checkpoint && " checkpoint"}
+                  </Text>
                 </View>
               );
             })}

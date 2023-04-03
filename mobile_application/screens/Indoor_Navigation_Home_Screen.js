@@ -590,11 +590,11 @@ export default function IndoorNavigation({ navigation }) {
         latitude:
           indoor_locations_map[
             String(indoor_navigation_properties.destination_location_id)
-          ].name.latitude,
+          ].latitude,
         longitude:
           indoor_locations_map[
             String(indoor_navigation_properties.destination_location_id)
-          ].name.longitude,
+          ].longitude,
       });
 
       dispatch(
