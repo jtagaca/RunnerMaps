@@ -1,5 +1,5 @@
-import React, { useRef, useState } from "react";
-import { View } from "react-native";
+import React, { useRef, useState, useEffect } from "react";
+import { View, Text } from "react-native";
 import Swiper from "react-native-deck-swiper";
 import cloneDeep from "lodash/cloneDeep";
 import { useSelector } from "react-redux";
@@ -8,6 +8,7 @@ import CardComponent from "./CardComponent";
 import ButtonGroup from "./ButtonGroup";
 
 export default function CustomSwiper() {
+  const haversineDistance = require("geodetic-haversine-distance");
   const shortest_path = useSelector(
     (state) => state.indoor_navigation_properties.shortest_path_directions
   );
@@ -18,8 +19,41 @@ export default function CustomSwiper() {
   const sorted_shortest_path = carousel_data.sort((a, b) => {
     return a.key - b.key;
   });
+  sorted_shortest_path.forEach((element, index) => {
+    element.index = index;
+  });
 
   const [current_index_of_swiper, set_current_index_of_swiper] = useState(0);
+
+  const [current_start, setCurrentStart] = useState(null);
+  const [current_end, setCurrentEnd] = useState(null);
+  const [current_path, setCurrentPath] = useState([]);
+  const [previous_swiper_index, setPreviousSwiperIndex] = useState(0);
+
+  const [current_distance_between_end, setCurrentDistanceBetweenEnd] =
+    useState(0);
+  const [current_percentage_of_distance, setCurrentPercentageOfDistance] =
+    useState(0);
+  const [current_array_of_checkpoints, setCurrentArrayOfCheckpoints] = useState(
+    []
+  );
+  const [
+    current_difference_index_between_start_and_end,
+    setCurrentDifferenceIndexBetweenStartAndEnd,
+  ] = useState(0);
+  const [current_index_of_checkpoints, setCurrentIndexOfCheckpoints] =
+    useState(0);
+  const [current_render_count, setCurrentRenderCount] = useState(0);
+  const [
+    current_distance_between_start_and_end,
+    setCurrentDistanceBetweenStartAndEnd,
+  ] = useState(0);
+  const [current_multiple_of_percentage, setCurrentMultipleOfPercentage] =
+    useState(1);
+  const [
+    previous_distance_between_current_and_end,
+    setPreviousCurrentDistanceBetweenCurrentAndEnd,
+  ] = useState(null);
 
   const handleSwipeLeft = () => {
     swiperRef.current.swipeLeft();
@@ -30,6 +64,162 @@ export default function CustomSwiper() {
     swiperRef.current.swipeRight();
     set_current_index_of_swiper(current_index_of_swiper + 1);
   };
+  useEffect(() => {
+    if (current_render_count === 0) {
+      let temp_counter_index = 0;
+      let temp_array_of_checkpoints = [];
+      let temp_current_start = null;
+      for (let i = 0; i < sorted_shortest_path.length; i++) {
+        if (i == 0) {
+          setCurrentStart(sorted_shortest_path[i]);
+          temp_current_start = sorted_shortest_path[i];
+          temp_counter_index += 1;
+        } else if (
+          sorted_shortest_path[i].latitude &&
+          sorted_shortest_path[i].longitude
+        ) {
+          temp_array_of_checkpoints.push(sorted_shortest_path[i]);
+          temp_counter_index += 1;
+        }
+      }
+      setCurrentEnd(temp_array_of_checkpoints[0]);
+      setCurrentIndexOfCheckpoints(0);
+      setCurrentRenderCount(1);
+
+      const harvestine_geolocation_propery_of_current_start = {
+        latitude: parseFloat(temp_current_start.latitude),
+        longitude: parseFloat(temp_current_start.longitude),
+      };
+      const harvestine_geolocation_propery_of_current_end = {
+        latitude: parseFloat(temp_array_of_checkpoints[0].latitude),
+        longitude: parseFloat(temp_array_of_checkpoints[0].longitude),
+      };
+      let distance_between_start_and_end = haversineDistance(
+        harvestine_geolocation_propery_of_current_start,
+        harvestine_geolocation_propery_of_current_end
+      );
+      setCurrentDistanceBetweenStartAndEnd(distance_between_start_and_end);
+      setCurrentArrayOfCheckpoints([...temp_array_of_checkpoints]);
+      let temp_difference =
+        parseInt(temp_array_of_checkpoints[0].index) -
+        parseInt(temp_current_start.index);
+      setCurrentDifferenceIndexBetweenStartAndEnd(temp_difference);
+      // let temp_current_path = loop from the start to temp_array_of_checkpoints[0].index +1
+      let temp_current_path = [];
+      for (
+        let i = parseInt(temp_current_start.index) + 1;
+        i < parseInt(temp_array_of_checkpoints[0].index) + 1;
+        i++
+      ) {
+        temp_current_path.push(sorted_shortest_path[i]);
+      }
+      setCurrentPath([...temp_current_path]);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (sorted_shortest_path) {
+      console.log("sorted_shortest_path", sorted_shortest_path);
+    }
+    if (current_start) {
+      console.log("current_start", current_start);
+    }
+    if (current_end) {
+      console.log("current_end", current_end);
+    }
+    if (current_array_of_checkpoints.length > 0) {
+      console.log("current_array_of_checkpoints", current_array_of_checkpoints);
+    }
+    if (current_index_of_checkpoints) {
+      console.log("current_index_of_checkpoints", current_index_of_checkpoints);
+    }
+  }, [
+    sorted_shortest_path,
+    current_start,
+    current_end,
+    current_array_of_checkpoints,
+    current_index_of_checkpoints,
+  ]);
+
+  const [current_array_of_pathing, setCurrentArrayOfPathing] = useState([]);
+
+  useEffect(() => {
+    if (current_start && current_end) {
+      if (current_index_of_swiper == sorted_shortest_path.length - 1) {
+        setCurrentPath([]);
+        setCurrentDifferenceIndexBetweenStartAndEnd(0);
+        setCurrentDistanceBetweenStartAndEnd(0);
+        return;
+      }
+      // debugger;
+
+      const isSwipedRight = current_index_of_swiper > previous_swiper_index;
+      const isSwipedLeft = current_index_of_swiper < previous_swiper_index;
+
+      if (isSwipedRight) {
+        setCurrentDifferenceIndexBetweenStartAndEnd(
+          current_difference_index_between_start_and_end - 1
+        );
+        setPreviousSwiperIndex(current_index_of_swiper);
+
+        setCurrentPath((prevPath) => {
+          const newPath = prevPath.slice(1);
+          return newPath;
+        });
+      } else if (isSwipedLeft) {
+        setCurrentDifferenceIndexBetweenStartAndEnd(
+          current_difference_index_between_start_and_end + 1
+        );
+        setPreviousSwiperIndex(current_index_of_swiper);
+
+        setCurrentPath((prevPath) => {
+          const newPath = [
+            sorted_shortest_path[current_index_of_swiper + 1],
+            ...prevPath,
+          ];
+          return newPath;
+        });
+      }
+
+      // debugger;
+      if (current_index_of_swiper == current_end.index) {
+        let new_start = current_end;
+        let new_end =
+          current_array_of_checkpoints[current_index_of_checkpoints + 1];
+
+        const harvestine_geolocation_propery_of_current_start = {
+          latitude: parseFloat(new_start.latitude),
+          longitude: parseFloat(new_start.longitude),
+        };
+        const harvestine_geolocation_propery_of_current_end = {
+          latitude: parseFloat(new_end.latitude),
+          longitude: parseFloat(new_end.longitude),
+        };
+        let distance_between_start_and_end = haversineDistance(
+          harvestine_geolocation_propery_of_current_start,
+          harvestine_geolocation_propery_of_current_end
+        );
+        setCurrentIndexOfCheckpoints(current_index_of_checkpoints + 1);
+        setCurrentStart(new_start);
+        setCurrentEnd(new_end);
+        // setCurrentMultipleOfPercentage(1);
+        setCurrentDifferenceIndexBetweenStartAndEnd(
+          parseInt(new_end.index) - parseInt(new_start.index)
+        );
+
+        let temp_current_path = [];
+        for (
+          let i = parseInt(new_start.index) + 1;
+          i < parseInt(new_end.index) + 1;
+          i++
+        ) {
+          temp_current_path.push(sorted_shortest_path[i]);
+        }
+        setCurrentPath([...temp_current_path]);
+        setCurrentDistanceBetweenStartAndEnd(distance_between_start_and_end);
+      }
+    }
+  }, [current_index_of_swiper]);
 
   return (
     <>
@@ -40,9 +230,28 @@ export default function CustomSwiper() {
             onSwipeRight={handleSwipeRight}
             disabled={current_index_of_swiper === 0}
           />
-          <View
-            style={tw`flex-row justify-center  mt-5 bg-blue-500 p-2 h-2/30`}
-          ></View>
+          <View style={tw`flex-col justify-center  mt-5 bg-blue-500 p-2`}>
+            {/* loop over current_path */}
+            {/* and display each  */}
+            <Text>Upcoming paths</Text>
+            {current_path.map((item, index) => {
+              return (
+                <View key={index} style={tw`bg-yellow-100  m-1 rounded-full`}>
+                  <Text>{item.userDirection + "\n"}</Text>
+                </View>
+              );
+            })}
+          </View>
+          <View style={tw`flex-col justify-center  mt-5 bg-blue-500 p-2`}>
+            <Text>
+              Number of cards including checkpoint :{" "}
+              {current_difference_index_between_start_and_end}
+            </Text>
+            <Text>
+              Current distance difference :{" "}
+              {current_distance_between_start_and_end}
+            </Text>
+          </View>
           <View
             style={tw`flex-row justify-center bg-yellow-100 m-0 h-21/20 w-20/20 content-center`}
           >
