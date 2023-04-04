@@ -78,27 +78,20 @@ export default function IndoorNavigation({ navigation }) {
   const indoor_navigation_properties = useSelector(
     (state) => state.indoor_navigation_properties
   );
-  useEffect(() => {
-    // this needs to have a checker do not use run this useState if the user is not in this page
-    // needs redux
-    const updateLocation = async () => {
-      let { status } = await Location.requestForegroundPermissionsAsync();
-      if (status !== "granted") {
-        setErrorMsg("Permission to access location was denied");
-        return;
-      }
 
-      let location = await Location.getCurrentPositionAsync({
-        enableHighAccuracy: true,
-        accuracy: Location.Accuracy.Highest,
-      });
-      setGeolocationProperties(location.coords);
-    };
+  const getCurrentGeolocation = async () => {
+    let { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      setErrorMsg("Permission to access location was denied");
+      return;
+    }
 
-    updateLocation();
-    const interval_id = setInterval(updateLocation, 5000);
-    return () => clearInterval(interval_id);
-  }, []);
+    let location = await Location.getCurrentPositionAsync({
+      enableHighAccuracy: true,
+      accuracy: Location.Accuracy.Highest,
+    });
+    return location.coords;
+  };
 
   useEffect(() => {
     console.log(
@@ -178,7 +171,7 @@ export default function IndoorNavigation({ navigation }) {
     return;
   };
 
-  const findNearestElevatorOrStairs = (start_point, index, floor_id) => {
+  const findNearestElevatorOrStairs = async (start_point, index, floor_id) => {
     // find elevators in the indoor_locations.elevators array using the floorid
     let locations = [];
     if (ways_to_navigate_between_floors[index] == "Elevator") {
@@ -191,10 +184,11 @@ export default function IndoorNavigation({ navigation }) {
       );
     }
     let current_geolocation_temp;
+    let current_geolocation_coords = await getCurrentGeolocation();
     if (start_point == null) {
       current_geolocation_temp = {
-        latitude: parseFloat(geolocationProperties.latitude),
-        longitude: parseFloat(geolocationProperties.longitude),
+        latitude: parseFloat(current_geolocation_coords.latitude),
+        longitude: parseFloat(current_geolocation_coords.longitude),
       };
     } else {
       current_geolocation_temp = {
@@ -381,7 +375,7 @@ export default function IndoorNavigation({ navigation }) {
           String(indoor_navigation_properties.start_location_id)
         ].gridColumnLength
       );
-      // nearest_elevator_or_stairs;
+
       let floor_id =
         indoor_locations_map[
           String(indoor_navigation_properties.start_location_id)
@@ -494,11 +488,13 @@ export default function IndoorNavigation({ navigation }) {
           String(indoor_navigation_properties.destination_location_id)
         ].floorID;
       let current_index = nearest_elevator_or_stairs.name == "elevator" ? 0 : 1;
-      let new_destination_elevator_or_stairs = findNearestElevatorOrStairs(
-        nearest_elevator_or_stairs,
-        current_index,
-        destination_floor_id
-      );
+      debugger;
+      let new_destination_elevator_or_stairs =
+        await findNearestElevatorOrStairs(
+          nearest_elevator_or_stairs,
+          current_index,
+          destination_floor_id
+        );
       destination_location_row_index =
         indoor_locations_map[
           String(indoor_navigation_properties.destination_location_id)
