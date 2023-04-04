@@ -27,7 +27,7 @@ import {
 } from "react-native-paper";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
-import CustomDropdownForAllIndoorLocations from "../utilities/Indoor_Navigation/Components/CustomDropdownForAllIndoorLocations";
+import CustomDropdownWithSelectorFromParent from "../utilities/Indoor_Navigation/Components/CustomDropdownWithSelectorFromParent";
 import CardComponentForHomeScreen from "../utilities/Indoor_Navigation/Components/CardComponentForHomeScreen";
 
 import LoadingImage from "../utilities/Components/LoadingImage";
@@ -61,12 +61,7 @@ export default function HomeScreen() {
     dispatch(all_indoor_locations_actions.setDestinationLocation(location));
     navigation.navigate("Indoor Navigation");
   };
-  const data = all_indoor_locations_data.map((location) => {
-    return {
-      label: formatTitle(location),
-      value: [location.floorID, location.row, location.col].join(","),
-    };
-  });
+
   const buildings = useSelector(
     (state) => state.all_indoor_locations.buildings
   );
@@ -121,13 +116,6 @@ export default function HomeScreen() {
     return {
       label: building.buildingName,
       value: building.buildingID,
-    };
-  });
-
-  const services_data = services.map((service) => {
-    return {
-      label: service.serviceName,
-      value: service.serviceID,
     };
   });
 
@@ -197,15 +185,17 @@ export default function HomeScreen() {
                 >
                   <Icon name="times" size={24} color="black" />
                 </TouchableOpacity>
-                <CustomDropdownForAllIndoorLocations
+                <CustomDropdownWithSelectorFromParent
                   data={filteredBuildingsData}
-                  type="building"
                   placeholder="Filter by building"
+                  selectedItem={buildingSelectedItem}
+                  setSelectedItem={setBuildingSelectedItem}
                 />
-                <CustomDropdownForAllIndoorLocations
+                <CustomDropdownWithSelectorFromParent
                   data={filteredServicesData}
-                  type="services"
                   placeholder="Filter by service"
+                  selectedItem={serviceSelectedItem}
+                  setSelectedItem={setServiceSelectedItem}
                 />
               </View>
             </View>
@@ -216,10 +206,11 @@ export default function HomeScreen() {
           <>
             <View style={tw`mx-1 mt-10 flex-row justify-center items-center`}>
               <View style={tw`w-8/10`}>
-                <CustomDropdownForAllIndoorLocations
+                <CustomDropdownWithSelectorFromParent
                   data={filteredDataForAllDropdown}
-                  type="all"
                   placeholder="Select destination"
+                  selectedItem={selectedItem}
+                  setSelectedItem={setSelectedItem}
                 />
               </View>
               <View style={tw`w-2/10 mt-10 justify-center items-center`}>

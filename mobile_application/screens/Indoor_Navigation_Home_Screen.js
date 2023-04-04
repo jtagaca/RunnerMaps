@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getBuildings } from "../redux_store/actions/Building_Locations";
 import { getIndoorLocationsById } from "../redux_store/actions/Indoor_Locations";
 import tw from "../tailwind/CustomTailwind";
-
+import CustomDropdownWithSelectorFromParent from "../utilities/Indoor_Navigation/Components/CustomDropdownWithSelectorFromParent";
 import CustomDropdown from "../utilities/Indoor_Navigation/Components/CustomDropdown";
 
 import {
@@ -12,6 +12,7 @@ import {
   setCurrentGeolocationProperties,
 } from "../redux_store/reducers";
 import SegmentedControlTab from "react-native-segmented-control-tab";
+import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 import Screen_Functions, {
   getWallsByFloorId,
@@ -32,6 +33,7 @@ import {
   View,
   ScrollView,
   ActivityIndicator,
+  TouchableOpacity,
 } from "react-native";
 
 export default function IndoorNavigation({ navigation }) {
@@ -40,7 +42,10 @@ export default function IndoorNavigation({ navigation }) {
     isStartAndDestinationOnDifferentFloors,
     setIsStartAndDestinationOnDifferentFloors,
   ] = useState(false);
-  const [geolocationProperties, setGeolocationProperties] = useState(null);
+  const [selected_floor, setSelectedFloor] = useState(null);
+
+  const [closest_location_near_user, setClosestLocationNearUser] =
+    useState(null);
   const dispatch = useDispatch();
   const [nearest_elevator_or_stairs, set_nearest_elevator_or_stairs] =
     useState(null);
@@ -54,14 +59,17 @@ export default function IndoorNavigation({ navigation }) {
     handleClearChosenDestinationLocation,
   } = Screen_Functions();
   const [is_loading, set_is_loading] = useState(false);
+  const [modal_for_closest_location, setModalForClosestLocation] =
+    useState(false);
+
   const buildings = useSelector((state) => state.buildings.data);
-  const status = useSelector((state) => state.buildings.status);
-  const error = useSelector((state) => state.buildings.error);
+  const floors = useSelector((state) => state.indoor_locations.floors);
   const haversineDistance = require("geodetic-haversine-distance");
   const indoor_locations = useSelector((state) => state.indoor_locations.data);
   const indoor_locations_map = useSelector(
     (state) => state.indoor_locations.map
   );
+  const [is_find_loading, set_is_find_loading] = useState(false);
   const home_screen_selected_building = useSelector(
     (state) => state.all_indoor_locations.chosen_building
   );
@@ -92,13 +100,6 @@ export default function IndoorNavigation({ navigation }) {
     });
     return location.coords;
   };
-
-  useEffect(() => {
-    console.log(
-      "home_screen_selected_destination_location",
-      home_screen_selected_destination_location
-    );
-  }, [home_screen_selected_destination_location]);
 
   useEffect(() => {
     dispatch(getBuildings());
@@ -605,7 +606,45 @@ export default function IndoorNavigation({ navigation }) {
   const changeModalVisibility = () => {
     setModalVisible(!modalVisible);
   };
+  const floor_data_dropdown = floors.map((floor) => ({
+    label: "floor " + floor.floorNumber.toString(),
+    value: floor.floorID.toString(),
+  }));
 
+  const handleFindClosestLocation = async () => {
+    // use the indoor_location and filter via the selected_floor.value
+    set_is_find_loading(true);
+    let filtered_indoor_locations = indoor_locations.filter(
+      (indoor_location) => {
+        return indoor_location.floorID == parseInt(selected_floor.value);
+      }
+    );
+    let current_geolocation_temp;
+    let current_geolocation_coords = await getCurrentGeolocation();
+    current_geolocation_temp = {
+      latitude: parseFloat(current_geolocation_coords.latitude),
+      longitude: parseFloat(current_geolocation_coords.longitude),
+    };
+
+    for (let i = 0; i < filtered_indoor_locations.length; i++) {
+      const locationWithDistance = {
+        ...filtered_indoor_locations[i],
+        distance: haversineDistance(current_geolocation_temp, {
+          latitude: parseFloat(filtered_indoor_locations[i].latitude),
+          longitude: parseFloat(filtered_indoor_locations[i].longitude),
+        }),
+      };
+      filtered_indoor_locations[i] = locationWithDistance;
+    }
+
+    let sorted_locations_via_haversine_distance =
+      filtered_indoor_locations.sort((a, b) => a.distance - b.distance);
+    setClosestLocationNearUser(sorted_locations_via_haversine_distance[0]);
+    set_is_find_loading(false);
+  };
+  useEffect(() => {
+    console.log("selected", selected_floor);
+  }, [selected_floor]);
   return (
     <SafeAreaView style={tw`flex flex-1 bg-yellow-100`}>
       <ScrollView
@@ -670,6 +709,80 @@ export default function IndoorNavigation({ navigation }) {
           </View>
         </Modal>
 
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modal_for_closest_location}
+          onRequestClose={() => {
+            changeModalVisibility();
+          }}
+        >
+          <View style={tw`flex-col content-center justify-center flex-1`}>
+            <View
+              style={tw`m-[20px] bg-white rounded-2xl p-5 items-center h-1/2 shadow-md flex-col`}
+            >
+              <View
+                style={tw`flex-col items-center justify-center justify-between flex-1 m-3`}
+              >
+                <CustomDropdownWithSelectorFromParent
+                  data={floor_data_dropdown}
+                  placeholder="Which floor are you in?"
+                  selectedItem={selected_floor}
+                  setSelectedItem={setSelectedFloor}
+                />
+                <View
+                  style={tw`flex-col m-1 justify-center items-center bg-yellow-300 rounded-lg p-4`}
+                >
+                  <Text style={tw`text-center text-lg`}>
+                    Closest location near you
+                  </Text>
+                  {is_find_loading ? (
+                    <ActivityIndicator
+                      animating={true}
+                      size="large"
+                      color="#3B82F6"
+                      style={tw`self-center`} // Center the activity indicator
+                    />
+                  ) : (
+                    <Text style={tw`text-center text-lg`}>
+                      {closest_location_near_user &&
+                        formatTitleForIndoorNavigationHome(
+                          closest_location_near_user
+                        )}
+                    </Text>
+                  )}
+                </View>
+                <View style={tw`flex-row justify-center items-center`}>
+                  <Button
+                    style={tw`mx-2 bg-red-500 w-4/10`}
+                    labelStyle={tw`text-lg text-white`}
+                    onPress={() => setModalForClosestLocation(false)}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    style={[
+                      tw`mx-2 w-4/10`,
+                      selected_floor == null
+                        ? tw`bg-gray-300`
+                        : tw`bg-green-700`,
+                    ]}
+                    disabled={selected_floor == null}
+                    labelStyle={[
+                      tw`text-lg`,
+                      selected_floor == null
+                        ? tw`text-gray-500`
+                        : tw`font-bold text-[1rem] text-white`,
+                    ]}
+                    onPress={handleFindClosestLocation}
+                  >
+                    Find
+                  </Button>
+                </View>
+              </View>
+            </View>
+          </View>
+        </Modal>
         {data.length == 0 ? null : (
           <>
             <View style={tw`flex-col flex-1`}>
@@ -702,13 +815,27 @@ export default function IndoorNavigation({ navigation }) {
               >
                 Start Location:
               </Text>
-              <CustomDropdown
-                data={indoor_locations_data}
-                handleSelection={handleSelectionStartLocation}
-                handleClear={handleClearIndoorNavigationProperties}
-                type={"start_location"}
-                empty_query_result={empty_query_result}
-              />
+              <View style={tw`flex-row`}>
+                <CustomDropdown
+                  data={indoor_locations_data}
+                  handleSelection={handleSelectionStartLocation}
+                  handleClear={handleClearIndoorNavigationProperties}
+                  type={"start_location"}
+                  empty_query_result={empty_query_result}
+                />
+                <View style={tw`w-2/10  justify-center items-center`}>
+                  <TouchableOpacity
+                    onPress={() => setModalForClosestLocation(true)}
+                  >
+                    <Icon
+                      name="crosshairs-gps"
+                      color="white"
+                      style={tw`bg-blue-500 rounded-full p-2`}
+                      size={40}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
             </View>
             <View style={tw`flex-col flex-1`}>
               <Text
@@ -716,6 +843,7 @@ export default function IndoorNavigation({ navigation }) {
               >
                 Destination Location:
               </Text>
+
               <CustomDropdown
                 data={indoor_locations_data}
                 handleSelection={handleSelectionDestinationLocation}

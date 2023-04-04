@@ -6,8 +6,8 @@ if (isset($_POST['get_list_of_indoor_locations_by_building_id'])) {
     $connection = get_connection();
     $building_id = intval($_POST['building_id']);
 
-    $query = "SELECT indoor_locations.*, joined_floors_buildings.buildingID, joined_floors_buildings.gridRowLength, joined_floors_buildings.gridColumnLength  FROM indoor_locations 
-                JOIN (SELECT floors.floorID, buildings.buildingID, buildings.buildingName, floors.gridRowLength, floors.gridColumnLength
+    $query = "SELECT indoor_locations.*,joined_floors_buildings.floorNumber, joined_floors_buildings.buildingID, joined_floors_buildings.gridRowLength, joined_floors_buildings.gridColumnLength  FROM indoor_locations 
+                JOIN (SELECT floors.floorID, floors.floorNumber, buildings.buildingID, buildings.buildingName, floors.gridRowLength, floors.gridColumnLength
                 FROM floors 
                 JOIN buildings ON floors.buildingID = buildings.buildingID WHERE buildings.buildingID = ?) as joined_floors_buildings 
                 ON indoor_locations.floorId = joined_floors_buildings.floorID;
@@ -32,6 +32,7 @@ if (isset($_POST['get_list_of_indoor_locations_by_building_id'])) {
     $query = "SELECT 
     indoor_locations.*,
     categories.services,
+    joined_floors_buildings.floorNumber,
     joined_floors_buildings.buildingID,
     joined_floors_buildings.buildingName,
     joined_floors_buildings.gridRowLength, joined_floors_buildings.gridColumnLength  
@@ -39,7 +40,7 @@ if (isset($_POST['get_list_of_indoor_locations_by_building_id'])) {
     indoor_locations
         JOIN
     (SELECT 
-        floors.floorID, buildings.buildingID, buildings.buildingName, floors.gridRowLength, floors.gridColumnLength
+        floors.floorID, floors.floorNumber, buildings.buildingID, buildings.buildingName, floors.gridRowLength, floors.gridColumnLength
     FROM
         floors
     JOIN buildings ON floors.buildingID = buildings.buildingID) AS joined_floors_buildings ON indoor_locations.floorId = joined_floors_buildings.floorID

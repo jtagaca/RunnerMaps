@@ -7,26 +7,12 @@ import tw from "../../../tailwind/CustomTailwind";
 import AllIndoorLocationContext from "../Contexts/AllIndoorLocations";
 import { Dimensions } from "react-native";
 
-const CustomDropdownForAllIndoorLocations = ({ data, type, placeholder }) => {
-  const context = useContext(AllIndoorLocationContext);
-
-  let selectedItem;
-  let setSelectedItem;
-
-  switch (type) {
-    case "building":
-      selectedItem = context.buildingSelectedItem;
-      setSelectedItem = context.setBuildingSelectedItem;
-      break;
-    case "services":
-      selectedItem = context.serviceSelectedItem;
-      setSelectedItem = context.setServiceSelectedItem;
-      break;
-    default:
-      selectedItem = context.selectedItem;
-      setSelectedItem = context.setSelectedItem;
-  }
-
+const CustomDropdownWithSelectorFromParent = ({
+  data,
+  placeholder,
+  selectedItem,
+  setSelectedItem,
+}) => {
   const handleSelectionLocal = (item) => {
     setSelectedItem(item);
   };
@@ -100,7 +86,7 @@ const CustomDropdownForAllIndoorLocations = ({ data, type, placeholder }) => {
   );
 };
 
-export default CustomDropdownForAllIndoorLocations;
+export default CustomDropdownWithSelectorFromParent;
 
 const styles = StyleSheet.create({
   dropdown: {
