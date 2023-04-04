@@ -5,6 +5,7 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { Button } from "react-native-paper";
 import tw from "../../../tailwind/CustomTailwind";
 const CustomDropdown = ({
+  given_style,
   data,
   handleSelection,
   handleClear,
@@ -24,7 +25,12 @@ const CustomDropdown = ({
     handleClear(type);
     setSelectedItem(null);
   };
-
+  useEffect(() => {
+    if (selectedItem === null) {
+      return;
+    }
+    console.log("selectedItem", selectedItem);
+  }, [selectedItem]);
   useEffect(() => {
     if (default_selected_item && default_selected_item != null) {
       handleSelectionLocal(default_selected_item);
@@ -52,13 +58,17 @@ const CustomDropdown = ({
 
   return (
     <View
-      style={tw`flex flex-row items-center content-center justify-center p-2 my-2 text-white bg-blue-500 rounded-lg`}
+      style={tw`flex flex-row items-center content-center justify-center p-2 my-2 text-white bg-blue-500 rounded-lg `}
     >
       <Dropdown
         dropdownPosition="auto"
         showsVerticalScrollIndicator={true}
-        style={(styles.dropdown, tw`my-4 mr-0 w-8/10 h-1/30 `)}
-        placeholderStyle={tw`text-white `}
+        style={(styles.dropdown, tw`my-4 mr-0 w-8/10 h-15/30 `)}
+        placeholderStyle={
+          given_style && data && data.length === 0
+            ? given_style
+            : tw`text-white`
+        }
         selectedTextStyle={tw`text-white `}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}
@@ -102,6 +112,12 @@ const CustomDropdown = ({
 export default CustomDropdown;
 
 const styles = StyleSheet.create({
+  placeholderStyle: {
+    color: "white",
+    fontSize: 25,
+    paddingHorizontal: 5, // Add padding to the placeholder text
+  },
+
   dropdown: {
     borderRadius: 12,
     padding: 12,

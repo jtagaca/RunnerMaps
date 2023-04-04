@@ -8,6 +8,7 @@ import AllIndoorLocationContext from "../Contexts/AllIndoorLocations";
 import { Dimensions } from "react-native";
 
 const CustomDropdownWithSelectorFromParent = ({
+  given_style,
   data,
   placeholder,
   selectedItem,
@@ -45,7 +46,7 @@ const CustomDropdownWithSelectorFromParent = ({
         dropdownPosition="auto"
         showsVerticalScrollIndicator={true}
         style={(styles.dropdown, tw`w-8/10 my-4 mr-0 h-2/30 `)}
-        placeholderStyle={tw`text-white flex-wrap justify-center`}
+        placeholderStyle={given_style ? given_style : tw`text-white`}
         selectedTextStyle={tw`text-white`}
         inputSearchStyle={styles.inputSearchStyle}
         iconStyle={styles.iconStyle}

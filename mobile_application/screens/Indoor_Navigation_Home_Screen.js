@@ -737,6 +737,7 @@ export default function IndoorNavigation({ navigation }) {
                 style={tw`flex-col items-center justify-center justify-between flex-1 m-3`}
               >
                 <CustomDropdownWithSelectorFromParent
+                  given_style={tw`h-12/10 text-white`}
                   data={floor_data_dropdown}
                   placeholder="Which floor are you in?"
                   selectedItem={selected_floor}
@@ -824,7 +825,7 @@ export default function IndoorNavigation({ navigation }) {
         </Modal>
         {data.length == 0 ? null : (
           <>
-            <View style={tw`flex-col flex-1`}>
+            <View style={tw`flex-col flex-1 my-5`}>
               <Text
                 style={tw`px-1 py-2 my-1 text-lg font-bold text-left bg-yellow-300 rounded-md shadow-md w-5/10`}
               >
@@ -848,7 +849,7 @@ export default function IndoorNavigation({ navigation }) {
                 handleClearHomeScreenData={handleClearChosenBuilding}
               />
             </View>
-            <View style={tw`flex-col flex-1`}>
+            <View style={tw`flex-col flex-1 my-5`}>
               <Text
                 style={tw`px-1 py-2 my-1 text-lg font-bold text-left bg-yellow-300 rounded-md shadow-md w-4/10`}
               >
@@ -856,6 +857,7 @@ export default function IndoorNavigation({ navigation }) {
               </Text>
               <View style={tw`flex-row`}>
                 <CustomDropdown
+                  given_style={tw`h-12/10 text-white`}
                   data={indoor_locations_data}
                   handleSelection={handleSelectionStartLocation}
                   handleClear={handleClearIndoorNavigationProperties}
@@ -878,21 +880,33 @@ export default function IndoorNavigation({ navigation }) {
                   }
                   handleClearHomeScreenData={handleClearStartLocationInModal}
                 />
-                <View style={tw`w-2/10  justify-center items-center`}>
+                <View style={tw`w-2/10  justify-center items-center `}>
                   <TouchableOpacity
+                    disabled={indoor_locations_data.length == 0}
                     onPress={() => setModalForClosestLocation(true)}
                   >
                     <Icon
                       name="crosshairs-gps"
-                      color="white"
-                      style={tw`bg-blue-500 rounded-full p-2`}
+                      color={
+                        indoor_locations_data.length &&
+                        indoor_locations_data.length > 0
+                          ? "white"
+                          : "grey"
+                      }
+                      style={[
+                        tw`rounded-full p-2`,
+                        indoor_locations_data.length &&
+                        indoor_locations_data.length > 0
+                          ? tw`bg-blue-500`
+                          : tw`bg-gray-300`,
+                      ]}
                       size={40}
                     />
                   </TouchableOpacity>
                 </View>
               </View>
             </View>
-            <View style={tw`flex-col flex-1`}>
+            <View style={tw`flex-col flex-1 my-5`}>
               <Text
                 style={tw`px-1 py-2 my-1 text-lg font-bold text-left bg-yellow-300 rounded-md shadow-md w-6/10`}
               >
