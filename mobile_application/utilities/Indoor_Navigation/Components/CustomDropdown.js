@@ -24,16 +24,13 @@ const CustomDropdown = ({
     handleClear(type);
     setSelectedItem(null);
   };
-  useEffect(() => {
-    if (selectedItem === null) {
-      return;
-    }
-    console.log("selectedItem", selectedItem);
-  }, [selectedItem]);
+
   useEffect(() => {
     if (default_selected_item && default_selected_item != null) {
       handleSelectionLocal(default_selected_item);
-      handleClearHomeScreenData();
+      if (handleClearHomeScreenData) {
+        handleClearHomeScreenData();
+      }
     }
   }, [default_selected_item]);
 

@@ -66,11 +66,7 @@ export default function HomeScreen() {
     (state) => state.all_indoor_locations.buildings
   );
   const services = useSelector((state) => state.all_indoor_locations.services);
-  useEffect(() => {
-    if (buildings && buildings.length > 0) {
-      console.log("buildings", buildings);
-    }
-  }, [buildings]);
+
   const filterBuildingsByService = () => {
     if (serviceSelectedItem) {
       const filteredLocations = all_indoor_locations_data.filter(

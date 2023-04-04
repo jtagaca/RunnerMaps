@@ -46,6 +46,10 @@ export default function IndoorNavigation({ navigation }) {
 
   const [closest_location_near_user, setClosestLocationNearUser] =
     useState(null);
+  const [
+    closest_location_near_user_confirmed,
+    setClosestLocationNearUserConfirmed,
+  ] = useState(null);
   const dispatch = useDispatch();
   const [nearest_elevator_or_stairs, set_nearest_elevator_or_stairs] =
     useState(null);
@@ -610,7 +614,17 @@ export default function IndoorNavigation({ navigation }) {
     label: "floor " + floor.floorNumber.toString(),
     value: floor.floorID.toString(),
   }));
+  const useNearestLocationForStartLocation = () => {
+    let copy = { ...closest_location_near_user };
 
+    setClosestLocationNearUserConfirmed(copy);
+    setModalForClosestLocation(false);
+  };
+  const handleClearStartLocationInModal = () => {
+    setClosestLocationNearUser(null);
+    setClosestLocationNearUserConfirmed(null);
+    setSelectedFloor(null);
+  };
   const handleFindClosestLocation = async () => {
     // use the indoor_location and filter via the selected_floor.value
     set_is_find_loading(true);
@@ -642,9 +656,7 @@ export default function IndoorNavigation({ navigation }) {
     setClosestLocationNearUser(sorted_locations_via_haversine_distance[0]);
     set_is_find_loading(false);
   };
-  useEffect(() => {
-    console.log("selected", selected_floor);
-  }, [selected_floor]);
+
   return (
     <SafeAreaView style={tw`flex flex-1 bg-yellow-100`}>
       <ScrollView
@@ -717,9 +729,9 @@ export default function IndoorNavigation({ navigation }) {
             changeModalVisibility();
           }}
         >
-          <View style={tw`flex-col content-center justify-center flex-1`}>
+          <View style={tw`flex-col content-center justify-center flex-1 `}>
             <View
-              style={tw`m-[20px] bg-white rounded-2xl p-5 items-center h-1/2 shadow-md flex-col`}
+              style={tw`m-[20px] bg-white rounded-2xl p-5 items-center h-3/4 shadow-md flex-col`}
             >
               <View
                 style={tw`flex-col items-center justify-center justify-between flex-1 m-3`}
@@ -731,7 +743,7 @@ export default function IndoorNavigation({ navigation }) {
                   setSelectedItem={setSelectedFloor}
                 />
                 <View
-                  style={tw`flex-col m-1 justify-center items-center bg-yellow-300 rounded-lg p-4`}
+                  style={tw`flex-col m-1 justify-center items-center bg-yellow-300 rounded-lg p-4 mt-3`}
                 >
                   <Text style={tw`text-center text-lg`}>
                     Closest location near you
@@ -752,7 +764,7 @@ export default function IndoorNavigation({ navigation }) {
                     </Text>
                   )}
                 </View>
-                <View style={tw`flex-row justify-center items-center`}>
+                <View style={tw`flex-row justify-center items-center mt-3`}>
                   <Button
                     style={tw`mx-2 bg-red-500 w-4/10`}
                     labelStyle={tw`text-lg text-white`}
@@ -777,6 +789,28 @@ export default function IndoorNavigation({ navigation }) {
                     onPress={handleFindClosestLocation}
                   >
                     Find
+                  </Button>
+                </View>
+                <View
+                  style={tw`flex-row justify-center items-center mt-3 mb-10`}
+                >
+                  <Button
+                    style={[
+                      closest_location_near_user == null
+                        ? tw`bg-gray-300`
+                        : tw`bg-green-700`,
+                    ]}
+                    disabled={closest_location_near_user == null}
+                    labelStyle={[
+                      tw`text-lg`,
+
+                      closest_location_near_user == null
+                        ? tw`text-gray-500`
+                        : tw`font-bold text-[1rem] text-white`,
+                    ]}
+                    onPress={useNearestLocationForStartLocation}
+                  >
+                    Use location as start location
                   </Button>
                 </View>
               </View>
@@ -822,6 +856,22 @@ export default function IndoorNavigation({ navigation }) {
                   handleClear={handleClearIndoorNavigationProperties}
                   type={"start_location"}
                   empty_query_result={empty_query_result}
+                  default_selected_item={
+                    closest_location_near_user_confirmed &&
+                    closest_location_near_user_confirmed != null
+                      ? {
+                          label: formatTitleForIndoorNavigationHome(
+                            closest_location_near_user_confirmed
+                          ),
+                          value: [
+                            closest_location_near_user_confirmed.floorID,
+                            closest_location_near_user_confirmed.row,
+                            closest_location_near_user_confirmed.col,
+                          ].join(","),
+                        }
+                      : null
+                  }
+                  handleClearHomeScreenData={handleClearStartLocationInModal}
                 />
                 <View style={tw`w-2/10  justify-center items-center`}>
                   <TouchableOpacity

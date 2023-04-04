@@ -20,12 +20,6 @@ const CustomDropdownWithSelectorFromParent = ({
   const handleClearLocal = () => {
     setSelectedItem(null);
   };
-  useEffect(() => {
-    if (selectedItem === null) {
-      return;
-    }
-    console.log("selectedItem", selectedItem);
-  }, [selectedItem]);
 
   const renderItem = (item) => {
     return (
