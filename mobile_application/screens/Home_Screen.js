@@ -61,7 +61,6 @@ export default function HomeScreen() {
     dispatch(all_indoor_locations_actions.setDestinationLocation(location));
     navigation.navigate("Indoor Navigation");
   };
-
   const data = all_indoor_locations_data.map((location) => {
     return {
       label: formatTitle(location),
@@ -156,6 +155,12 @@ export default function HomeScreen() {
   };
 
   const filteredData = filterData();
+  const filteredDataForAllDropdown = filteredData.map((location) => {
+    return {
+      label: formatTitle(location),
+      value: [location.floorID, location.row, location.col].join(","),
+    };
+  });
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
@@ -212,7 +217,7 @@ export default function HomeScreen() {
             <View style={tw`mx-1 mt-10 flex-row justify-center items-center`}>
               <View style={tw`w-8/10`}>
                 <CustomDropdownForAllIndoorLocations
-                  data={data}
+                  data={filteredDataForAllDropdown}
                   type="all"
                   placeholder="Select destination"
                 />

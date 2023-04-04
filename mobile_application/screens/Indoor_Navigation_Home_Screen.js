@@ -488,7 +488,6 @@ export default function IndoorNavigation({ navigation }) {
           String(indoor_navigation_properties.destination_location_id)
         ].floorID;
       let current_index = nearest_elevator_or_stairs.name == "elevator" ? 0 : 1;
-      debugger;
       let new_destination_elevator_or_stairs =
         await findNearestElevatorOrStairs(
           nearest_elevator_or_stairs,
