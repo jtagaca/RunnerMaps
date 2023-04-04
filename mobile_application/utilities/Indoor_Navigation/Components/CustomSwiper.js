@@ -1,10 +1,12 @@
 import React, { useRef, useState, useEffect } from "react";
-import { View, Text } from "react-native";
+import { View, Text, ScrollView } from "react-native";
 import Swiper from "react-native-deck-swiper";
 import cloneDeep from "lodash/cloneDeep";
 import { useSelector } from "react-redux";
 import tw from "../../../tailwind/CustomTailwind";
 import CardComponent from "./CardComponent";
+import Icon from "react-native-vector-icons/FontAwesome";
+
 import ButtonGroup from "./ButtonGroup";
 
 export default function CustomSwiper() {
@@ -114,32 +116,6 @@ export default function CustomSwiper() {
   }, []);
 
   useEffect(() => {
-    if (sorted_shortest_path) {
-      console.log("sorted_shortest_path", sorted_shortest_path);
-    }
-    if (current_start) {
-      console.log("current_start", current_start);
-    }
-    if (current_end) {
-      console.log("current_end", current_end);
-    }
-    if (current_array_of_checkpoints.length > 0) {
-      console.log("current_array_of_checkpoints", current_array_of_checkpoints);
-    }
-    if (current_index_of_checkpoints) {
-      console.log("current_index_of_checkpoints", current_index_of_checkpoints);
-    }
-  }, [
-    sorted_shortest_path,
-    current_start,
-    current_end,
-    current_array_of_checkpoints,
-    current_index_of_checkpoints,
-  ]);
-
-  const [current_array_of_pathing, setCurrentArrayOfPathing] = useState([]);
-
-  useEffect(() => {
     if (current_start && current_end) {
       if (current_index_of_swiper >= sorted_shortest_path.length - 1) {
         setCurrentPath([]);
@@ -221,38 +197,65 @@ export default function CustomSwiper() {
     <>
       {sorted_shortest_path.length > 0 ? (
         <View style={tw`bg-yellow-100 `}>
-          <ButtonGroup
+          {/* <ButtonGroup
             onSwipeLeft={handleSwipeLeft}
             onSwipeRight={handleSwipeRight}
             disabled={current_index_of_swiper === 0}
-          />
-          <View style={tw`flex-col justify-center  mt-5 bg-blue-500 p-2`}>
-            {/* loop over current_path */}
-            {/* and display each  */}
-            <Text>Upcoming paths</Text>
-            {current_path.map((item, index) => {
-              return (
-                <View key={index} style={tw`bg-yellow-100  m-1 rounded-full`}>
-                  <Text>
-                    {item.userDirection || item.locationName + "\n"}
-                    {item.checkpoint && " checkpoint"}
-                  </Text>
-                </View>
-              );
-            })}
-          </View>
-          <View style={tw`flex-col justify-center  mt-5 bg-blue-500 p-2`}>
-            <Text>
-              Number of cards including checkpoint :{" "}
-              {current_difference_index_between_start_and_end}
-            </Text>
-            <Text>
-              Current distance difference :{" "}
-              {current_distance_between_start_and_end}
-            </Text>
-          </View>
+          /> */}
           <View
-            style={tw`flex-row justify-center bg-yellow-100 m-0 h-21/20 w-20/20 content-center`}
+            style={tw`flex-col justify-center mt-2 bg-blue-500 py-2 rounded-lg `}
+          >
+            <View style={tw`mx-10`}>
+              <Text style={tw`text-white font-bold text-lg mb-1 text-center`}>
+                Upcoming Paths
+              </Text>
+              <ScrollView style={tw`h-25`}>
+                {current_path.map((item, index) => {
+                  return (
+                    <View
+                      key={index}
+                      style={[
+                        tw`m-1 p-1 rounded-lg shadow-lg`,
+                        item.checkpoint ? tw`bg-green-300` : tw`bg-yellow-300`,
+                      ]}
+                    >
+                      <Text style={tw`text-black text-center`}>
+                        {item.userDirection || item.locationName}
+                        {item.checkpoint && (
+                          <>
+                            {" "}
+                            <Icon name="star" size={14} color="black" />
+                          </>
+                        )}
+                      </Text>
+                    </View>
+                  );
+                })}
+              </ScrollView>
+            </View>
+            <View
+              style={tw`flex-col justify-center mt-1 bg-yellow-300 p-2 mx-10 rounded-lg shadow-lg`}
+            >
+              <Text style={tw`text-black font-bold text-lg text-center mb-2`}>
+                Information
+              </Text>
+              <Text style={tw`text-center`}>
+                Cards left til next checkpoint(checkpoints included):{"\n"}
+                <Text style={tw`font-semibold text-center`}>
+                  {current_difference_index_between_start_and_end}
+                </Text>
+              </Text>
+              <Text style={tw`text-center`}>
+                Distance of start checkpoint and next checkpoint:{"\n"}
+                <Text style={tw`font-semibold text-center`}>
+                  {current_distance_between_start_and_end.toFixed(2)} meters
+                </Text>
+              </Text>
+            </View>
+          </View>
+
+          <View
+            style={tw`flex-row justify-center bg-yellow-100 m-0 h-16/20 w-20/20 content-center`}
           >
             <Swiper
               style={tw`bg-yellow-100 m-0 `}

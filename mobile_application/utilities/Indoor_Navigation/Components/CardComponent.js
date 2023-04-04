@@ -34,7 +34,7 @@ export default function CardComponent({ card, index, sorted_shortest_path }) {
           {card.image && card.image != null && card.image != "" ? (
             <>
               <Card.Cover
-                style={tw`h-8/10 m-5`}
+                style={tw`h-7/10 m-5`}
                 source={{ uri: card.image }}
                 resizeMode="contain"
               />

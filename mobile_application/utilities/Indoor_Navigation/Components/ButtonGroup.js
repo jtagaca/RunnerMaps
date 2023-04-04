@@ -6,7 +6,7 @@ import tw from "../../../tailwind/CustomTailwind";
 export default function ButtonGroup({ onSwipeLeft, onSwipeRight, disabled }) {
   return (
     <View
-      style={tw`flex-row justify-center mx-3 justify-between mt-5 h-2/50 content-center items-center`}
+      style={tw`flex-row justify-center mx-3 justify-between mt-5 h-3/50 content-center items-center`}
     >
       <Button
         style={tw`rounded-lg bg-blue-500 text-center p-1`}
