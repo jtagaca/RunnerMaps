@@ -825,7 +825,7 @@ export default function IndoorNavigation({ navigation }) {
         </Modal>
         {data.length == 0 ? null : (
           <>
-            <View style={tw`flex-col flex-1 my-5`}>
+            <View style={tw`flex-col flex-1 my-3`}>
               <Text
                 style={tw`px-1 py-2 my-1 text-lg font-bold text-left bg-yellow-300 rounded-md shadow-md w-5/10`}
               >
@@ -849,7 +849,7 @@ export default function IndoorNavigation({ navigation }) {
                 handleClearHomeScreenData={handleClearChosenBuilding}
               />
             </View>
-            <View style={tw`flex-col flex-1 my-5`}>
+            <View style={tw`flex-col flex-1 my-3`}>
               <Text
                 style={tw`px-1 py-2 my-1 text-lg font-bold text-left bg-yellow-300 rounded-md shadow-md w-4/10`}
               >
@@ -906,7 +906,7 @@ export default function IndoorNavigation({ navigation }) {
                 </View>
               </View>
             </View>
-            <View style={tw`flex-col flex-1 my-5`}>
+            <View style={tw`flex-col flex-1 my-3`}>
               <Text
                 style={tw`px-1 py-2 my-1 text-lg font-bold text-left bg-yellow-300 rounded-md shadow-md w-6/10`}
               >

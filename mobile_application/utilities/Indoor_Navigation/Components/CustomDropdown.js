@@ -25,12 +25,7 @@ const CustomDropdown = ({
     handleClear(type);
     setSelectedItem(null);
   };
-  useEffect(() => {
-    if (selectedItem === null) {
-      return;
-    }
-    console.log("selectedItem", selectedItem);
-  }, [selectedItem]);
+
   useEffect(() => {
     if (default_selected_item && default_selected_item != null) {
       handleSelectionLocal(default_selected_item);
@@ -63,7 +58,7 @@ const CustomDropdown = ({
       <Dropdown
         dropdownPosition="auto"
         showsVerticalScrollIndicator={true}
-        style={(styles.dropdown, tw`my-4 mr-0 w-8/10 h-15/30 `)}
+        style={(styles.dropdown, tw`my-4 mr-0 w-8/10  `)}
         placeholderStyle={
           given_style && data && data.length === 0
             ? given_style
