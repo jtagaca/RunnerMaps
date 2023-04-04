@@ -768,7 +768,10 @@ export default function IndoorNavigation({ navigation }) {
                   <Button
                     style={tw`mx-2 bg-red-500 w-4/10`}
                     labelStyle={tw`text-lg text-white`}
-                    onPress={() => setModalForClosestLocation(false)}
+                    onPress={() => {
+                      handleClearStartLocationInModal();
+                      setModalForClosestLocation(false);
+                    }}
                   >
                     Cancel
                   </Button>
@@ -786,7 +789,9 @@ export default function IndoorNavigation({ navigation }) {
                         ? tw`text-gray-500`
                         : tw`font-bold text-[1rem] text-white`,
                     ]}
-                    onPress={handleFindClosestLocation}
+                    onPress={async () => {
+                      await handleFindClosestLocation();
+                    }}
                   >
                     Find
                   </Button>
