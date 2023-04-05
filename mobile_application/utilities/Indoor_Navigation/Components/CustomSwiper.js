@@ -8,7 +8,9 @@ import CardComponent from "./CardComponent";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 import ButtonGroup from "./ButtonGroup";
+import { buildText } from "../Library/FormatText";
 
+import * as Speech from "expo-speech";
 export default function CustomSwiper() {
   const haversineDistance = require("geodetic-haversine-distance");
   const shortest_path = useSelector(
@@ -17,6 +19,7 @@ export default function CustomSwiper() {
   const swiperRef = useRef(null);
 
   const carousel_data = cloneDeep(shortest_path);
+  const accessibility = useSelector((state) => state.accessibility);
 
   const sorted_shortest_path = carousel_data.sort((a, b) => {
     return a.key - b.key;
@@ -61,6 +64,13 @@ export default function CustomSwiper() {
   const handleSwipeRight = () => {
     swiperRef.current.swipeRight();
     set_current_index_of_swiper(current_index_of_swiper + 1);
+  };
+  const handleSpeech = (word_to_speak) => {
+    Speech.speak(word_to_speak, {
+      language: "en-US",
+      pitch: 1,
+      rate: 0.7,
+    });
   };
   useEffect(() => {
     if (current_render_count === 0) {
@@ -117,13 +127,30 @@ export default function CustomSwiper() {
 
   useEffect(() => {
     if (current_start && current_end) {
+      if (current_index_of_swiper < sorted_shortest_path.length) {
+        let card = sorted_shortest_path[current_index_of_swiper];
+
+        if (
+          accessibility.voice_enabled &&
+          accessibility.voice_enabled == true
+        ) {
+          let text_to_speak = buildText(
+            card,
+            current_index_of_swiper,
+            sorted_shortest_path,
+            card.image && card.image != null && card.image != ""
+              ? null
+              : "noImage"
+          );
+          handleSpeech(text_to_speak);
+        }
+      }
       if (current_index_of_swiper >= sorted_shortest_path.length - 1) {
         setCurrentPath([]);
         setCurrentDifferenceIndexBetweenStartAndEnd(0);
         setCurrentDistanceBetweenStartAndEnd(0);
         return;
       }
-      // debugger;
 
       const isSwipedRight = current_index_of_swiper > previous_swiper_index;
       const isSwipedLeft = current_index_of_swiper < previous_swiper_index;
@@ -220,7 +247,14 @@ export default function CustomSwiper() {
                       ]}
                     >
                       <Text style={tw`text-black text-center`}>
-                        {item.userDirection || item.locationName}
+                        {buildText(
+                          item,
+                          index,
+                          current_path,
+                          item.image && item.image != null && item.image != ""
+                            ? null
+                            : "noImage"
+                        )}
                         {item.checkpoint && (
                           <>
                             {" "}
