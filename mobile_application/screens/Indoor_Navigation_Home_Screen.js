@@ -68,6 +68,7 @@ export default function IndoorNavigation({ navigation }) {
 
   const buildings = useSelector((state) => state.buildings.data);
   const floors = useSelector((state) => state.indoor_locations.floors);
+  const [geolocationProperties, setGeolocationProperties] = useState(null);
   const haversineDistance = require("geodetic-haversine-distance");
   const indoor_locations = useSelector((state) => state.indoor_locations.data);
   const indoor_locations_map = useSelector(
@@ -90,8 +91,7 @@ export default function IndoorNavigation({ navigation }) {
   const indoor_navigation_properties = useSelector(
     (state) => state.indoor_navigation_properties
   );
-
-  const getCurrentGeolocation = async () => {
+  const updateLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
       setErrorMsg("Permission to access location was denied");
@@ -102,8 +102,11 @@ export default function IndoorNavigation({ navigation }) {
       enableHighAccuracy: true,
       accuracy: Location.Accuracy.Highest,
     });
-    return location.coords;
+    setGeolocationProperties(location.coords);
   };
+  useEffect(() => {
+    updateLocation();
+  }, []);
 
   useEffect(() => {
     dispatch(getBuildings());
@@ -176,7 +179,7 @@ export default function IndoorNavigation({ navigation }) {
     return;
   };
 
-  const findNearestElevatorOrStairs = async (start_point, index, floor_id) => {
+  const findNearestElevatorOrStairs = (start_point, index, floor_id) => {
     // find elevators in the indoor_locations.elevators array using the floorid
     let locations = [];
     if (ways_to_navigate_between_floors[index] == "Elevator") {
@@ -189,11 +192,10 @@ export default function IndoorNavigation({ navigation }) {
       );
     }
     let current_geolocation_temp;
-    let current_geolocation_coords = await getCurrentGeolocation();
     if (start_point == null) {
       current_geolocation_temp = {
-        latitude: parseFloat(current_geolocation_coords.latitude),
-        longitude: parseFloat(current_geolocation_coords.longitude),
+        latitude: parseFloat(geolocationProperties.latitude),
+        longitude: parseFloat(geolocationProperties.longitude),
       };
     } else {
       current_geolocation_temp = {
@@ -219,6 +221,7 @@ export default function IndoorNavigation({ navigation }) {
     set_nearest_elevator_or_stairs(sorted_locations_via_haversine_distance[0]);
     return sorted_locations_via_haversine_distance[0];
   };
+
   const handleStartNavigationConfirmed = async () => {
     // todo rename change the variable
     // add a variable for this and change it indoor_locations_map[String(indoor_navigation_properties.start_location_id)]
@@ -493,12 +496,11 @@ export default function IndoorNavigation({ navigation }) {
           String(indoor_navigation_properties.destination_location_id)
         ].floorID;
       let current_index = nearest_elevator_or_stairs.name == "elevator" ? 0 : 1;
-      let new_destination_elevator_or_stairs =
-        await findNearestElevatorOrStairs(
-          nearest_elevator_or_stairs,
-          current_index,
-          destination_floor_id
-        );
+      let new_destination_elevator_or_stairs = findNearestElevatorOrStairs(
+        nearest_elevator_or_stairs,
+        current_index,
+        destination_floor_id
+      );
       destination_location_row_index =
         indoor_locations_map[
           String(indoor_navigation_properties.destination_location_id)
@@ -634,10 +636,10 @@ export default function IndoorNavigation({ navigation }) {
       }
     );
     let current_geolocation_temp;
-    let current_geolocation_coords = await getCurrentGeolocation();
+    await updateLocation();
     current_geolocation_temp = {
-      latitude: parseFloat(current_geolocation_coords.latitude),
-      longitude: parseFloat(current_geolocation_coords.longitude),
+      latitude: parseFloat(geolocationProperties.latitude),
+      longitude: parseFloat(geolocationProperties.longitude),
     };
 
     for (let i = 0; i < filtered_indoor_locations.length; i++) {
@@ -790,9 +792,7 @@ export default function IndoorNavigation({ navigation }) {
                         ? tw`text-gray-500`
                         : tw`font-bold text-[1rem] text-white`,
                     ]}
-                    onPress={async () => {
-                      await handleFindClosestLocation();
-                    }}
+                    onPress={handleFindClosestLocation}
                   >
                     Find
                   </Button>

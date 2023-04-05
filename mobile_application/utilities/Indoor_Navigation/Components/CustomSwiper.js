@@ -203,7 +203,7 @@ export default function CustomSwiper() {
             disabled={current_index_of_swiper === 0}
           /> */}
           <View
-            style={tw`flex-col justify-center mt-2 bg-blue-500 py-2 rounded-lg `}
+            style={tw`flex-col justify-center  bg-blue-500 py-2 rounded-lg `}
           >
             <View style={tw`mx-10`}>
               <Text style={tw`text-white font-bold text-lg mb-1 text-center`}>

@@ -32,6 +32,7 @@ export default function App() {
                 component={IndoorNavigation}
                 options={({ navigation }) => ({
                   headerLeft: () => <CustomHeader navigation={navigation} />,
+                  headerTitleAlign: "center",
                 })}
               />
             </Stack.Navigator>
