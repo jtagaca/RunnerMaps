@@ -9,6 +9,7 @@ const store = configureStore({
     currentLocations: reducers.currentLocation,
     indoor_navigation_properties: reducers.indoor_navigation_properties,
     all_indoor_locations: reducers.all_indoor_locations,
+    accessibility: reducers.accessibility,
   },
 });
 

@@ -1,8 +1,9 @@
 import { View, SafeAreaView } from "react-native";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Text, Switch } from "react-native-paper";
 import tw from "../tailwind/CustomTailwind";
-
+import { useSelector, useDispatch } from "react-redux";
+import { accessibility_actions } from "../redux_store/reducers";
 import * as Speech from "expo-speech";
 export default function SettingScreen() {
   const [
@@ -10,7 +11,22 @@ export default function SettingScreen() {
     setIndoorNavigationResultVoiceEnabled,
   ] = useState(false);
 
+  const dispatch = useDispatch();
+
+  const accessibility = useSelector((state) => state.accessibility);
+  useEffect(() => {
+    console.log("Setting accessibility: ", accessibility);
+    if (accessibility.voice_enabled && accessibility.voice_enabled == true) {
+      setIndoorNavigationResultVoiceEnabled(true);
+    }
+  }, [accessibility]);
+
   const toggleSwitch = () => {
+    dispatch(
+      accessibility_actions.setVoiceEnabled(
+        !indoor_navigation_result_voice_enabled
+      )
+    );
     setIndoorNavigationResultVoiceEnabled(
       !indoor_navigation_result_voice_enabled
     );

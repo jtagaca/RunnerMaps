@@ -139,6 +139,18 @@ const indoor_navigation_properties_slice = createSlice({
   },
 });
 
+const accessibility_slice = createSlice({
+  name: "accessibility",
+  initialState: {
+    voice_enabled: false,
+  },
+  reducers: {
+    setVoiceEnabled: (state, action) => {
+      state.voice_enabled = action.payload;
+    },
+  },
+});
+
 // to be edited
 const current_geolocation_slice = createSlice({
   name: "current_geolocation",
@@ -224,6 +236,7 @@ const all_indoor_locations_slice = createSlice({
   },
 });
 
+export const accessibility_actions = accessibility_slice.actions;
 export const all_indoor_locations_actions = all_indoor_locations_slice.actions;
 export const { setClosestLocations } = closestLocationsSlice.actions;
 export const { setCurrentGeolocationProperties } =
@@ -239,4 +252,5 @@ export default {
   currentLocation: current_geolocation_slice.reducer,
   indoor_navigation_properties: indoor_navigation_properties_slice.reducer,
   all_indoor_locations: all_indoor_locations_slice.reducer,
+  accessibility: accessibility_slice.reducer,
 };

@@ -9,7 +9,6 @@ import CustomDropdown from "../utilities/Indoor_Navigation/Components/CustomDrop
 import {
   indoor_locations_actions,
   indoor_navigation_properties_actions,
-  setCurrentGeolocationProperties,
 } from "../redux_store/reducers";
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
