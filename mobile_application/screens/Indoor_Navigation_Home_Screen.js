@@ -25,7 +25,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { Button } from "react-native-paper";
 
 import {
-  Alert,
   Modal,
   StyleSheet,
   Text,
@@ -36,6 +35,7 @@ import {
   TouchableOpacity,
 } from "react-native";
 
+import { Linking, Alert, Platform } from "react-native";
 export default function IndoorNavigation({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [
@@ -94,7 +94,27 @@ export default function IndoorNavigation({ navigation }) {
   const updateLocation = async () => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if (status !== "granted") {
-      setErrorMsg("Permission to access location was denied");
+      const openSettings = async () => {
+        if (Platform.OS === "ios") {
+          if (await Linking.canOpenURL("app-settings:")) {
+            await Linking.openURL("app-settings:");
+          } else {
+            console.log("Unable to open app settings");
+          }
+        } else if (Platform.OS === "android") {
+          await Linking.openSettings();
+        }
+      };
+
+      Alert.alert(
+        "It seems that permission wasn't granted please try again",
+        "Please enable location permission in the app settings to use all features.",
+        [
+          { text: "Cancel", onPress: () => console.log("Canceled") },
+          { text: "Open Settings", onPress: openSettings },
+        ]
+      );
+
       return;
     }
 
