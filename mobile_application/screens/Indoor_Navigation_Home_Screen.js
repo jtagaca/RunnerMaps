@@ -272,8 +272,15 @@ export default function IndoorNavigation({ navigation }) {
         String(indoor_navigation_properties.start_location_id)
       ].col
     );
+    let isOnDifferentFloors =
+      indoor_locations_map[
+        String(indoor_navigation_properties.start_location_id)
+      ].floorID !=
+      indoor_locations_map[
+        String(indoor_navigation_properties.destination_location_id)
+      ].floorID;
 
-    if (isStartAndDestinationOnDifferentFloors == false) {
+    if (isOnDifferentFloors == false) {
       let floor_id =
         indoor_locations_map[
           String(indoor_navigation_properties.start_location_id)
@@ -391,7 +398,7 @@ export default function IndoorNavigation({ navigation }) {
       navigation.push("Result");
       return;
     }
-    if (isStartAndDestinationOnDifferentFloors == true) {
+    if (isOnDifferentFloors == true) {
       gridStartRowLength = parseInt(
         indoor_locations_map[
           String(indoor_navigation_properties.start_location_id)
