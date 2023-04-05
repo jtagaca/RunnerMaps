@@ -3,11 +3,13 @@ import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import IndoorNavigationHomeScreen from "../../screens/Indoor_Navigation_Home_Screen";
 import HomeScreen from "../../screens/Home_Screen";
+import SettingScreen from "../../screens/SettingScreen";
 
 import OutdoorNavigationScreen from "../../screens/Outdoor_Navigation";
 import Icon from "react-native-vector-icons/FontAwesome";
 const Tab = createBottomTabNavigator();
 import tw from "../../tailwind/CustomTailwind";
+
 export default function NavigationBar() {
   return (
     <Tab.Navigator
@@ -46,6 +48,15 @@ export default function NavigationBar() {
         options={{
           tabBarIcon: ({ color, size }) => (
             <Icon name="compass" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Settings"
+        component={SettingScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="gear" color={color} size={size} />
           ),
         }}
       />
