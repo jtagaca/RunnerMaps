@@ -7,6 +7,7 @@ CREATE TABLE `users` (
   `email` varchar(255) NOT NULL,
   `departmentID` int(11) DEFAULT NULL,
   PRIMARY KEY (`userID`),
+  UNIQUE (`username`),
   KEY `foreign_key_of_users_to_department_idx` (`departmentID`),
   -- CONSTRAINT `foreign_key_of_users_to_department` FOREIGN KEY (`departmentID`) REFERENCES `department` (`departmentID`) 
   -- ON DELETE NO ACTION ON UPDATE NO ACTION

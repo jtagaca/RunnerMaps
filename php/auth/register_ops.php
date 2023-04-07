@@ -2,6 +2,7 @@
 session_start();
 require_once("../config/config.php");
 require_once("validation_functions.php");
+require_once("../settings/settings_func.php");
 
 // function register($username, $password, $userType, $email_username, $email_domain) {
 function register($username, $password, $userType, $email) {
@@ -39,7 +40,7 @@ function register($username, $password, $userType, $email) {
     // unset($_POST["password_confirm"]);
 
     echo "executed <br>";
-    header("Location: register_page.php");
+    // header("Location: register_page.php");
 
     // $fetchedResult = $command->get_result();
 
@@ -54,6 +55,25 @@ function register($username, $password, $userType, $email) {
     //         // $_SESSION["error"] = $error;
     //     }
     // }
+}
+
+function fetchUserID($username) {
+    $db = get_connection();
+    $command = $db->prepare("SELECT userID FROM users WHERE username = ?;");
+    $command->bind_param('s', $username);
+
+    if (!$command->execute()) {
+        $_SESSION["error"] = die(mysqli_error($db) . "<br>");
+    }
+
+    $fetchedResult = $command->get_result();
+
+    $userID = [];
+    if ($row = $fetchedResult->fetch_assoc()) {
+        $userID = $row["userID"];
+    }
+    
+    return $userID;
 }
 
 if (isset($_POST["register"])) {
@@ -111,7 +131,14 @@ if (isset($_POST["register"])) {
 
                 echo "before calling register <br>";
                 register($username, $password, $userType, $email);
+                $userID = fetchUserID($username);
+                echo $userID;
+                echo "before initializing settings";
+                initializeSettings($userID);
+                echo "after initializing settings";
                 echo "after calling register <br>";
+                header("Location: register_page.php");
+
                 // $_SESSION["success_message"] = "Account successfully created. Username: $username";
             }
         }

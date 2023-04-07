@@ -6,3 +6,4 @@ source tables/users.sql;
 source tables/markers.sql;
 source tables/indoorLocations.sql;
 source tables/walls.sql;
+source tables/settings.sql;

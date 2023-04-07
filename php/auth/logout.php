@@ -13,6 +13,7 @@ if (isset($_POST["logout"])) {
     unset($_SESSION["userEmail"]);
     unset($_SESSION["userType"]);
     unset($_SESSION["departmentID"]);
+    unset($_SESSION["style"]);
 
 }
 

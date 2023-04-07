@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once("../settings/settings_func.php");
 
 if (isset($_SESSION["authorized"])) {
     if ($_SESSION["authorized"] === true) {

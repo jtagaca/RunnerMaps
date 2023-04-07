@@ -2,6 +2,7 @@
 session_start();
 require_once("../config/config.php");
 require_once("validation_functions.php");
+require_once("../settings/settings_func.php");
 
 $userExists = false;
 
@@ -112,6 +113,9 @@ function login($username, $password) {
                 $_SESSION["userEmail"] = $userEmail;
                 $_SESSION["userType"] = $userType;
                 $_SESSION["departmentID"] = $deptID;
+
+                $settings = fetchSettings($userID);
+                $_SESSION["style"] = $settings;
                 
                 // header("Location: ../home/hub.php");
 

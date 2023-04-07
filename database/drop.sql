@@ -12,3 +12,4 @@ DROP TABLE IF EXISTS `department`;
 DROP TABLE IF EXISTS `categories`;
 DROP TABLE IF EXISTS `floors`;
 DROP TABLE IF EXISTS `buildings`;
+DROP TABLE IF EXISTS `settings`;
