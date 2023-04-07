@@ -200,7 +200,7 @@ export default function HomeScreen() {
 
         {all_indoor_locations_data && all_indoor_locations_data.length > 0 ? (
           <>
-            <View style={tw`mx-1 mt-10 flex-row justify-center items-center`}>
+            <View style={tw`mx-1 flex-row justify-center items-center`}>
               <View style={tw`w-8/10`}>
                 <CustomDropdownWithSelectorFromParent
                   data={filteredDataForAllDropdown}

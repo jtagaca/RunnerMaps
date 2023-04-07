@@ -1,17 +1,32 @@
 import React, { useRef, useState, useEffect } from "react";
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, Platform } from "react-native";
 import Swiper from "react-native-deck-swiper";
 import cloneDeep from "lodash/cloneDeep";
 import { useSelector } from "react-redux";
 import tw from "../../../tailwind/CustomTailwind";
 import CardComponent from "./CardComponent";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { Audio } from "expo-av";
+const soundObject = new Audio.Sound();
 
 import ButtonGroup from "./ButtonGroup";
 import { buildText } from "../Library/FormatText";
 
 import * as Speech from "expo-speech";
 export default function CustomSwiper() {
+  useEffect(() => {
+    const enableSound = async () => {
+      if (Platform.OS === "ios") {
+        await Audio.setAudioModeAsync({
+          playsInSilentModeIOS: true,
+        });
+        await soundObject.loadAsync(require("../Extra/soundFile.mp3"));
+        await soundObject.playAsync();
+      }
+    };
+    enableSound();
+  });
+
   const haversineDistance = require("geodetic-haversine-distance");
   const shortest_path = useSelector(
     (state) => state.indoor_navigation_properties.shortest_path_directions
@@ -70,6 +85,12 @@ export default function CustomSwiper() {
       language: "en-US",
       pitch: 1,
       rate: 0.7,
+      onError: (e) =>
+        alert(
+          e.message +
+            "\n" +
+            "there was an issue with voice enabled speech, please make sure you have allowed the app to use dictation "
+        ),
     });
   };
   useEffect(() => {
@@ -223,7 +244,7 @@ export default function CustomSwiper() {
   return (
     <>
       {sorted_shortest_path.length > 0 ? (
-        <View style={tw`bg-yellow-100 `}>
+        <>
           {/* <ButtonGroup
             onSwipeLeft={handleSwipeLeft}
             onSwipeRight={handleSwipeRight}
@@ -249,8 +270,8 @@ export default function CustomSwiper() {
                       <Text style={tw`text-black text-center`}>
                         {buildText(
                           item,
-                          index,
-                          current_path,
+                          item.index,
+                          sorted_shortest_path,
                           item.image && item.image != null && item.image != ""
                             ? null
                             : "noImage"
@@ -289,7 +310,7 @@ export default function CustomSwiper() {
           </View>
 
           <View
-            style={tw`flex-row justify-center bg-yellow-100 m-0 h-16/20 w-20/20 content-center`}
+            style={tw`flex-row justify-center bg-yellow-100 m-0 h-18/20 w-20/20 content-center`}
           >
             <Swiper
               style={tw`bg-yellow-100 m-0 `}
@@ -323,7 +344,7 @@ export default function CustomSwiper() {
               disableLeftSwipe={current_index_of_swiper === 0 ? true : false}
             ></Swiper>
           </View>
-        </View>
+        </>
       ) : null}
     </>
   );
