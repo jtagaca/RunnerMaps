@@ -5,31 +5,36 @@ require_once("validation_functions.php");
 require_once("../settings/settings_func.php");
 
 function checkUsername($username) {
+    $db = get_connection();
+    $command = $db->prepare("SELECT count(*) FROM users WHERE username = ?;");
+    $command->bind_param('s', $username);
+
+    if (!$command->execute()) {
+        $_SESSION["error"] = die(mysqli_error($db) . "<br>");
+    }
+
+    $fetchedResult = $command->get_result();
+
+    $count = 0;
+    if ($row = $fetchedResult->fetch_assoc()) {
+        $count = $row["count(*)"];
+    }
     
+    return $count;
 }
 
 
 // function register($username, $password, $userType, $email_username, $email_domain) {
 function register($username, $password, $userType, $email) {
     $db = get_connection();
-
-    // print_r($db);
-
     $hashed = password_hash($password, PASSWORD_DEFAULT);
 
-    // echo "hashed: $hashed <br>";
     echo "hashed: $hashed <br> username: $username <br> usertype: $userType <br> email: $email <br>";
 
     $command = $db->prepare("INSERT INTO users (`password`, `username`, `userType`, `email`) VALUES (?, ?, ?, ?)");
-    // $command = $db->prepare("Call RegisterUser(?, ?, ?, ?)");
-
-    echo "after prepare, before binding <br>";
-
-    // print_r($db);
     $command->bind_param('ssss', $hashed, $username, $userType, $email);
 
     echo "after binding, before executing <br>";
-
     echo "$hashed and <br> $username and <br> $userType and <br> $email <br>";
 
     if (!$command->execute()) {
@@ -39,27 +44,7 @@ function register($username, $password, $userType, $email) {
         $_SESSION["success_message"] = "Account successfully created. Username: $username";
     }
 
-    // unset($_POST["username"]);
-    // unset($_POST["email"]);
-    // unset($_POST["password"]);
-    // unset($_POST["password_confirm"]);
-
     echo "executed <br>";
-    // header("Location: register_page.php");
-
-    // $fetchedResult = $command->get_result();
-
-    // while ($row = $fetchedResult->fetch_assoc()) {
-    //     $output = $row["Result"];
-    //     $error = $row["Error"];
-
-    //     if ($output == "true") {
-    //         $_SESSION["result"] = "Registration Successful.";
-    //     }
-    //     else {
-    //         // $_SESSION["error"] = $error;
-    //     }
-    // }
 }
 
 function fetchUserID($username) {
@@ -132,17 +117,24 @@ if (isset($_POST["register"])) {
                     "the retyped password and password do not match <br>";
             } 
             else {
-                $userType = "supervisor";
+                $count = checkUsername($username);
+                if ($count == 0) {
+                    $userType = "supervisor";
 
-                echo "before calling register <br>";
-                register($username, $password, $userType, $email);
-                $userID = fetchUserID($username);
-                echo $userID;
-                echo "before initializing settings";
-                initializeSettings($userID);
-                echo "after initializing settings";
-                echo "after calling register <br>";
-                header("Location: register_page.php");
+                    echo "before calling register <br>";
+                    register($username, $password, $userType, $email);
+                    $userID = fetchUserID($username);
+                    echo $userID;
+                    echo "before initializing settings";
+                    initializeSettings($userID);
+                    echo "after initializing settings";
+                    echo "after calling register <br>";
+                    header("Location: register_page.php");
+                }
+                else {
+                    $_SESSION["error"] = $_SESSION["error"] . 
+                    "username already exists <br>";
+                }
 
                 // $_SESSION["success_message"] = "Account successfully created. Username: $username";
             }
