@@ -16,6 +16,14 @@ if (isset($_POST["logout"])) {
     unset($_SESSION["departmentID"]);
     unset($_SESSION["style"]);
 
+    unset($_SESSION["fontSize"]);
+    unset($_SESSION["fontColor"]);
+    unset($_SESSION["backgroundColor"]);
+    unset($_SESSION["borderColor"]);
+
+    unset($_SESSION["registerUsername"]);
+    unset($_SESSION["registerEmail"]);
+
 }
 
 if (!$_SESSION["authorized"] || !isset($_SESSION["authorized"])) {

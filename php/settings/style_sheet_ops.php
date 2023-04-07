@@ -19,7 +19,14 @@ if (isset($_SESSION["style"])) {
     }
     
     // echo $fontSize;
+    $_SESSION["fontSize"] = $fontSize;
+    $_SESSION["fontColor"] = $fontColor;
+    $_SESSION["backgroundColor"] = $backgroundColor;
+    $_SESSION["borderColor"] = $borderColor;
+    
+    // unset($_SESSION["style"]);
 }
+
 
 
 ?>

@@ -24,6 +24,10 @@ require_once("../auth/logout.php");
         <a href="../map/delete_page.php"> Delete a Map </a>
         </h2>
 
+        <h2>
+        <a href="../settings/settings_page.php"> User Settings </a>
+        </h2>
+
     </body>
     
 </html>
