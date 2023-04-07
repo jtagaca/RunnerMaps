@@ -2,6 +2,7 @@
 session_start();
 require_once("delete_func.php");
 require_once("../style/table_style.php");
+require_once("../auth/logout.php");
 ?>
 
 <!DOCTYPE html>
