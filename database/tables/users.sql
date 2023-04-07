@@ -13,3 +13,9 @@ CREATE TABLE `users` (
   -- ON DELETE NO ACTION ON UPDATE NO ACTION
   CONSTRAINT `foreign_key_of_users_to_department` FOREIGN KEY (`departmentID`) REFERENCES `department` (`departmentID`) 
 ) 
+
+-- ALTER TABLE table_name
+-- ADD CONSTRAINT constraint_name UNIQUE (column1, column2, ... column_n);
+
+-- ALTER TABLE users
+-- ADD CONSTRAINT username_unique UNIQUE (username);

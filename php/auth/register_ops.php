@@ -4,6 +4,11 @@ require_once("../config/config.php");
 require_once("validation_functions.php");
 require_once("../settings/settings_func.php");
 
+function checkUsername($username) {
+    
+}
+
+
 // function register($username, $password, $userType, $email_username, $email_domain) {
 function register($username, $password, $userType, $email) {
     $db = get_connection();

@@ -1,4 +1,5 @@
 <?php
+require_once("../settings/style_sheet.php");
 
 // if (isset($_SESSION["authorized"])) {
 //     if ($_SESSION["authorized"] === true) {

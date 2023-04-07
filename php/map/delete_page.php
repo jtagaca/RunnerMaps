@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once("delete_func.php");
-require_once("../settings/style_sheet.php");
+// require_once("../settings/style_sheet.php");
 require_once("../auth/logout.php");
 ?>
 
