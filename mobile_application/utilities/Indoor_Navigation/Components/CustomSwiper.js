@@ -7,25 +7,32 @@ import tw from "../../../tailwind/CustomTailwind";
 import CardComponent from "./CardComponent";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Audio } from "expo-av";
+
 const soundObject = new Audio.Sound();
 
 import ButtonGroup from "./ButtonGroup";
 import { buildText } from "../Library/FormatText";
 
 import * as Speech from "expo-speech";
+
 export default function CustomSwiper() {
   useEffect(() => {
     const enableSound = async () => {
-      if (Platform.OS === "ios") {
-        await Audio.setAudioModeAsync({
-          playsInSilentModeIOS: true,
-        });
-        await soundObject.loadAsync(require("../Extra/soundFile.mp3"));
-        await soundObject.playAsync();
+      try {
+        if (Platform.OS === "ios") {
+          await Audio.setAudioModeAsync({
+            playsInSilentModeIOS: true,
+          });
+          await soundObject.loadAsync(require("../Extra/soundFile.mp3"));
+          await soundObject.playAsync();
+        }
+      } catch (error) {
+        console.error("Error enabling sound:", error);
+        alert("Error loading sound");
       }
     };
     enableSound();
-  });
+  }, []);
 
   const haversineDistance = require("geodetic-haversine-distance");
   const shortest_path = useSelector(
