@@ -75,6 +75,13 @@ if (isset($_POST["uploadJSON"])) {
                 $inputDescription = "";
 
                 insertIntoIndoorLocations($insertFloorID, $inputRow, $inputCol, $inputImage, $inputLatitude, $inputLongitude, $inputName, $inputDescription);
+                // if(blankTest($inputRow) && 
+                //    blankTest($inputCol) &&
+                //    blankTest($inputLatitude) && 
+                //    blankTest($inputLongitude)) 
+                //    {
+                       
+                //    }
             }
 
             //insert into the markers table
