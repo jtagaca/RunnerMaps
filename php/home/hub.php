@@ -25,6 +25,10 @@ require_once("../auth/logout.php");
         </h2>
 
         <h2>
+        <a href="../category/delete_page.php"> Delete an Indoor Location </a>
+        </h2>
+
+        <h2>
         <a href="../settings/settings_page.php"> User Settings </a>
         </h2>
 
