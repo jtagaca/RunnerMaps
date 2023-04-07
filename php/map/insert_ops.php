@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once("insert_func.php");
+require_once("../auth/validation_functions.php");
 
 if (isset($_POST["uploadJSON"])) {
 
@@ -31,67 +32,74 @@ if (isset($_POST["uploadJSON"])) {
         $markers = $decodedJSON->markers;
         $walls = $decodedJSON->walls;
         
+        if(blankTest($inputBuildingName) && blankTest($inputFloorNumber) &&
+           blankTest($inputGridRowLength) && blankTest($inputGridColumnLength)) {
+
         //checks if the building name already exists in the building table
         //if not, insert it before retrieving its ID
-        $buildingExists = doesBuildingAlreadyExist($inputBuildingName);
+            $buildingExists = doesBuildingAlreadyExist($inputBuildingName);
 
-        if (!$buildingExists) {
-            insertIntoBuildings($inputBuildingName, "", "");
-        }
+            if (!$buildingExists) {
+                insertIntoBuildings($inputBuildingName, "", "");
+            }
+            
+            $insertBuildingID = getBuildingID($inputBuildingName);
+
+            //checks if the floor plan already exists in the floor table
+            //if not, insert it before retrieving its ID
+            $floorExists = doesFloorAlreadyExist($inputBuildingName, $inputFloorNumber);
         
-        $insertBuildingID = getBuildingID($inputBuildingName);
+            if (!$floorExists) {
+                insertIntoFloors($inputBuildingName, $inputFloorNumber, $inputGridColumnLength, $inputGridRowLength);
+            }
 
-        //checks if the floor plan already exists in the floor table
-        //if not, insert it before retrieving its ID
-        $floorExists = doesFloorAlreadyExist($inputBuildingName, $inputFloorNumber);
-       
-        if (!$floorExists) {
-            insertIntoFloors($inputBuildingName, $inputFloorNumber, $inputGridColumnLength, $inputGridRowLength);
+            $insertFloorID = getFloorID($inputBuildingName, $inputFloorNumber);
+        
+            //could potentially add logic to drop all previous data
+            //associated with this floor before inserting this floor plan
+            //
+            //
+            //
+            //
+
+
+            //insert into the indoor_locations table
+            foreach($targetLocations as $rowNumber => $entireRow) {
+                
+                $inputRow = $entireRow->row;
+                $inputCol = $entireRow->col;
+                $inputLatitude = $entireRow->latitude;
+                $inputLongitude = $entireRow->longitude;
+                $inputImage= $entireRow->image_url;
+                $inputName = $entireRow->name;
+                $inputDescription = "";
+
+                insertIntoIndoorLocations($insertFloorID, $inputRow, $inputCol, $inputImage, $inputLatitude, $inputLongitude, $inputName, $inputDescription);
+            }
+
+            //insert into the markers table
+            foreach($markers as $rowNumber => $entireRow) {
+                
+                $inputRow = $entireRow->row;
+                $inputCol = $entireRow->col;
+                $inputLatitude = $entireRow->latitude;
+                $inputLongitude = $entireRow->longitude;
+                $inputImage= $entireRow->image_url;
+                
+                insertIntoMarkers($insertFloorID, $inputRow, $inputCol, $inputImage, $inputLatitude, $inputLongitude);
+            }
+
+            //insert into the walls table
+            foreach($walls as $rowNumber => $entireRow) {
+                
+                $inputRow = $entireRow->row;
+                $inputCol = $entireRow->col;
+            
+                insertIntoWalls($insertFloorID, $inputRow, $inputCol);
+            }
         }
-
-        $insertFloorID = getFloorID($inputBuildingName, $inputFloorNumber);
-       
-        //could potentially add logic to drop all previous data
-        //associated with this floor before inserting this floor plan
-        //
-        //
-        //
-        //
-
-
-        //insert into the indoor_locations table
-        foreach($targetLocations as $rowNumber => $entireRow) {
-            
-            $inputRow = $entireRow->row;
-            $inputCol = $entireRow->col;
-            $inputLatitude = $entireRow->latitude;
-            $inputLongitude = $entireRow->longitude;
-            $inputImage= $entireRow->image_url;
-            $inputName = $entireRow->name;
-            $inputDescription = "";
-
-            insertIntoIndoorLocations($insertFloorID, $inputRow, $inputCol, $inputImage, $inputLatitude, $inputLongitude, $inputName, $inputDescription);
-        }
-
-        //insert into the markers table
-        foreach($markers as $rowNumber => $entireRow) {
-            
-            $inputRow = $entireRow->row;
-            $inputCol = $entireRow->col;
-            $inputLatitude = $entireRow->latitude;
-            $inputLongitude = $entireRow->longitude;
-            $inputImage= $entireRow->image_url;
-            
-            insertIntoMarkers($insertFloorID, $inputRow, $inputCol, $inputImage, $inputLatitude, $inputLongitude);
-        }
-
-        //insert into the walls table
-        foreach($walls as $rowNumber => $entireRow) {
-            
-            $inputRow = $entireRow->row;
-            $inputCol = $entireRow->col;
-           
-            insertIntoWalls($insertFloorID, $inputRow, $inputCol);
+        else {
+            $_SESSION["error"] = "building name, floor number, or grid dimension is null. <br>";
         }
     }
 
