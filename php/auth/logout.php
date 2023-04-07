@@ -23,7 +23,7 @@ if (isset($_POST["logout"])) {
 
     unset($_SESSION["registerUsername"]);
     unset($_SESSION["registerEmail"]);
-
+    unset($_SESSION["loginUsername"]);
 }
 
 if (!$_SESSION["authorized"] || !isset($_SESSION["authorized"])) {
