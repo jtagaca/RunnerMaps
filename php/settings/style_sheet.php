@@ -9,7 +9,13 @@ require_once("style_sheet_ops.php");
     html{
         font-size: <?=$fontSize?>px;
         color: <?=$fontColor?>;
-        background-color: <?$=$backgroundColor?>;
+        background-color: <?=$backgroundColor?>;
+    }
+
+    body{
+        font-size: <?=$fontSize?>px;
+        color: <?=$fontColor?>;
+        background-color: <?=$backgroundColor?>;
     }
 
     input{
