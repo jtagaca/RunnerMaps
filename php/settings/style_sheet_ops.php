@@ -2,9 +2,8 @@
 session_start();
 
 if (isset($_SESSION["style"])) {
-    echo 1;
     $settings = $_SESSION["style"];
-    print_r($settings);
+    // print_r($settings);
     if (!is_null($settings)) {
         $fontSize = $settings["fontSize"];
         $fontColor = $settings["fontColor"];
@@ -19,7 +18,7 @@ if (isset($_SESSION["style"])) {
         $borderColor = "#000000";
     }
     
-    echo $fontSize;
+    // echo $fontSize;
 }
 
 

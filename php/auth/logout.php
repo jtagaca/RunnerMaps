@@ -24,6 +24,6 @@ if (!$_SESSION["authorized"] || !isset($_SESSION["authorized"])) {
 
 
 <form action="<?=$_SERVER['PHP_SELF']?>" method="POST">
-    <input type="submit" name="logout" value="Log Out">
+    <input class=logout type="submit" name="logout" value="Log Out">
 </form>
 

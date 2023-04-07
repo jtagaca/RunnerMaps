@@ -35,10 +35,10 @@ function printFloorPlan($floorPlan) {
     $floorNumber = htmlspecialchars($floorPlan["floorNumber"]);
 
     $deleteButton = 
-    "<br>
-    <form action=\"delete_ops.php\" method=\"POST\"> 
+    "
+    <form class=deleteForms action=\"delete_ops.php\" method=\"POST\"> 
     <input type=\"hidden\" name=\"floorID\" value=\"$floorID\">
-    <input type=\"submit\" name=\"deleteFloorPlan\" value=\"Delete\">
+    <input class=deleteButtons type=\"submit\" name=\"deleteFloorPlan\" value=\"Delete\">
     </form>
     ";
 
