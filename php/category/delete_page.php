@@ -44,6 +44,7 @@ require_once("../auth/logout.php");
                 $table_heading = "<h3>$buildingName: floor $floorNumber </h3>";
                 $table_start = "<table>
                                 <tr>
+                                    <th>Location ID</th>
                                     <th>Location Name</th>
                                     <th>Service</th>
                                     <th>Delete</th>

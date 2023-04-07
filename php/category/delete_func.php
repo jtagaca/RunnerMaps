@@ -85,6 +85,7 @@ function printIndoorLocations($location) {
     ";
 
     echo "<tr>";
+    echo "<td>$locationID</td>";
     echo "<td>$locationName</td>";
     echo "<td>$categoryName</td>";
     echo "<td>$deleteButton</td>";
