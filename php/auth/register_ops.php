@@ -84,6 +84,9 @@ if (isset($_POST["register"])) {
         $password = $_POST["password"];
         $password_confirm = $_POST["password_confirm"];
 
+        $_SESSION["registerUsername"] = $username;
+        $_SESSION["registerEmail"] = $email;
+
 
         $usernameNotBlank = blankTest($username);
         $passwordNotBlank = blankTest($password);
