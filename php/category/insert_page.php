@@ -49,7 +49,11 @@ if (isset($_SESSION["success_message"])) {
         <br>
 
         <h2>Edit a Category</h2>
-        
+        <div> 
+            <span style="background-color:yellow;">
+                Note: This change will apply to ALL LOCATIONS that share this category.
+            </span>
+        </div>
         <form action="insert_ops.php" method="POST">
             Old Category Name: <br>
             <input type="text" name="oldCategoryName">
