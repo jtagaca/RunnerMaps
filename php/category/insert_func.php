@@ -184,6 +184,35 @@ function updateCategories($locationID, $categoryName) {
     }
 }
 
+function editCategoryName($old, $new) {
+    $old = strtolower(htmlspecialchars($old));
+    $new = strtolower(htmlspecialchars($new));
+
+    if (doesCategoryAlreadyExist($new)) {
+        $_SESSION["error"] = "category name already exists. <br>";
+        return;
+    }
+
+    $categoryID = fetchCategoryID($old);
+
+    if (!blankTest($old) || !blankTest($categoryID) || !blankTest($new)) {
+        $_SESSION["error"] = "invalid category input<br>";
+        return;
+    }
+
+    $db = get_connection();
+
+    $command = $db->prepare("UPDATE categories SET services = ? WHERE categoryID = ?");
+
+    $command->bind_param('si', $new, $categoryID);
+
+    if (!$command->execute()) {
+        $_SESSION["error"] = die(mysqli_error($db) . "<br>");
+    }
+    else {
+        $_SESSION["success_message"] = "Successfully updated category name from $old to $new<br> This applies to ALL LOCATIONS that belong to this category";
+    }
+}
 
 
 ?>

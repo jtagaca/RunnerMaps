@@ -44,6 +44,22 @@ if (isset($_POST["updateCategory"])) {
     }
 }
 
+
+if (isset($_POST["editCategoryName"])) {
+    if (isset($_POST["oldCategoryName"]) && isset($_POST["newCategoryName"])) {
+
+        $oldCategoryName = $_POST["oldCategoryName"];
+        $newCategoryName = $_POST["newCategoryName"];
+
+        if (blankTest($oldCategoryName) && blankTest($newCategoryName)) {
+            editCategoryName($oldCategoryName, $newCategoryName);
+        }
+        }
+    }
+    else {
+        $_SESSION["error"] = "please select a category. <br>";
+    }
+
 // else {
 //     echo "if form submission is invalid";
 //     $_SESSION["error"] = "please submit the form properly <br>";

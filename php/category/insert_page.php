@@ -52,11 +52,11 @@ if (isset($_SESSION["success_message"])) {
         
         <form action="insert_ops.php" method="POST">
             Old Category Name: <br>
-            <input type="text" name="categoryName">
+            <input type="text" name="oldCategoryName">
             <br><br>           
 
             New Category Name: <br>
-            <input type="text" name="categoryName">
+            <input type="text" name="newCategoryName">
             <br><br>           
         
             <input style="background-color: #ADD8E6;" type="submit" name="editCategoryName" value="Edit">
