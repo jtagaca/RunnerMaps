@@ -54,11 +54,12 @@ if (isset($_POST["editCategoryName"])) {
         if (blankTest($oldCategoryName) && blankTest($newCategoryName)) {
             editCategoryName($oldCategoryName, $newCategoryName);
         }
-        }
     }
     else {
         $_SESSION["error"] = "please select a category. <br>";
     }
+}
+    
 
 // else {
 //     echo "if form submission is invalid";

@@ -143,7 +143,41 @@ function fetchCategoryID($categoryName) {
     return $categoryID;
 }
 
+
+function doesLocationExist($locationID) {
+    
+    $db = get_connection();
+
+    $command = $db->prepare("select count(*) from indoor_locations WHERE locationID = ?");
+
+    $command->bind_param('i', $locationID);
+
+    if (!$command->execute()) {
+        $_SESSION["error"] = die(mysqli_error($db) . "<br>");
+    }
+    else {
+        $fetchedResult = $command->get_result();
+        if ($row = $fetchedResult->fetch_assoc()) {
+            $count = $row["count(*)"];
+            if ($count > 0) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
+    }
+}
+
 function updateCategories($locationID, $categoryName) {
+    if (!blankTest($locationID)) {
+        $_SESSION["error"] = "location ID is blank.<br>";
+        return;
+    }
+    if (!doesLocationExist($locationID)) {
+        $_SESSION["error"] = "location ID does not exist. please check again.<br>";
+        return;
+    }
 
     if ($categoryName == "remove") {
         $db = get_connection();
