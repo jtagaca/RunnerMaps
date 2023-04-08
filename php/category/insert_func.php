@@ -49,7 +49,7 @@ function insertIntoCategories($categoryName) {
 
 function fetchAllCategories() {
     $db = get_connection();
-    $command = $db->prepare("SELECT * FROM categories;");
+    $command = $db->prepare("SELECT * FROM categories order by services;");
 
     if (!$command->execute()) {
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
@@ -69,6 +69,52 @@ function fetchAllCategories() {
     }
     
     return $categories;
+}
+
+function printCategoriesOptions() {
+    // https://www.c-sharpcorner.com/UploadFile/051e29/dropdown-list-in-php/
+    // https://html.form.guide/php-form/php-form-select/
+
+    $categories = fetchAllCategories();
+    
+    echo "<select name=updatedCategory>";
+
+    echo "<option value=\"\">Please Select A Category</option>";
+    
+    foreach($categories as $category) {
+        // didn't end up needing the id
+        
+        $categoryName = $category["categoryName"];
+        // $categoryID = $category["categoryID"];
+
+        // if (!blankTest($categoryName) || !blankTest($categoryID)) {
+        //     return;
+        // }
+
+        if (!blankTest($categoryName)) {
+            return;
+        }
+
+        $categoryName = htmlspecialchars($categoryName);
+        $categoryName = ucwords($categoryName);
+        // $categoryID = htmlspecialchars($categoryID);
+
+        // $realCategoryID = fetchCategoryID($categoryName);
+
+        // if ($categoryID != $realCategoryID) {
+        //     return false;
+        // }
+
+        $categoryOption = 
+        "
+        <option value=\"$categoryName\">$categoryName</option><br>
+        ";
+
+        echo $categoryOption;
+    }
+
+    echo "</select>";
+    
 }
 
 

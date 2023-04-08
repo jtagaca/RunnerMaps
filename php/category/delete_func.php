@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once("../config/config.php");
+require_once("../auth/validation_functions.php");
 
 function fetchFloorPlans() {
     $db = get_connection();
@@ -33,7 +34,13 @@ function fetchIndoorLocationsByFloorID($floorID) {
     // echo $floorID;
 
     $db = get_connection();
-    $command = $db->prepare("SELECT locationID, buildingName, floorNumber, i.name, services FROM indoor_locations as i NATURAL JOIN floors NATURAL JOIN buildings NATURAL JOIN categories WHERE floorID = ? ORDER BY buildingName, floorID, i.name;");
+    // $command = $db->prepare("SELECT locationID, buildingName, floorNumber, i.name, services FROM indoor_locations as i NATURAL JOIN floors NATURAL JOIN buildings NATURAL JOIN categories WHERE floorID = ? ORDER BY buildingName, floorID, i.name;");
+    $command = $db->prepare(
+        "SELECT locationID, buildingName, floorNumber, i.name, services
+        FROM indoor_locations as i NATURAL JOIN floors NATURAL JOIN buildings LEFT JOIN categories 
+        on categories.categoryID = i.categoryID
+        WHERE floorID = ? ORDER BY buildingName, floorID, i.name;
+    ");
     $command->bind_param('i', $floorID);
 
     if (!$command->execute()) {
@@ -75,6 +82,10 @@ function printIndoorLocations($location) {
     
     $locationName = ucwords($locationName);
     $categoryName = ucwords($categoryName);
+
+    // if (!blankTest($categoryName)) { 
+    //     $categoryName = "N/A";
+    // }
 
     $deleteButton = 
     "

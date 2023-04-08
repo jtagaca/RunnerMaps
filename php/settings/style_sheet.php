@@ -23,6 +23,16 @@ require_once("style_sheet_ops.php");
         color: <?=$fontColor?>;   
     }
 
+    option{
+        font-size: <?=$fontSize?>px;
+        color: <?=$fontColor?>;   
+    }
+
+    select{
+        font-size: <?=$fontSize?>px;
+        color: <?=$fontColor?>;   
+    }
+
     .deleteForms{
         margin: 10px;
         padding: 5px 10px;

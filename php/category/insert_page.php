@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once("../auth/logout.php");
+require_once("insert_func.php");
 // require_once("../settings/style_sheet.php");
 
 
@@ -40,9 +41,33 @@ if (isset($_SESSION["success_message"])) {
             <input type="text" name="categoryName">
             <br><br>           
         
-            <input type="submit" name="addCategory" value="Add a New Category">
+            <input style="background-color: #ADD8E6;" type="submit" name="addCategory" value="Add a New Category">
         </form>
 
+        <br>
+        <br>
+        <br>
+
+        <h2>Edit a Category</h2>
+        
+        <form action="insert_ops.php" method="POST">
+            Old Category Name: <br>
+            <input type="text" name="categoryName">
+            <br><br>           
+
+            New Category Name: <br>
+            <input type="text" name="categoryName">
+            <br><br>           
+        
+            <input style="background-color: #ADD8E6;" type="submit" name="editCategoryName" value="Edit">
+        </form>
+
+        <br>
+        <br>
+        <br>
+
+
+        <h2>Update an Indoor Location's Category</h2>
         <form action="insert_ops.php" method="POST">
             Location ID: <br>
             <input type="text" name="locationID" accept="numbers">
@@ -51,11 +76,12 @@ if (isset($_SESSION["success_message"])) {
             Category: <br>
             
             <?php
-                // fetch all categories
-                // then print them as diff input items
+                printCategoriesOptions();
             ?>
-        
-            <input type="submit" name="updateCategory" value="Update Category">
+            
+            <br>
+            <br>
+            <input style="background-color: #ADD8E6;" type="submit" name="updateCategory" value="Update Category">
         </form>
 
         <br><br>
