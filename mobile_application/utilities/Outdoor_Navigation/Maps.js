@@ -9,6 +9,7 @@ import {getDistance} from 'geolib';
 export default function Maps () {
     const [region, setRegion] = useState(null);
     const [destination, setDestination] = useState(null);
+    const [polyline, setPolyline] = useState(null);
     useEffect(() => {
         (async () => {
         let { status } = await Location.requestForegroundPermissionsAsync();
@@ -60,7 +61,8 @@ export default function Maps () {
           const response = await fetch(directionsUrl);
           const result = await response.json();
           if (result.status === 'OK' && result.routes.length > 0) {
-            const polyline = result.routes[0].overview_polyline.points;
+            const newPolyline = result.routes[0].overview_polyline.points;
+            setPolyline(newPolyline);
             const url = `https://www.google.com/maps/dir/?api=1&destination=${destinationStr}&travelmode=walking&dir_action=navigate&polyline=${polyline}`;
             Linking.openURL(url);
           } else {
@@ -84,6 +86,7 @@ export default function Maps () {
                 apikey={apiKey}
                 strokeWidth={3}
                 strokeColor="red"
+                polyline={polyline}
               />
             </MapView>
           ) : (
