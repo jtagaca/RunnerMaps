@@ -17,5 +17,6 @@ CREATE TABLE `users` (
 -- ALTER TABLE table_name
 -- ADD CONSTRAINT constraint_name UNIQUE (column1, column2, ... column_n);
 
+-- https://www.techonthenet.com/mysql/unique.php
 -- ALTER TABLE users
 -- ADD CONSTRAINT username_unique UNIQUE (username);

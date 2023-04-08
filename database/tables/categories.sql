@@ -5,3 +5,7 @@ CREATE TABLE `categories` (
   `services` varchar(200) DEFAULT "default",
   PRIMARY KEY (`categoryID`)
 ); 
+
+-- https://www.techonthenet.com/mysql/unique.php
+-- ALTER TABLE categories
+-- ADD CONSTRAINT category_unique UNIQUE (services);
