@@ -908,6 +908,13 @@ export default function IndoorNavigation({ navigation }) {
                 />
                 <View style={tw`w-2/10  justify-center items-center `}>
                   <TouchableOpacity
+                    style={[
+                      tw`rounded-full p-2`,
+                      indoor_locations_data.length &&
+                      indoor_locations_data.length > 0
+                        ? tw`bg-blue-500`
+                        : tw`bg-gray-300`,
+                    ]}
                     disabled={indoor_locations_data.length == 0}
                     onPress={() => setModalForClosestLocation(true)}
                   >
@@ -919,13 +926,6 @@ export default function IndoorNavigation({ navigation }) {
                           ? "white"
                           : "grey"
                       }
-                      style={[
-                        tw`rounded-full p-2`,
-                        indoor_locations_data.length &&
-                        indoor_locations_data.length > 0
-                          ? tw`bg-blue-500`
-                          : tw`bg-gray-300`,
-                      ]}
                       size={40}
                     />
                   </TouchableOpacity>
