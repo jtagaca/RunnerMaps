@@ -80,6 +80,7 @@ function printCategoriesOptions() {
     echo "<select name=updatedCategory>";
 
     echo "<option value=\"\">Please Select A Category</option>";
+    echo "<option style=\"background-color:#F2C0BD;\" value=\"remove\">Remove Category</option>";
     
     foreach($categories as $category) {
         // didn't end up needing the id
@@ -144,26 +145,45 @@ function fetchCategoryID($categoryName) {
 
 function updateCategories($locationID, $categoryName) {
 
-    $categoryName = strtolower(htmlspecialchars($categoryName));
-    $categoryID = fetchCategoryID($categoryName);
+    if ($categoryName == "remove") {
+        $db = get_connection();
 
-    if (!blankTest($categoryName) || !blankTest($categoryID)) {
-        $_SESSION["error"] = "invalid category input<br>";
-        return;
+        $command = $db->prepare("UPDATE indoor_locations SET categoryID = NULL WHERE locationID = ?");
+
+        $command->bind_param('i', $locationID);
+
+        if (!$command->execute()) {
+            $_SESSION["error"] = die(mysqli_error($db) . "<br>");
+        }
+        else {
+            $_SESSION["success_message"] = "Successfully removed the category for location #$locationID.<br>";
+        }
     }
 
-    $db = get_connection();
-
-    $command = $db->prepare("UPDATE indoor_locations SET categoryID = ? WHERE locationID = ?");
-
-    $command->bind_param('ii', $categoryID, $locationID);
-
-    if (!$command->execute()) {
-        $_SESSION["error"] = die(mysqli_error($db) . "<br>");
-    }
     else {
-        $_SESSION["success_message"] = "Successfully updated category for location #$locationID to $categoryName<br>";
+        $categoryName = strtolower(htmlspecialchars($categoryName));
+        $categoryID = fetchCategoryID($categoryName);
+
+        if (!blankTest($categoryName) || !blankTest($categoryID)) {
+            $_SESSION["error"] = "invalid category input<br>";
+            return;
+        }
+
+        $db = get_connection();
+
+        $command = $db->prepare("UPDATE indoor_locations SET categoryID = ? WHERE locationID = ?");
+
+        $command->bind_param('ii', $categoryID, $locationID);
+
+        if (!$command->execute()) {
+            $_SESSION["error"] = die(mysqli_error($db) . "<br>");
+        }
+        else {
+            $_SESSION["success_message"] = "Successfully updated category for location #$locationID to $categoryName<br>";
+        }
     }
 }
+
+
 
 ?>
