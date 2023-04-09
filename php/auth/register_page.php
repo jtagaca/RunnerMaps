@@ -26,6 +26,9 @@ if (isset($_SESSION["success_message"])) {
         <h2>Register</h2>
         
         <form action="register_ops.php" method="POST">
+            <p>Registration Code:</p>
+            <input type="text" name="registrationCode" value="<?=$_SESSION["registrationCode"]?>" placeholder="Registration Code"> 
+            <br><br>
             <p>Email Address:</p>
             <input type="text" name="email" value="<?=$_SESSION["registerEmail"]?>" placeholder="someone@example.com">
             <!-- <input type="text" name="email_username" placeholder="someone"> <span>@</span>

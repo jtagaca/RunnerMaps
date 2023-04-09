@@ -23,9 +23,69 @@ function checkUsername($username) {
     return $count;
 }
 
+// insert into codes (`code`) values ("1111");
+
+function registrationCodeValid($registrationCode) {
+    $db = get_connection();
+    $command = $db->prepare("SELECT count(*) FROM codes WHERE code = ? and used = 0;");
+    $command->bind_param('s', $registrationCode);
+
+    if (!$command->execute()) {
+        $_SESSION["error"] = die(mysqli_error($db) . "<br>");
+    }
+
+    $fetchedResult = $command->get_result();
+
+    $count = 0;
+    if ($row = $fetchedResult->fetch_assoc()) {
+        $count = $row["count(*)"];
+    }
+
+    if ($count > 1) {
+        return true;
+    }
+    
+    return false;
+}
+
+function fetchRegistrationCodeID($registrationCode) {
+    $db = get_connection();
+    $command = $db->prepare("SELECT codeID FROM codes WHERE code = ? and used = 0 order by codeID limit 1;");
+    $command->bind_param('s', $registrationCode);
+
+    if (!$command->execute()) {
+        $_SESSION["error"] = die(mysqli_error($db) . "<br>");
+    }
+
+    $fetchedResult = $command->get_result();
+
+    $count = 0;
+    if ($row = $fetchedResult->fetch_assoc()) {
+        $codeID = $row["codeID"];
+    }
+    
+    return $codeID;
+}
+
+function updateRegistrationCode($registrationCode, $username) {
+
+    $codeID = fetchRegistrationCodeID($registrationCode);
+    $userID = fetchUserID($username);
+
+    $db = get_connection();
+    $command = $db->prepare("UPDATE codes set used = 1, userID = ? WHERE codeID = ?");
+    $command->bind_param('ii', $userID, $codeID);
+
+    if (!$command->execute()) {
+        $_SESSION["error"] = die(mysqli_error($db) . "<br>");
+    }
+
+    return;
+}
+
 
 // function register($username, $password, $userType, $email_username, $email_domain) {
-function register($username, $password, $userType, $email) {
+function register($username, $password, $userType, $email, $registrationCode) {
     $db = get_connection();
     $hashed = password_hash($password, PASSWORD_DEFAULT);
 
@@ -41,6 +101,7 @@ function register($username, $password, $userType, $email) {
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
     }
     else {
+        updateRegistrationCode($registrationCode, $username);
         $_SESSION["success_message"] = "Account successfully created. Username: $username";
     }
 
@@ -69,7 +130,8 @@ function fetchUserID($username) {
 if (isset($_POST["register"])) {
 
     if (isset($_POST["email"]) && isset($_POST["username"]) &&
-        isset($_POST["password"]) && isset($_POST["password_confirm"])) {
+        isset($_POST["password"]) && isset($_POST["password_confirm"]) &&
+        isset($_POST["registrationCode"])) {
 
 
         //need to check for if blank inputs
@@ -83,22 +145,25 @@ if (isset($_POST["register"])) {
         $username = $_POST["username"];
         $password = $_POST["password"];
         $password_confirm = $_POST["password_confirm"];
+        $registrationCode = $_POST["registrationCode"];
 
         $_SESSION["registerUsername"] = $username;
         $_SESSION["registerEmail"] = $email;
+        $_SESSION["registrationCode"] = $registrationCode;
 
 
         $usernameNotBlank = blankTest($username);
         $passwordNotBlank = blankTest($password);
         $emailNotBlank = blankTest($email);
+        $registrationCodeNotBlank = blankTest($registrationCode);
         $usernameLengthValid = lengthTest($username, 4, 12);
         $passwordLengthValid = lengthTest($password, 6, 20);
 
         if (!$usernameNotBlank || !$passwordNotBlank || !$emailNotBlank ||
-            !$usernameLengthValid || !$passwordLengthValid) {
+            !$usernameLengthValid || !$passwordLengthValid || !$registrationCodeNotBlank) {
         
-            if (!$usernameNotBlank || !$passwordNotBlank || !$emailNotBlank) {
-                $_SESSION["error"] = "Make sure all fields are entered <br>";
+            if (!$usernameNotBlank || !$passwordNotBlank || !$emailNotBlank || !$registrationCodeNotBlank) {
+                $_SESSION["error"] .= "Make sure all fields are entered <br>";
             }
 
             if (!$usernameLengthValid) {
@@ -112,6 +177,7 @@ if (isset($_POST["register"])) {
                                     "passwords need to be 6-20 characters long <br>";
 
             }
+
         }
 
         else {
@@ -120,23 +186,32 @@ if (isset($_POST["register"])) {
                     "the retyped password and password do not match <br>";
             } 
             else {
-                $count = checkUsername($username);
-                if ($count == 0) {
-                    $userType = "supervisor";
+                
+                $codeValid = registrationCodeValid($registrationCode);
+echo $codeValid;
+                if ($codeValid) {
+                    $count = checkUsername($username);
+                    if ($count == 0) {
+                        $userType = "supervisor";
 
-                    echo "before calling register <br>";
-                    register($username, $password, $userType, $email);
-                    $userID = fetchUserID($username);
-                    echo $userID;
-                    echo "before initializing settings";
-                    initializeSettings($userID);
-                    echo "after initializing settings";
-                    echo "after calling register <br>";
-                    header("Location: register_page.php");
+                        echo "before calling register <br>";
+                        register($username, $password, $userType, $email, $registrationCode);
+                        $userID = fetchUserID($username);
+                        echo $userID;
+                        echo "before initializing settings";
+                        initializeSettings($userID);
+                        echo "after initializing settings";
+                        echo "after calling register <br>";
+                        header("Location: register_page.php");
+                    }
+                    else {
+                        $_SESSION["error"] = $_SESSION["error"] . 
+                        "username already exists <br>";
+                    }
                 }
                 else {
                     $_SESSION["error"] = $_SESSION["error"] . 
-                    "username already exists <br>";
+                        "please enter a valid registration code <br>";
                 }
 
                 // $_SESSION["success_message"] = "Account successfully created. Username: $username";
