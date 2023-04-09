@@ -23,15 +23,15 @@ require_once("../auth/logout.php");
         <h2>
         <a href="../map/delete_page.php"> View/Delete a Map </a>
         </h2>
-        
-        <br>
+    
 
         <h2>
-        <a href="../category/insert_page.php"> Updating Categories </a>
+            <a href="../category/delete_page.php"> View/Delete an Indoor Location </a>
         </h2>
         
+
         <h2>
-            <a href="../category/delete_page.php"> View/Delete an Indoor Location </a>
+        <a href="../category/insert_page.php"> Category Hub </a>
         </h2>
         
         <br>
