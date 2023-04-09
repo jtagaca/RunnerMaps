@@ -9,8 +9,6 @@ require_once("../settings/style_sheet.php");
 if (isset($_POST["logout"])) {
     $_SESSION["authorized"] = false;
 
-    unset($_SESSION);
-
     unset($_SESSION["userID"]);
     unset($_SESSION["username"]);
     unset($_SESSION["userEmail"]);
@@ -27,6 +25,9 @@ if (isset($_POST["logout"])) {
     unset($_SESSION["registerEmail"]);
     unset($_SESSION["loginUsername"]);
     unset($_SESSION["registrationCode"]);
+
+    $_SESSION = [];
+    unset($_SESSION);
 }
 
 if (!$_SESSION["authorized"] || !isset($_SESSION["authorized"])) {
