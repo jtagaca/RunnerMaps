@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Alert, StyleSheet, View, Text, Button, Linking } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import MapViewDirections from 'react-native-maps-directions';
 import apiKey from './config_dev.js';
 import {getDistance} from 'geolib';
+import tw from "../../tailwind/CustomTailwind";
 
 export default function Maps () {
     const [region, setRegion] = useState(null);
@@ -92,7 +94,7 @@ export default function Maps () {
           ) : (
             <Text>Loading...</Text>
           )}
-          <Button color="#FFFF00" title="Get directions" onPress={handleGetDirections} />
+          <Button style={tw`p-2 bg-yellow-300 rounded-md shadow-2xl`} title="Get directions" onPress={handleGetDirections} />
         </View>
       );
 };
@@ -117,6 +119,6 @@ const styles = StyleSheet.create({
     map: {
         zoom: 0,
         width: '100%',
-        height: '50%',
+        height: '75%',
     },
 });
