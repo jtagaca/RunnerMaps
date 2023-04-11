@@ -121,7 +121,7 @@ export default function Maps() {
         labelStyle={tw`text-lg text-white `}
         onPress={handleGetDirections}
       >
-        Get Directions
+        Start Live Navigation
       </Button>
     </View>
   );
