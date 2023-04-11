@@ -85,12 +85,12 @@ export default function CustomSwiper() {
 
   const handleSwipeLeft = () => {
     swiperRef.current.swipeLeft();
-    set_current_index_of_swiper(current_index_of_swiper - 1);
+    set_current_index_of_swiper(current_index_of_swiper + 1);
   };
 
   const handleSwipeRight = () => {
     swiperRef.current.swipeRight();
-    set_current_index_of_swiper(current_index_of_swiper + 1);
+    set_current_index_of_swiper(current_index_of_swiper - 1);
   };
   const handleSpeech = (word_to_speak) => {
     Speech.speak(word_to_speak, {
@@ -185,20 +185,10 @@ export default function CustomSwiper() {
         return;
       }
 
-      const isSwipedRight = current_index_of_swiper > previous_swiper_index;
-      const isSwipedLeft = current_index_of_swiper < previous_swiper_index;
+      const isSwipedRight = current_index_of_swiper < previous_swiper_index;
+      const isSwipedLeft = current_index_of_swiper > previous_swiper_index;
 
       if (isSwipedRight) {
-        setCurrentDifferenceIndexBetweenStartAndEnd(
-          current_difference_index_between_start_and_end - 1
-        );
-        setPreviousSwiperIndex(current_index_of_swiper);
-
-        setCurrentPath((prevPath) => {
-          const newPath = prevPath.slice(1);
-          return newPath;
-        });
-      } else if (isSwipedLeft) {
         setCurrentDifferenceIndexBetweenStartAndEnd(
           current_difference_index_between_start_and_end + 1
         );
@@ -209,6 +199,16 @@ export default function CustomSwiper() {
             sorted_shortest_path[current_index_of_swiper + 1],
             ...prevPath,
           ];
+          return newPath;
+        });
+      } else if (isSwipedLeft) {
+        setCurrentDifferenceIndexBetweenStartAndEnd(
+          current_difference_index_between_start_and_end - 1
+        );
+        setPreviousSwiperIndex(current_index_of_swiper);
+
+        setCurrentPath((prevPath) => {
+          const newPath = prevPath.slice(1);
           return newPath;
         });
       }
@@ -341,10 +341,10 @@ export default function CustomSwiper() {
                 );
               }}
               onSwipedRight={(cardIndex) => {
-                set_current_index_of_swiper(cardIndex + 1);
+                set_current_index_of_swiper(cardIndex - 1);
               }}
               onSwipedLeft={(cardIndex) => {
-                set_current_index_of_swiper(cardIndex - 1);
+                set_current_index_of_swiper(cardIndex + 1);
               }}
               onSwipedAll={() => {
                 alert("Congratulations! You have reached your destination");
@@ -352,8 +352,8 @@ export default function CustomSwiper() {
               cardIndex={0}
               stackSize={3}
               showSecondCard={false}
-              goBackToPreviousCardOnSwipeLeft={true}
-              disableLeftSwipe={current_index_of_swiper === 0 ? true : false}
+              goBackToPreviousCardOnSwipeRight={true}
+              disableRightSwipe={current_index_of_swiper === 0 ? true : false}
             ></Swiper>
           </View>
         </>
