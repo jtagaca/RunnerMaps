@@ -14,17 +14,22 @@ export default function Maps() {
   const [destination, setDestination] = useState(null);
   const [polyline, setPolyline] = useState(null);
 
-  const home_screen_selected_building = useSelector(
-    (state) => state.all_indoor_locations.chosen_building
-  );
-  const home_screen_selected_destination_location = useSelector(
-    (state) => state.all_indoor_locations.destination_location
+  const home_screen_entrances = useSelector(
+    (state) => state.all_indoor_locations.entrances
   );
 
   useEffect(() => {
-    if (home_screen_selected_destination_location){
-      alert(home_screen_selected_destination_location);
+    if (home_screen_entrances && home_screen_entrances != null) {
+      alert(
+        "data" +
+          parseInt(home_screen_entrances[0].latitude) +
+          "data" +
+          home_screen_entrances[0].longitude
+      );
     }
+  }, [home_screen_entrances]);
+
+  useEffect(() => {
     const fetchData = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {

@@ -172,10 +172,16 @@ const all_indoor_locations_slice = createSlice({
     destination_location: null,
     buildings: [],
     services: [],
+    entrances: [],
   },
   reducers: {
     setChosenBuilding: (state, action) => {
       state.chosen_building = action.payload;
+      state.entrances = state.data.filter(
+        (location) =>
+          location.buildingID === parseInt(action.payload.buildingID) &&
+          location.name === "entrance"
+      );
     },
     setDestinationLocation: (state, action) => {
       state.destination_location = action.payload;
