@@ -5,7 +5,7 @@ export default function LoadingScreen(){
   return (
     <SafeAreaView style={styles.safeAreaContainer}>
       <View style={styles.container}>
-        <Image source={require('../../images/runner.png')} style={styles.image} />
+        <Image source={require('../../images/csub.png')} style={styles.image} />
         <Text style={styles.title}>Runner Maps</Text>
       </View>
     </SafeAreaView>
