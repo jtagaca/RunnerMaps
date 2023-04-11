@@ -36,7 +36,6 @@ import { formatTitle } from "./../utilities/Indoor_Navigation/Library/Screen_Fun
 import AllIndoorLocationContext from "./../utilities/Indoor_Navigation/Contexts/AllIndoorLocations";
 import Screen_Functions from "./../utilities/Indoor_Navigation/Library/Screen_Functions";
 
-
 export default function HomeScreen() {
   const dispatch = useDispatch();
   const [selectedItem, setSelectedItem] = useState(null);
@@ -44,7 +43,6 @@ export default function HomeScreen() {
   const [serviceSelectedItem, setServiceSelectedItem] = useState(null);
 
   const [modalVisible, setModalVisible] = useState(false);
-
 
   const navigation = useNavigation();
   useEffect(() => {
@@ -162,7 +160,6 @@ export default function HomeScreen() {
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
-  
 
   return (
     <AllIndoorLocationContext.Provider
@@ -175,7 +172,7 @@ export default function HomeScreen() {
         setServiceSelectedItem,
       }}
     >
-      <SafeAreaView style={tw`flex-col flex-1 bg-yellow-100`}>
+      <SafeAreaView style={tw`flex-col flex-1 bg-yellow-100`} edges={[]}>
         <Modal
           animationType="slide"
           transparent={true}
