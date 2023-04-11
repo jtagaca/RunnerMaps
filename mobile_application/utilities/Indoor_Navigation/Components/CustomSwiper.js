@@ -7,6 +7,7 @@ import tw from "../../../tailwind/CustomTailwind";
 import CardComponent from "./CardComponent";
 import Icon from "react-native-vector-icons/FontAwesome";
 import { Audio } from "expo-av";
+import { formatTitle } from "../Library/Screen_Functions";
 
 const soundObject = new Audio.Sound();
 
@@ -157,6 +158,14 @@ export default function CustomSwiper() {
       setCurrentPath([...temp_current_path]);
     }
   }, []);
+  // use useEffect to console log current start and current end
+  useEffect(() => {
+    if (current_start && current_end) {
+      // debugger;
+      console.log("current start", current_start);
+      console.log("current end", current_end);
+    }
+  }, [current_start, current_end]);
 
   useEffect(() => {
     if (current_start && current_end) {
@@ -306,14 +315,43 @@ export default function CustomSwiper() {
               <Text style={tw`text-black font-bold text-lg text-center mb-2`}>
                 Information
               </Text>
+              {current_start && current_end ? (
+                <View style={tw`text-center flex-col items-center`}>
+                  <Text style={tw`text-center`}>
+                    CURRENT START:{"\n"}
+                    <Text style={tw`font-semibold `}>
+                      {buildText(
+                        current_start,
+                        current_start.index,
+                        sorted_shortest_path,
+                        current_start.image &&
+                          current_start.image != null &&
+                          current_start.image != ""
+                          ? null
+                          : "noImage"
+                      )}
+                    </Text>
+                  </Text>
+                  <Text style={tw`text-center`}>
+                    CURRENT CHECKPOINT:{"\n"}
+                    <Text style={tw`font-semibold `}>
+                      {buildText(
+                        current_end,
+                        current_end.index,
+                        sorted_shortest_path,
+                        current_end.image &&
+                          current_end.image != null &&
+                          current_end.image != ""
+                          ? null
+                          : "noImage"
+                      )}
+                    </Text>
+                  </Text>
+                </View>
+              ) : null}
+
               <Text style={tw`text-center`}>
-                Cards left til next checkpoint(checkpoints included):{"\n"}
-                <Text style={tw`font-semibold text-center`}>
-                  {current_difference_index_between_start_and_end}
-                </Text>
-              </Text>
-              <Text style={tw`text-center`}>
-                Distance of start checkpoint and next checkpoint:{"\n"}
+                Distance of current start and current checkpoint:{"\n"}
                 <Text style={tw`font-semibold text-center`}>
                   {current_distance_between_start_and_end.toFixed(2)} meters
                 </Text>
@@ -322,7 +360,7 @@ export default function CustomSwiper() {
           </View>
 
           <View
-            style={tw`flex-row justify-center bg-yellow-100 m-0 h-18/20 w-20/20 content-center`}
+            style={tw`flex-row justify-center bg-yellow-100 m-0 h-16/20 w-20/20 content-center`}
           >
             <Swiper
               style={tw`bg-yellow-100 m-0 `}
