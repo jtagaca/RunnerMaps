@@ -7,13 +7,24 @@ import apiKey from "./config_dev.js";
 import { getDistance } from "geolib";
 import tw from "../../tailwind/CustomTailwind";
 import { Button } from "react-native-paper";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Maps() {
   const [region, setRegion] = useState(null);
   const [destination, setDestination] = useState(null);
   const [polyline, setPolyline] = useState(null);
 
+  const home_screen_selected_building = useSelector(
+    (state) => state.all_indoor_locations.chosen_building
+  );
+  const home_screen_selected_destination_location = useSelector(
+    (state) => state.all_indoor_locations.destination_location
+  );
+
   useEffect(() => {
+    if (home_screen_selected_destination_location){
+      alert(home_screen_selected_destination_location);
+    }
     const fetchData = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {

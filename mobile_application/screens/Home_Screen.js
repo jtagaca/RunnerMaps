@@ -65,6 +65,16 @@ export default function HomeScreen() {
     dispatch(all_indoor_locations_actions.setDestinationLocation(location));
     navigation.navigate("Indoor Navigation");
   };
+  const handleOutdoorNavigate = (location) => {
+    dispatch(
+      all_indoor_locations_actions.setChosenBuilding({
+        buildingName: location.buildingName,
+        buildingID: location.buildingID,
+      })
+    );
+    dispatch(all_indoor_locations_actions.setDestinationLocation(location));
+    navigation.navigate("Outdoor Navigation");
+  };
 
   const buildings = useSelector(
     (state) => state.all_indoor_locations.buildings
@@ -237,6 +247,7 @@ export default function HomeScreen() {
                   <CardComponentForHomeScreen
                     item={item}
                     handleIndoorNavigate={handleIndoorNavigate}
+                    handleOutdoorNavigate={handleOutdoorNavigate}
                     formatTitle={formatTitle}
                   />
                 )}

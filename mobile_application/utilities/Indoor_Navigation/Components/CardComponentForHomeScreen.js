@@ -6,7 +6,7 @@ import tw from "../../../tailwind/CustomTailwind";
 import Icon from "react-native-vector-icons/FontAwesome";
 import LoadingImage from "../../Components/LoadingImage";
 const CardComponentForHomeScreen = React.memo(
-  ({ item, handleIndoorNavigate, formatTitle }) => {
+  ({ item, handleIndoorNavigate, handleOutdoorNavigate, formatTitle }) => {
     return (
       <View style={tw`m-1`}>
         <Card mode="elevated" style={(styles.card, styles.spacing)}>
@@ -39,7 +39,7 @@ const CardComponentForHomeScreen = React.memo(
             </TouchableOpacity>
             <TouchableOpacity
               style={tw`flex-row items-center p-1 mx-4 bg-blue-500 rounded-2xl justify-evenly w-5/10`}
-              onPress={() => CallNum(item.display_phone)}
+              onPress={() => handleOutdoorNavigate(item)}
             >
               <Text style={tw`text-white`}>Outdoor Navigate</Text>
               <Icon name="compass" color="white" size={25}></Icon>
