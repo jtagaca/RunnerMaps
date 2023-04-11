@@ -35,6 +35,8 @@ import { formatTitle } from "./../utilities/Indoor_Navigation/Library/Screen_Fun
 
 import AllIndoorLocationContext from "./../utilities/Indoor_Navigation/Contexts/AllIndoorLocations";
 import Screen_Functions from "./../utilities/Indoor_Navigation/Library/Screen_Functions";
+import LoadingScreen from '../utilities/Components/LoadingScreen.js';
+
 export default function HomeScreen() {
   const dispatch = useDispatch();
   const [selectedItem, setSelectedItem] = useState(null);
@@ -42,9 +44,14 @@ export default function HomeScreen() {
   const [serviceSelectedItem, setServiceSelectedItem] = useState(null);
 
   const [modalVisible, setModalVisible] = useState(false);
+  const [loading, setLoading] = useState(true);
+
   const navigation = useNavigation();
   useEffect(() => {
     dispatch(getAllIndoorLocations());
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
   }, [dispatch]);
 
   const all_indoor_locations_data = useSelector(
@@ -148,7 +155,10 @@ export default function HomeScreen() {
   const toggleModal = () => {
     setModalVisible(!modalVisible);
   };
-
+  
+  if (loading) {
+    return <LoadingScreen />;
+  }
   return (
     <AllIndoorLocationContext.Provider
       value={{
