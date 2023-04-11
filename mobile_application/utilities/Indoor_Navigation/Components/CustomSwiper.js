@@ -16,6 +16,19 @@ import { buildText } from "../Library/FormatText";
 import * as Speech from "expo-speech";
 
 export default function CustomSwiper() {
+  const haversineDistance = require("geodetic-haversine-distance");
+  const shortest_path = useSelector(
+    (state) => state.indoor_navigation_properties.shortest_path_directions
+  );
+  const swiperRef = useRef(null);
+
+  const carousel_data = cloneDeep(shortest_path);
+  const accessibility = useSelector((state) => state.accessibility);
+
+  const sorted_shortest_path = carousel_data.sort((a, b) => {
+    return a.key - b.key;
+  });
+
   useEffect(() => {
     const enableSound = async () => {
       try {
@@ -32,20 +45,12 @@ export default function CustomSwiper() {
       }
     };
     enableSound();
+
+    // Unload the sound file when the component is unmounted
+    return () => {
+      soundObject.unloadAsync();
+    };
   }, []);
-
-  const haversineDistance = require("geodetic-haversine-distance");
-  const shortest_path = useSelector(
-    (state) => state.indoor_navigation_properties.shortest_path_directions
-  );
-  const swiperRef = useRef(null);
-
-  const carousel_data = cloneDeep(shortest_path);
-  const accessibility = useSelector((state) => state.accessibility);
-
-  const sorted_shortest_path = carousel_data.sort((a, b) => {
-    return a.key - b.key;
-  });
   sorted_shortest_path.forEach((element, index) => {
     element.index = index;
     element.checkpoint = element.latitude && element.longitude ? true : false;
