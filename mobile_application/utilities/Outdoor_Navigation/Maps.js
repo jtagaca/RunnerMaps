@@ -38,13 +38,12 @@ export default function Maps() {
       });
       let destinations = [];
       if (home_screen_entrances && home_screen_entrances != null) {
-        for (entrance in home_screen_entrances) {
-          let lat = parseInt(entrance.latitude)
-          let long = parseInt(entrance.longitude)
+        for (let i = 0; i < home_screen_entrances.length; i++) {
+          let lat = parseFloat(home_screen_entrances[i].latitude)
+          let long = parseFloat(home_screen_entrances[i].longitude)
           destinations.push({latitude:lat, longitude:long})
         }
       }
-      alert(destinations)
       const closestDestination = (obj) => {
         let minDistance = Infinity;
         let closestDest = obj[0];
