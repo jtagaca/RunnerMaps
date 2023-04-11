@@ -1,40 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { Alert, StyleSheet, View, Text, Button, Linking } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Alert, StyleSheet, View, Text, Linking } from 'react-native';
 import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import * as Location from 'expo-location';
 import MapViewDirections from 'react-native-maps-directions';
 import apiKey from './config_dev.js';
 import {getDistance} from 'geolib';
 import tw from "../../tailwind/CustomTailwind";
+import { Button } from "react-native-paper";
 
 export default function Maps () {
     const [region, setRegion] = useState(null);
     const [destination, setDestination] = useState(null);
     const [polyline, setPolyline] = useState(null);
-    useEffect(() => {
-        (async () => {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if (status !== "granted") {
-            console.log("Permission to access location was denied");
-            return;
-        }
-        const location = await Location.getCurrentPositionAsync({});
-        setRegion({
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude,
-            latitudeDelta: 0.015,
-            longitudeDelta: 0.0121,
-          });
-        })();
-      }, []);
 
-      const handleGetDirections = async () => {
+    useEffect(() => {
+      const fetchData = async () => {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+        if (status !== 'granted') {
+          console.log('Permission to access location was denied');
+          return;
+        }
         const location = await Location.getCurrentPositionAsync({});
         const origin = {
           latitude: location.coords.latitude,
           longitude: location.coords.longitude,
         };
+        setRegion({
+          latitude: origin.latitude,
+          longitude: origin.longitude,
+          latitudeDelta: 0.015,
+          longitudeDelta: 0.0121,
+        });
         const destinations = {
           1: { latitude: 35.348883, longitude: -119.103437 },
           2: { latitude: 35.348886, longitude: -119.103911 },
@@ -55,7 +51,17 @@ export default function Maps () {
         }
         let destination = closestDestination(destinations);
         setDestination(destination);
-        
+      };
+      fetchData();
+    }, []);
+
+
+      const handleGetDirections = async () => {
+        const location = await Location.getCurrentPositionAsync({});
+        const origin = {
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+        };
         const destinationStr = `${destination.latitude},${destination.longitude}`;
         const originStr = `${origin.latitude},${origin.longitude}`;
         const directionsUrl = `https://maps.googleapis.com/maps/api/directions/json?origin=${originStr}&destination=${destinationStr}&key=${apiKey}`;
@@ -75,26 +81,26 @@ export default function Maps () {
           Alert.alert('Error', error.message);
         }
       }
+
       return (
         <View style={styles.container}>
-        <Text style={styles.titleText}>Runner Maps</Text>
-          {region ? (
-            <MapView style={styles.map} region={region} provider={PROVIDER_GOOGLE}>
-              <Marker coordinate={region} title="You are here" />
-              <Marker coordinate={destination} title="Destination" />
-              <MapViewDirections
-                origin={region}
-                destination={destination}
-                apikey={apiKey}
-                strokeWidth={3}
-                strokeColor="red"
-                polyline={polyline}
-              />
-            </MapView>
-          ) : (
-            <Text>Loading...</Text>
-          )}
-          <Button style={tw`p-2 bg-yellow-300 rounded-md shadow-2xl`} title="Get directions" onPress={handleGetDirections} />
+        {region ? (
+          <MapView style={styles.map} region={region} provider={PROVIDER_GOOGLE}>
+            <Marker coordinate={region} title="You are here" />
+            <Marker coordinate={destination} title="Destination" />
+            <MapViewDirections
+              origin={region}
+              destination={destination}
+              apikey={apiKey}
+              strokeWidth={3}
+              strokeColor="red"
+              polyline={polyline}
+            />
+          </MapView>
+        ) : (
+          <Text>Loading...</Text>
+        )}
+          <Button style={tw`text-xl text-white`} onPress={handleGetDirections}>Get Directions</Button>
         </View>
       );
 };
@@ -107,18 +113,14 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         alignItems: 'center',
-        backgroundColor: '#0000FF',
         justifyContent: 'center',
-    },
-    titleText: {
-        color:"#FFFF00",
-        fontSize: 40,
-        fontWeight: 'bold',
-        paddingBottom: 20
+        paddingTop: 0,
+        paddingBottom: 40
     },
     map: {
+        margin: 0,
         zoom: 0,
         width: '100%',
-        height: '75%',
+        height: '100%',
     },
 });
