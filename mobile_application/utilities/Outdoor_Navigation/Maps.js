@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Alert, StyleSheet, View, Text, Linking } from "react-native";
+import { Alert, StyleSheet, View, Text, Linking, ActivityIndicator } from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
@@ -19,17 +19,6 @@ export default function Maps() {
   );
 
   useEffect(() => {
-    if (home_screen_entrances && home_screen_entrances != null) {
-      alert(
-        "data" +
-          parseInt(home_screen_entrances[0].latitude) +
-          "data" +
-          home_screen_entrances[0].longitude
-      );
-    }
-  }, [home_screen_entrances]);
-
-  useEffect(() => {
     const fetchData = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
@@ -47,12 +36,15 @@ export default function Maps() {
         latitudeDelta: 0.015,
         longitudeDelta: 0.0121,
       });
-      const destinations = {
-        1: { latitude: 35.348883, longitude: -119.103437 },
-        2: { latitude: 35.348886, longitude: -119.103911 },
-        3: { latitude: 35.348957, longitude: -119.104085 },
-      };
-
+      let destinations = [];
+      if (home_screen_entrances && home_screen_entrances != null) {
+        for (entrance in home_screen_entrances) {
+          let lat = parseInt(entrance.latitude)
+          let long = parseInt(entrance.longitude)
+          destinations.push({latitude:lat, longitude:long})
+        }
+      }
+      alert(destinations)
       const closestDestination = (obj) => {
         let minDistance = Infinity;
         let closestDest = obj[0];
@@ -68,7 +60,13 @@ export default function Maps() {
       let destination = closestDestination(destinations);
       setDestination(destination);
     };
-    fetchData();
+    if (home_screen_entrances){
+      fetchData();
+    }
+  }, [home_screen_entrances]);
+
+  useEffect(() => {
+
   }, []);
 
   const handleGetDirections = async () => {
@@ -112,7 +110,12 @@ export default function Maps() {
           />
         </MapView>
       ) : (
-        <Text>Loading...</Text>
+        <ActivityIndicator
+                      animating={true}
+                      size="large"
+                      color="#3B82F6"
+                      style={tw`self-center`} // Center the activity indicator
+        />
       )}
       <Button
         style={tw`bg-blue-500 mt-3`}
