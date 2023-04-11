@@ -9,6 +9,9 @@ module.exports = {
       },
       colors: {
         jamescolor: "grey",
+        blue: {
+          500: "#003594",
+        },
       },
     },
   },

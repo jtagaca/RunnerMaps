@@ -7,7 +7,7 @@ import tw from "../tailwind/CustomTailwind";
 
 export default function OutdoorNavigation() {
   return (
-    <SafeAreaView style={(tw `bg-yellow-100`, styles.container)}>
+    <SafeAreaView style={(tw`bg-yellow-100`, styles.container)}>
       <Maps />
       <StatusBar style="auto" />
     </SafeAreaView>
@@ -21,4 +21,3 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
 });
-
