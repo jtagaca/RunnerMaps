@@ -99,7 +99,7 @@ export default function Maps() {
         <Text>Loading...</Text>
       )}
       <Button
-        style={tw`bg-blue-500`}
+        style={tw`bg-blue-500 mt-3`}
         labelStyle={tw`text-lg text-white `}
         onPress={handleGetDirections}
       >
