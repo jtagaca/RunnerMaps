@@ -24,7 +24,7 @@ const LoadingImage = ({ uri }) => {
       />
       {isLoading && !hasLoadedOnce && (
         <View style={tw`absolute inset-0 items-center justify-center`}>
-          <ActivityIndicator size="large" color="#3B82F6" />
+          <ActivityIndicator size="large" color="#003594" />
         </View>
       )}
     </View>

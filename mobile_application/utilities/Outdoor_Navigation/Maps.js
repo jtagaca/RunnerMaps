@@ -1,5 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Alert, StyleSheet, View, Text, Linking, ActivityIndicator } from "react-native";
+import {
+  Alert,
+  StyleSheet,
+  View,
+  Text,
+  Linking,
+  ActivityIndicator,
+} from "react-native";
 import MapView, { Marker, PROVIDER_GOOGLE } from "react-native-maps";
 import * as Location from "expo-location";
 import MapViewDirections from "react-native-maps-directions";
@@ -39,9 +46,9 @@ export default function Maps() {
       let destinations = [];
       if (home_screen_entrances && home_screen_entrances != null) {
         for (let i = 0; i < home_screen_entrances.length; i++) {
-          let lat = parseFloat(home_screen_entrances[i].latitude)
-          let long = parseFloat(home_screen_entrances[i].longitude)
-          destinations.push({latitude:lat, longitude:long})
+          let lat = parseFloat(home_screen_entrances[i].latitude);
+          let long = parseFloat(home_screen_entrances[i].longitude);
+          destinations.push({ latitude: lat, longitude: long });
         }
       }
       const closestDestination = (obj) => {
@@ -59,14 +66,12 @@ export default function Maps() {
       let destination = closestDestination(destinations);
       setDestination(destination);
     };
-    if (home_screen_entrances){
+    if (home_screen_entrances) {
       fetchData();
     }
   }, [home_screen_entrances]);
 
-  useEffect(() => {
-
-  }, []);
+  useEffect(() => {}, []);
 
   const handleGetDirections = async () => {
     const location = await Location.getCurrentPositionAsync({});
@@ -110,10 +115,10 @@ export default function Maps() {
         </MapView>
       ) : (
         <ActivityIndicator
-                      animating={true}
-                      size="large"
-                      color="#3B82F6"
-                      style={tw`self-center`} // Center the activity indicator
+          animating={true}
+          size="large"
+          color="#003594"
+          style={tw`self-center`} // Center the activity indicator
         />
       )}
       <Button

@@ -46,7 +46,7 @@ export default function SettingScreen() {
             <Switch
               value={indoor_navigation_result_voice_enabled}
               onValueChange={toggleSwitch}
-              color="#3B82F6"
+              color="#003594"
             />
           </View>
         </View>

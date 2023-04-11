@@ -781,7 +781,7 @@ export default function IndoorNavigation({ navigation }) {
                     <ActivityIndicator
                       animating={true}
                       size="large"
-                      color="#3B82F6"
+                      color="#003594"
                       style={tw`self-center`} // Center the activity indicator
                     />
                   ) : (
@@ -1020,7 +1020,7 @@ export default function IndoorNavigation({ navigation }) {
       </ScrollView>
       {(is_loading || data.length === 0) && (
         <View style={[tw`absolute inset-0 flex items-center justify-center`]}>
-          <ActivityIndicator animating={true} size="large" color="#3B82F6" />
+          <ActivityIndicator animating={true} size="large" color="#003594" />
         </View>
       )}
     </SafeAreaView>

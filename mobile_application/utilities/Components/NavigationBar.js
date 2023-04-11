@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import IndoorNavigationHomeScreen from "../../screens/Indoor_Navigation_Home_Screen";
 import HomeScreen from "../../screens/Home_Screen";
@@ -9,9 +9,7 @@ import OutdoorNavigationScreen from "../../screens/Outdoor_Navigation";
 import Icon from "react-native-vector-icons/FontAwesome";
 const Tab = createBottomTabNavigator();
 import tw from "../../tailwind/CustomTailwind";
-import LoadingScreen from '../Components/LoadingScreen.js';
-
-
+import LoadingScreen from "../Components/LoadingScreen.js";
 
 export default function NavigationBar() {
   const [loading, setLoading] = useState(true);
@@ -19,7 +17,7 @@ export default function NavigationBar() {
     setTimeout(() => {
       setLoading(false);
     }, 3000);
-  },);
+  });
   if (loading) {
     return <LoadingScreen />;
   }
@@ -29,11 +27,11 @@ export default function NavigationBar() {
       initialRouteName="Home"
       screenOptions={{
         tabBarStyle: { backgroundColor: "#f7db69" },
-        tabBarActiveTintColor: "#3B82F6",
+        tabBarActiveTintColor: "#003594",
         tabBarLabelStyle: { fontWeight: "bold" },
         headerTitleAlign: "center",
         headerStyle: { backgroundColor: "#f7db69" },
-        headerTintColor: "#3B82F6",
+        headerTintColor: "#003594",
         headerShown: false,
       }}
     >
