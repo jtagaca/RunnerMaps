@@ -38,20 +38,20 @@ export default function NavigationBar() {
       }}
     >
       <Tab.Screen
-        name="Indoor Navigation"
-        component={IndoorNavigationHomeScreen}
-        options={{
-          tabBarIcon: ({ color, size }) => (
-            <Icon name="street-view" color={color} size={size} />
-          ),
-        }}
-      />
-      <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
           tabBarIcon: ({ color, size }) => (
             <Icon name="home" color={color} size={size} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Indoor Navigation"
+        component={IndoorNavigationHomeScreen}
+        options={{
+          tabBarIcon: ({ color, size }) => (
+            <Icon name="street-view" color={color} size={size} />
           ),
         }}
       />
