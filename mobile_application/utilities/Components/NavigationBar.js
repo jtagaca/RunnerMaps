@@ -1,5 +1,5 @@
 import { View, Text } from "react-native";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import IndoorNavigationHomeScreen from "../../screens/Indoor_Navigation_Home_Screen";
 import HomeScreen from "../../screens/Home_Screen";
@@ -9,8 +9,21 @@ import OutdoorNavigationScreen from "../../screens/Outdoor_Navigation";
 import Icon from "react-native-vector-icons/FontAwesome";
 const Tab = createBottomTabNavigator();
 import tw from "../../tailwind/CustomTailwind";
+import LoadingScreen from '../Components/LoadingScreen.js';
+
+
 
 export default function NavigationBar() {
+  const [loading, setLoading] = useState(true);
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
+  },);
+  if (loading) {
+    return <LoadingScreen />;
+  }
+
   return (
     <Tab.Navigator
       initialRouteName="Home"
