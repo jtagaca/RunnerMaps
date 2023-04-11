@@ -54,9 +54,49 @@ function printFloorPlan($floorPlan) {
 // insert into buildings (`buildingID`, `buildingName`) VALUES ("4", "test");
 // insert into floors VALUES (4, 4, 4, 4, 4);
 
+function deleteIndoorLocations($floorID) {
+    $db = get_connection();
+    $command = $db->prepare("DELETE FROM indoor_locations WHERE floorID = ?;");
+    $command->bind_param('i', $floorID);
+
+    if (!$command->execute()) {
+        $_SESSION["error"] = die(mysqli_error($db) . "<br>");
+    }
+    
+    return;
+}
+
+function deleteMarkers($floorID) {
+    $db = get_connection();
+    $command = $db->prepare("DELETE FROM markers WHERE floorID = ?;");
+    $command->bind_param('i', $floorID);
+
+    if (!$command->execute()) {
+        $_SESSION["error"] = die(mysqli_error($db) . "<br>");
+    }
+    
+    return;
+}
+
+
+function deleteWalls($floorID) {
+    $db = get_connection();
+    $command = $db->prepare("DELETE FROM walls WHERE floorID = ?;");
+    $command->bind_param('i', $floorID);
+
+    if (!$command->execute()) {
+        $_SESSION["error"] = die(mysqli_error($db) . "<br>");
+    }
+    
+    return;
+}
 
 
 function deleteFloorPlan($floorID) {
+    deleteIndoorLocations($floorID);
+    deleteMarkers($floorID);
+    deleteWalls($floorID);
+
     $db = get_connection();
     $command = $db->prepare("DELETE FROM floors WHERE floorID = ?;");
     $command->bind_param('i', $floorID);
