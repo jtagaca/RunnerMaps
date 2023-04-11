@@ -6,8 +6,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "../tailwind/CustomTailwind";
 
 export default function OutdoorNavigation() {
-  const [classroom, setClassroom] = useState("");
-
   return (
     <SafeAreaView style={(tw `bg-yellow-100`, styles.container)}>
       <Maps />
