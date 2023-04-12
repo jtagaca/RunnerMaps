@@ -6,7 +6,7 @@ import MapViewDirections from "react-native-maps-directions";
 import apiKey from "./config_dev.js";
 import { getDistance } from "geolib";
 import tw from "../../tailwind/CustomTailwind";
-import { Button,Title } from "react-native-paper";
+import { Button} from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import CustomDropdown from "../../utilities/Indoor_Navigation/Components/CustomDropdown";
 import Screen_Functions from "../../utilities/Indoor_Navigation/Library/Screen_Functions";
@@ -15,6 +15,7 @@ export default function Maps() {
   const [region, setRegion] = useState(null);
   const [destination, setDestination] = useState(null);
   const [polyline, setPolyline] = useState(null);
+  
 
   const home_screen_entrances = useSelector(
     (state) => state.all_indoor_locations.entrances
@@ -22,6 +23,7 @@ export default function Maps() {
   const home_screen_selected_building = useSelector(
     (state) => state.all_indoor_locations.chosen_building
   );
+  
   const {
     handleSelectionBuilding,
     handleClearIndoorNavigationProperties,
@@ -79,6 +81,7 @@ export default function Maps() {
       fetchData();
     }
   }, [home_screen_entrances]);
+  
 
   useEffect(() => {}, []);
 
@@ -109,25 +112,25 @@ export default function Maps() {
 
   return (
     <View style={[tw`bg-yellow-100`, styles.container]}>
-      <View style={tw`flex-col flex-1 my-3`}>
-        <CustomDropdown
-          data={data}
-          handleSelection={handleSelectionBuilding}
-          handleClear={handleClearIndoorNavigationProperties}
-          type={"building"}
-          default_selected_item={
-            home_screen_selected_building &&
-            home_screen_selected_building != null
-              ? {
-                  label: home_screen_selected_building.buildingName,
-                  value:
-                    home_screen_selected_building.buildingID.toString(),
-                }
-              : null
-          }
-          handleClearHomeScreenData={handleClearChosenBuilding}
-        />
-      </View>
+        <View style={tw`flex-col flex-1 my-3`}>
+          <CustomDropdown
+            data={data}
+            handleSelection={handleSelectionBuilding}
+            handleClear={handleClearIndoorNavigationProperties}
+            type={"building"}
+            default_selected_item={
+              home_screen_selected_building &&
+              home_screen_selected_building != null
+                ? {
+                    label: home_screen_selected_building.buildingName,
+                    value:
+                      home_screen_selected_building.buildingID.toString(),
+                  }
+                : null
+            }
+            handleClearHomeScreenData={handleClearChosenBuilding}
+          />
+        </View>
       {region ? (
         <MapView style={styles.map} region={region} provider={PROVIDER_GOOGLE}>
           <Marker coordinate={region} title="You are here" />
