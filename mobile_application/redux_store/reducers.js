@@ -139,6 +139,20 @@ const indoor_navigation_properties_slice = createSlice({
   },
 });
 
+const outdoor_navigation_properties_slice = createSlice({
+  name: "outdoor_navigation_properties",
+  initialState: {
+    building_id: null,
+    building_name: null,
+  },
+  reducers: {
+    setSelectedBuildingToOutdoorNavigate: (state, action) => {
+      state.building_id = action.payload.value;
+      state.building_name = action.payload.label;
+    },
+  },
+});
+
 const accessibility_slice = createSlice({
   name: "accessibility",
   initialState: {
@@ -250,6 +264,8 @@ export const { setCurrentGeolocationProperties } =
 export const indoor_locations_actions = indoor_locations_slice.actions;
 export const indoor_navigation_properties_actions =
   indoor_navigation_properties_slice.actions;
+export const outdoor_navigation_properties_actions =
+  outdoor_navigation_properties_slice.actions;
 
 export default {
   closestLocations: closestLocationsSlice.reducer,
@@ -257,6 +273,7 @@ export default {
   buildings: buildings_slice.reducer,
   currentLocation: current_geolocation_slice.reducer,
   indoor_navigation_properties: indoor_navigation_properties_slice.reducer,
+  outdoor_navigation_properties: outdoor_navigation_properties_slice.reducer,
   all_indoor_locations: all_indoor_locations_slice.reducer,
   accessibility: accessibility_slice.reducer,
 };
