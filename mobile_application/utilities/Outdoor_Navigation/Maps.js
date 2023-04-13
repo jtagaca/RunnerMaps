@@ -9,7 +9,10 @@ import tw from "../../tailwind/CustomTailwind";
 import { Button} from "react-native-paper";
 import { useDispatch, useSelector } from "react-redux";
 import CustomDropdown from "../../utilities/Indoor_Navigation/Components/CustomDropdown";
-import Screen_Functions from "../../utilities/Indoor_Navigation/Library/Screen_Functions";
+import Screen_Functions from "./Screen_Functions";
+import { getBuildings } from "../../redux_store/actions/Building_Locations";
+
+
 
 export default function Maps() {
   const [region, setRegion] = useState(null);
@@ -23,22 +26,36 @@ export default function Maps() {
   const home_screen_selected_building = useSelector(
     (state) => state.all_indoor_locations.chosen_building
   );
-  
+
+  const { actions, getBuildingEntrancesByBuildingID } = Screen_Functions();
   const {
     handleSelectionBuilding,
-    handleClearIndoorNavigationProperties,
+    handleClearOutdoorNavigationProperties,
     handleClearChosenBuilding,
-  } = Screen_Functions();
+  } = actions;
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getBuildings());
+  }, [dispatch]); 
 
   const buildings = useSelector((state) => state.buildings.data);
   const data = buildings.map((building) => ({
     label: building.buildingName,
     value: building.buildingID.toString(),
   }));
+  const buildingSelected = useSelector((state) => state.outdoor_navigation_properties);
+
 
   useEffect(() => {
     const fetchData = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
+      let entrances = []
+      if (buildingSelected){
+        entrances = getBuildingEntrancesByBuildingID(buildingSelected);
+      } else if (home_screen_entrances && home_screen_entrances != null) {
+        entrances = home_screen_entrances
+      }
       if (status !== "granted") {
         console.log("Permission to access location was denied");
         return;
@@ -55,13 +72,13 @@ export default function Maps() {
         longitudeDelta: 0.0121,
       });
       let destinations = [];
-      if (home_screen_entrances && home_screen_entrances != null) {
-        for (let i = 0; i < home_screen_entrances.length; i++) {
-          let lat = parseFloat(home_screen_entrances[i].latitude);
-          let long = parseFloat(home_screen_entrances[i].longitude);
-          destinations.push({ latitude: lat, longitude: long });
-        }
+    
+      for (let i = 0; i < entrances.length; i++) {
+        let lat = parseFloat(entrances[i].latitude);
+        let long = parseFloat(entrances[i].longitude);
+        destinations.push({ latitude: lat, longitude: long });
       }
+
       const closestDestination = (obj) => {
         let minDistance = Infinity;
         let closestDest = obj[0];
@@ -77,8 +94,9 @@ export default function Maps() {
       let destination = closestDestination(destinations);
       setDestination(destination);
     };
-    if (home_screen_entrances) {
-      fetchData();
+    if (home_screen_entrances || buildingSelected) {
+      fetchData()
+      
     }
   }, [home_screen_entrances]);
   
@@ -116,7 +134,7 @@ export default function Maps() {
           <CustomDropdown
             data={data}
             handleSelection={handleSelectionBuilding}
-            handleClear={handleClearIndoorNavigationProperties}
+            handleClear={handleClearOutdoorNavigationProperties}
             type={"building"}
             default_selected_item={
               home_screen_selected_building &&
@@ -132,6 +150,7 @@ export default function Maps() {
           />
         </View>
       {region ? (
+        <>
         <MapView style={styles.map} region={region} provider={PROVIDER_GOOGLE}>
           <Marker coordinate={region} title="You are here" />
           <Marker coordinate={destination} title="Destination" />
@@ -144,6 +163,14 @@ export default function Maps() {
             polyline={polyline}
           />
         </MapView>
+        <Button
+              style={tw`bg-blue-500 mt-3`}
+              labelStyle={tw`text-lg text-white `}
+              onPress={handleGetDirections}
+            >
+              Start Live Navigation
+        </Button>
+        </>
       ) : (
         <ActivityIndicator
           animating={true}
@@ -152,13 +179,6 @@ export default function Maps() {
           style={tw`self-center`} // Center the activity indicator
         />
       )}
-      <Button
-        style={tw`bg-blue-500 mt-3`}
-        labelStyle={tw`text-lg text-white `}
-        onPress={handleGetDirections}
-      >
-        Start Live Navigation
-      </Button>
     </View>
   );
 }
