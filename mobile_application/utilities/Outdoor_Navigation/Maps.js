@@ -51,7 +51,7 @@ export default function Maps() {
       setRegion({
         latitude: origin.latitude,
         longitude: origin.longitude,
-        latitudeDelta: 0.015,
+        latitudeDelta: 0.03,
         longitudeDelta: 0.0121,
       });
       let destinations = [];
