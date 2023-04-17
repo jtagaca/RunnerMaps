@@ -76,8 +76,8 @@ export default function Maps() {
       setRegion({
         latitude: origin.latitude,
         longitude: origin.longitude,
-        latitudeDelta: 0.03,
-        longitudeDelta: 0.0121,
+        latitudeDelta: 0.015,
+        longitudeDelta: 0.015,
       });
       let destinations = [];
 
@@ -177,8 +177,8 @@ export default function Maps() {
               destination={destination}
               apikey={apiKey}
               strokeWidth={3}
+              mode="WALKING"
               strokeColor="red"
-              polyline={polyline}
             />
           </MapView>
           <Button
