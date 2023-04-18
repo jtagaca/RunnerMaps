@@ -145,8 +145,13 @@ async function getMarkersByFloorId(floorId) {
 }
 
 const makeHexColorDarker = (hex_color) => {
-  return tinycolor(hex_color).darken(20).toString();
+  const darker_hex_color = tinycolor(hex_color).darken(20);
+  return {
+    darker_hex_color: darker_hex_color.toString(),
+    is_dark: darker_hex_color.isDark(),
+  };
 };
+
 export {
   getWallsByFloorId,
   getMarkersByFloorId,
