@@ -157,10 +157,22 @@ const accessibility_slice = createSlice({
   name: "accessibility",
   initialState: {
     voice_enabled: false,
+    selected_background_color: "default",
+    selected_font_color: "default",
+    selected_font_size: "default",
   },
   reducers: {
     setVoiceEnabled: (state, action) => {
       state.voice_enabled = action.payload;
+    },
+    setSelectedBackgroundColor: (state, action) => {
+      state.selected_background_color = action.payload;
+    },
+    setSelectedFontColor: (state, action) => {
+      state.selected_font_color = action.payload;
+    },
+    setSelectedFontSize: (state, action) => {
+      state.selected_font_size = action.payload;
     },
   },
 });
