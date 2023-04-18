@@ -11,6 +11,7 @@
   "dependencies": {
     "@ja-ka/react-native-fade-in-flatlist": "^1.0.13",
     "@react-native-community/masked-view": "^0.1.11",
+    "@react-native-community/slider": "^4.4.2",
     "@react-native-masked-view/masked-view": "^0.2.8",
     "@react-navigation/bottom-tabs": "^6.5.7",
     "@react-navigation/native": "^6.1.6",
@@ -31,6 +32,7 @@
     "react-dom": "18.1.0",
     "react-native": "0.70.5",
     "react-native-autocomplete-dropdown": "^2.1.0",
+    "react-native-color-picker": "^0.6.0",
     "react-native-deck-swiper": "^2.0.13",
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-element-dropdown": "^2.8.1",
