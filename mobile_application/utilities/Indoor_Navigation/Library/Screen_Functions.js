@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { indoor_navigation_properties_actions } from "../../../redux_store/reducers";
 import { all_indoor_locations_actions } from "../../../redux_store/reducers";
+import tinycolor from "tinycolor2";
 
 import qs from "qs";
 import axios from "axios";
@@ -143,9 +144,13 @@ async function getMarkersByFloorId(floorId) {
   }
 }
 
+const makeHexColorDarker = (hex_color) => {
+  return tinycolor(hex_color).darken(20).toString();
+};
 export {
   getWallsByFloorId,
   getMarkersByFloorId,
   formatTitle,
   formatTitleForIndoorNavigationHome,
+  makeHexColorDarker,
 };

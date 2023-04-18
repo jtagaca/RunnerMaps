@@ -29,9 +29,13 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { useNavigation } from "@react-navigation/native";
 import CustomDropdownWithSelectorFromParent from "../utilities/Indoor_Navigation/Components/CustomDropdownWithSelectorFromParent";
 import CardComponentForHomeScreen from "../utilities/Indoor_Navigation/Components/CardComponentForHomeScreen";
+import tinycolor from "tinycolor2";
 
 import LoadingImage from "../utilities/Components/LoadingImage";
-import { formatTitle } from "./../utilities/Indoor_Navigation/Library/Screen_Functions";
+import {
+  formatTitle,
+  makeHexColorDarker,
+} from "./../utilities/Indoor_Navigation/Library/Screen_Functions";
 
 import AllIndoorLocationContext from "./../utilities/Indoor_Navigation/Contexts/AllIndoorLocations";
 import Screen_Functions from "./../utilities/Indoor_Navigation/Library/Screen_Functions";
@@ -126,6 +130,7 @@ export default function HomeScreen() {
       value: building.buildingID,
     };
   });
+  const accessibility = useSelector((state) => state.accessibility);
 
   const filterData = () => {
     return all_indoor_locations_data.filter((item) => {
@@ -161,6 +166,20 @@ export default function HomeScreen() {
     setModalVisible(!modalVisible);
   };
 
+  //! todo
+  // there must be two ways to handle the background color
+  // one for bg - yellow - 100 and one for the bg - yellow - 300
+  // for the bg-yellow-300 if the hex color is dark then the text color should be white
+
+  // just use backgroundColor instead of tailwind
+
+  // if (current_color === default ) {
+  // darker_color = makeHexColorDarker(default_color, 0.2)
+  // if (darker_color is dark) {
+  // text_color = white
+  // }
+  //!
+
   return (
     <AllIndoorLocationContext.Provider
       value={{
@@ -172,7 +191,18 @@ export default function HomeScreen() {
         setServiceSelectedItem,
       }}
     >
-      <SafeAreaView style={tw`flex-col flex-1 bg-yellow-100`} edges={[]}>
+      <SafeAreaView
+        style={[
+          tw`flex-col flex-1`,
+          accessibility.selected_background_color.primaryColor === "default"
+            ? tw`bg-yellow-100`
+            : {
+                backgroundColor:
+                  accessibility.selected_background_color.primaryColor,
+              },
+        ]}
+        edges={[]}
+      >
         <Modal
           animationType="slide"
           transparent={true}
@@ -227,7 +257,16 @@ export default function HomeScreen() {
                   size={30}
                   onPress={() => toggleModal()}
                   onBackdropPress={() => toggleModal()}
-                  style={tw`bg-yellow-300`}
+                  style={[
+                    accessibility.selected_background_color.primaryColor ===
+                    "default"
+                      ? tw`bg-yellow-300`
+                      : {
+                          backgroundColor: makeHexColorDarker(
+                            accessibility.selected_background_color.primaryColor
+                          ),
+                        },
+                  ]}
                   color="black"
                 />
               </View>

@@ -157,7 +157,10 @@ const accessibility_slice = createSlice({
   name: "accessibility",
   initialState: {
     voice_enabled: false,
-    selected_background_color: "default",
+    selected_background_color: {
+      primaryColor: "default",
+      secondaryColor: "default",
+    },
     selected_font_color: "default",
     selected_font_size: "default",
   },
@@ -173,6 +176,15 @@ const accessibility_slice = createSlice({
     },
     setSelectedFontSize: (state, action) => {
       state.selected_font_size = action.payload;
+    },
+    resetSettings: (state) => {
+      state.voice_enabled = false;
+      state.selected_background_color = {
+        primaryColor: "default",
+        secondaryColor: "default",
+      };
+      state.selected_font_color = "default";
+      state.selected_font_size = "default";
     },
   },
 });
