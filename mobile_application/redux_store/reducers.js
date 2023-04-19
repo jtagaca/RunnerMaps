@@ -158,8 +158,9 @@ const accessibility_slice = createSlice({
   initialState: {
     voice_enabled: false,
     selected_background_color: {
-      primaryColor: "default",
-      secondaryColor: "default",
+      primaryColor: "#fefce8",
+      secondaryColor: "#003594",
+      darkerPrimaryColor: "#fde047",
     },
     selected_font_color: "default",
     selected_font_size: "default",
@@ -180,8 +181,9 @@ const accessibility_slice = createSlice({
     resetSettings: (state) => {
       state.voice_enabled = false;
       state.selected_background_color = {
-        primaryColor: "default",
-        secondaryColor: "default",
+        primaryColor: "#fefce8",
+        secondaryColor: "#003594",
+        darkerPrimaryColor: "#fde047",
       };
       state.selected_font_color = "default";
       state.selected_font_size = "default";

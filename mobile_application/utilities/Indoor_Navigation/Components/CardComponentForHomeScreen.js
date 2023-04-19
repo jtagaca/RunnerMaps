@@ -2,43 +2,60 @@ import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import React from "react";
 import { Card, Title } from "react-native-paper";
 import { LinearGradient } from "expo-linear-gradient";
+import { useSelector } from "react-redux";
+
 import tw from "../../../tailwind/CustomTailwind";
 import Icon from "react-native-vector-icons/FontAwesome";
 import LoadingImage from "../../Components/LoadingImage";
 const CardComponentForHomeScreen = React.memo(
   ({ item, handleIndoorNavigate, handleOutdoorNavigate, formatTitle }) => {
+    const accessibility = useSelector((state) => state.accessibility);
+
     return (
       <View style={tw`m-1`}>
         <Card mode="elevated" style={(styles.card, styles.spacing)}>
           <Card.Content
             style={tw`flex-row items-center justify-center mt-2 mb-3  bg-opacity-50 bg-transparent`}
           >
-            <Title style={tw`p-2 bg-yellow-300 rounded-md shadow-2xl`}>
+            <Title
+              style={[
+                tw`p-2 rounded-md shadow-2xl`,
+                {
+                  backgroundColor:
+                    accessibility.selected_background_color.darkerPrimaryColor,
+                },
+              ]}
+            >
               {formatTitle(item)}
             </Title>
           </Card.Content>
-          <TouchableOpacity
-          // onPress={() =>
-          //   props.navigation.navigate("RestaurantDetails", {
-          //     name: item.name,
-          //     restaurant: item,
-          //   })
-          // }
-          >
+          <TouchableOpacity>
             <LoadingImage uri={item.image ? item.image : null} />
           </TouchableOpacity>
           <View
             style={tw`flex-row items-center justify-center py-2 mx-5 my-2 justify-evenly`}
           >
             <TouchableOpacity
-              style={tw`flex-row items-center p-1 mx-4 bg-blue-500 rounded-2xl justify-evenly w-5/10`}
+              style={[
+                tw`flex-row items-center p-1 mx-4 rounded-2xl justify-evenly w-5/10`,
+                {
+                  backgroundColor:
+                    accessibility.selected_background_color.secondaryColor,
+                },
+              ]}
               onPress={() => handleIndoorNavigate(item)}
             >
               <Text style={tw`text-white`}>Indoor Navigate</Text>
               <Icon name="street-view" color="white" size={25}></Icon>
             </TouchableOpacity>
             <TouchableOpacity
-              style={tw`flex-row items-center p-1 mx-4 bg-blue-500 rounded-2xl justify-evenly w-5/10`}
+              style={[
+                tw`flex-row items-center p-1 mx-4 rounded-2xl justify-evenly w-5/10`,
+                {
+                  backgroundColor:
+                    accessibility.selected_background_color.secondaryColor,
+                },
+              ]}
               onPress={() => handleOutdoorNavigate(item)}
             >
               <Text style={tw`text-white`}>Outdoor Navigate</Text>

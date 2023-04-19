@@ -6,6 +6,7 @@ import { Button } from "react-native-paper";
 import tw from "../../../tailwind/CustomTailwind";
 import AllIndoorLocationContext from "../Contexts/AllIndoorLocations";
 import { Dimensions } from "react-native";
+import { useSelector } from "react-redux";
 
 const CustomDropdownWithSelectorFromParent = ({
   given_style,
@@ -21,7 +22,7 @@ const CustomDropdownWithSelectorFromParent = ({
   const handleClearLocal = () => {
     setSelectedItem(null);
   };
-
+  const accessibility = useSelector((state) => state.accessibility);
   const renderItem = (item) => {
     return (
       <View style={styles.item}>
@@ -40,7 +41,13 @@ const CustomDropdownWithSelectorFromParent = ({
 
   return (
     <View
-      style={tw`flex flex-row items-center justify-center content-center bg-blue-500 rounded-lg mt-10 p-4 text-white shadow-2xl`}
+      style={[
+        tw`flex flex-row items-center justify-center content-center rounded-lg mt-10 p-4 text-white shadow-2xl`,
+        {
+          backgroundColor:
+            accessibility.selected_background_color.secondaryColor,
+        },
+      ]}
     >
       <Dropdown
         dropdownPosition="auto"

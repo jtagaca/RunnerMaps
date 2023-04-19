@@ -272,7 +272,13 @@ export default function CustomSwiper() {
             disabled={current_index_of_swiper === 0}
           /> */}
           <View
-            style={tw`flex-col justify-center mt-0 bg-blue-500 py-2 rounded-lg `}
+            style={[
+              tw`flex-col justify-center mt-0 py-2 rounded-lg `,
+              {
+                backgroundColor:
+                  accessibility.selected_background_color.secondaryColor,
+              },
+            ]}
           >
             <View style={tw`mx-10`}>
               <Text style={tw`text-white font-bold text-lg mb-1 text-center`}>
@@ -285,7 +291,13 @@ export default function CustomSwiper() {
                       key={index}
                       style={[
                         tw`m-1 p-1 rounded-lg shadow-lg`,
-                        item.checkpoint ? tw`bg-green-300` : tw`bg-yellow-300`,
+                        item.checkpoint
+                          ? tw`bg-green-300`
+                          : {
+                              backgroundColor:
+                                accessibility.selected_background_color
+                                  .darkerPrimaryColor,
+                            },
                       ]}
                     >
                       <Text style={tw`text-black text-center`}>
@@ -310,7 +322,13 @@ export default function CustomSwiper() {
               </ScrollView>
             </View>
             <View
-              style={tw`flex-col justify-center mt-1 bg-yellow-300 p-2 mx-10 rounded-lg shadow-lg`}
+              style={[
+                tw`flex-col justify-center mt-1 p-2 mx-10 rounded-lg shadow-lg`,
+                {
+                  backgroundColor:
+                    accessibility.selected_background_color.darkerPrimaryColor,
+                },
+              ]}
             >
               <Text style={tw`text-black font-bold text-lg text-center mb-2`}>
                 Information
@@ -360,14 +378,32 @@ export default function CustomSwiper() {
           </View>
 
           <View
-            style={tw`flex-row justify-center bg-yellow-100 m-0 h-16/20 w-20/20 content-center`}
+            style={[
+              tw`flex-row justify-center  m-0 h-16/20 w-20/20 content-center`,
+              {
+                backgroundColor:
+                  accessibility.selected_background_color.primaryColor,
+              },
+            ]}
           >
             <Swiper
-              style={tw`bg-yellow-100 m-0 `}
+              style={[
+                tw`m-0 `,
+                {
+                  backgroundColor:
+                    accessibility.selected_background_color.primaryColor,
+                },
+              ]}
               cards={sorted_shortest_path}
-              containerStyle={tw`bg-yellow-100 flex-col justify-center items-center h-20/20 w-20/20 shadow-2xl`}
+              containerStyle={[
+                tw`flex-col justify-center items-center h-20/20 w-20/20 shadow-2xl`,
+                {
+                  backgroundColor:
+                    accessibility.selected_background_color.primaryColor,
+                },
+              ]}
               cardVerticalMargin={0}
-              cardStyle={tw`bg-yellow-100 flex-col  h-10/20 mb-5 `}
+              cardStyle={[tw`flex-col  h-10/20 mb-5 `]}
               ref={swiperRef}
               renderCard={(card, index) => {
                 return (

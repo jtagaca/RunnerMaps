@@ -4,6 +4,7 @@ import { Dropdown } from "react-native-element-dropdown";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { Button } from "react-native-paper";
 import tw from "../../../tailwind/CustomTailwind";
+import { useSelector } from "react-redux";
 const CustomDropdown = ({
   given_style,
   data,
@@ -15,7 +16,7 @@ const CustomDropdown = ({
   handleClearHomeScreenData,
 }) => {
   const [selectedItem, setSelectedItem] = useState(null);
-
+  const accessibility = useSelector((state) => state.accessibility);
   const handleSelectionLocal = (item) => {
     handleSelection(item);
     setSelectedItem(item);
@@ -53,7 +54,13 @@ const CustomDropdown = ({
 
   return (
     <View
-      style={tw`flex flex-row items-center content-center justify-center p-2 my-2 text-white bg-blue-500 rounded-lg `}
+      style={[
+        tw`flex flex-row items-center content-center justify-center p-2 my-2 text-white rounded-lg `,
+        {
+          backgroundColor:
+            accessibility.selected_background_color.secondaryColor,
+        },
+      ]}
     >
       <Dropdown
         dropdownPosition="auto"

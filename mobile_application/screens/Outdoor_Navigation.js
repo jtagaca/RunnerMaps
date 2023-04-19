@@ -4,10 +4,19 @@ import React, { useState } from "react";
 import Maps from "../utilities/Outdoor_Navigation/Maps.js";
 import { SafeAreaView } from "react-native-safe-area-context";
 import tw from "../tailwind/CustomTailwind";
+import { useSelector } from "react-redux";
 
 export default function OutdoorNavigation() {
+  const accessibility = useSelector((state) => state.accessibility);
   return (
-    <SafeAreaView style={(tw`bg-yellow-100`, styles.container)}>
+    <SafeAreaView
+      style={[
+        {
+          backgroundColor: accessibility.selected_background_color.primaryColor,
+        },
+        styles.container,
+      ]}
+    >
       <Maps />
       <StatusBar style="auto" />
     </SafeAreaView>

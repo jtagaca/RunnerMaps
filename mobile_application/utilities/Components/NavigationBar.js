@@ -7,11 +7,13 @@ import SettingScreen from "../../screens/SettingScreen";
 
 import OutdoorNavigationScreen from "../../screens/Outdoor_Navigation";
 import Icon from "react-native-vector-icons/FontAwesome";
+import { useSelector } from "react-redux";
 const Tab = createBottomTabNavigator();
-import tw from "../../tailwind/CustomTailwind";
 import LoadingScreen from "../Components/LoadingScreen.js";
 
 export default function NavigationBar() {
+  const accessibility = useSelector((state) => state.accessibility);
+
   const [loading, setLoading] = useState(true);
   useEffect(() => {
     setTimeout(() => {
@@ -26,12 +28,19 @@ export default function NavigationBar() {
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={{
-        tabBarStyle: { backgroundColor: "#f7db69" },
-        tabBarActiveTintColor: "#003594",
+        tabBarStyle: {
+          backgroundColor:
+            accessibility.selected_background_color.darkerPrimaryColor,
+        },
+        tabBarActiveTintColor:
+          accessibility.selected_background_color.secondaryColor,
         tabBarLabelStyle: { fontWeight: "bold" },
         headerTitleAlign: "center",
-        headerStyle: { backgroundColor: "#f7db69" },
-        headerTintColor: "#003594",
+        headerStyle: {
+          backgroundColor:
+            accessibility.selected_background_color.darkerPrimaryColor,
+        },
+        headerTintColor: accessibility.selected_background_color.secondaryColor,
         headerShown: false,
       }}
     >

@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { View, Image, ActivityIndicator } from "react-native";
 import tw from "../../tailwind/CustomTailwind";
 
+import { useSelector } from "react-redux";
 const LoadingImage = ({ uri }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [hasLoadedOnce, setHasLoadedOnce] = useState(false);
+  const accessibility = useSelector((state) => state.accessibility);
 
   const handleLoad = () => {
     setIsLoading(false);
@@ -24,7 +26,10 @@ const LoadingImage = ({ uri }) => {
       />
       {isLoading && !hasLoadedOnce && (
         <View style={tw`absolute inset-0 items-center justify-center`}>
-          <ActivityIndicator size="large" color="#003594" />
+          <ActivityIndicator
+            size="large"
+            color={accessibility.selected_background_color.secondaryColor}
+          />
         </View>
       )}
     </View>

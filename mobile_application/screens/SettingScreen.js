@@ -16,7 +16,7 @@ import { accessibility_actions } from "../redux_store/reducers";
 import { TriangleColorPicker, fromHsv } from "react-native-color-picker";
 import { Dropdown } from "react-native-element-dropdown";
 import Slider from "@react-native-community/slider";
-
+import { makeHexColorDarker } from "../utilities/Indoor_Navigation/Library/Screen_Functions";
 export default function SettingScreen() {
   const [
     indoor_navigation_result_voice_enabled,
@@ -27,9 +27,13 @@ export default function SettingScreen() {
   const [modalVisibleFontColor, setmodalVisibleFontColor] = useState(false);
   const [modalVisibleFontSize, setmodalVisibleFontSize] = useState(false);
   const [font_size, setFontSize] = useState("default");
+
+  const accessibility = useSelector((state) => state.accessibility);
   const [background_color, setbackgroundColor] = useState({
-    primaryColor: "#f7db69",
-    secondaryColor: "#003594",
+    primaryColor: accessibility.selected_background_color.primaryColor,
+    secondaryColor: accessibility.selected_background_color.secondaryColor,
+    darkerPrimaryColor:
+      accessibility.selected_background_color.darkerPrimaryColor,
   });
   const [font_color, setfontColor] = useState("default");
   const dispatch = useDispatch();
@@ -50,7 +54,6 @@ export default function SettingScreen() {
     { label: "36", value: 36 },
   ];
 
-  const accessibility = useSelector((state) => state.accessibility);
   useEffect(() => {
     if (accessibility.voice_enabled && accessibility.voice_enabled == true) {
       setIndoorNavigationResultVoiceEnabled(true);
@@ -101,7 +104,11 @@ export default function SettingScreen() {
     dispatch(accessibility_actions.resetSettings());
     setIndoorNavigationResultVoiceEnabled(false);
     setFontSize("default");
-    setbackgroundColor("default");
+    setbackgroundColor({
+      primaryColor: "#fefce8",
+      secondaryColor: "#003594",
+      darkerPrimaryColor: "#fde047",
+    });
     setfontColor("default");
   };
 
@@ -113,7 +120,14 @@ export default function SettingScreen() {
     );
   };
   return (
-    <SafeAreaView style={tw`flex-1 bg-yellow-100`}>
+    <SafeAreaView
+      style={[
+        tw`flex-1`,
+        {
+          backgroundColor: accessibility.selected_background_color.primaryColor,
+        },
+      ]}
+    >
       <Modal
         animationType="slide"
         transparent={true}
@@ -143,6 +157,8 @@ export default function SettingScreen() {
                 setbackgroundColor({
                   primaryColor: fromHsv(color),
                   secondaryColor: background_color.secondaryColor,
+                  darkerPrimaryColor: makeHexColorDarker(fromHsv(color))
+                    .darker_hex_color,
                 });
               }}
               sliderComponent={Slider}
@@ -158,6 +174,7 @@ export default function SettingScreen() {
                 setbackgroundColor({
                   primaryColor: background_color.primaryColor,
                   secondaryColor: fromHsv(color),
+                  darkerPrimaryColor: background_color.darkerPrimaryColor,
                 });
               }}
               sliderComponent={Slider}
@@ -260,7 +277,13 @@ export default function SettingScreen() {
               </Text>
             </View>
             <View
-              style={tw` bg-red-500 w-48 justify-center items-center bg-blue-500 mt-[50px]`}
+              style={[
+                tw` bg-red-500 w-48 justify-center items-center mt-[50px]`,
+                {
+                  backgroundColor:
+                    accessibility.selected_background_color.secondaryColor,
+                },
+              ]}
             >
               <Dropdown
                 dropdownPosition="auto"
@@ -287,7 +310,13 @@ export default function SettingScreen() {
       </Modal>
       <View style={tw`items-center justify-center flex-1`}>
         <View
-          style={tw`flex-col items-center justify-center p-2 bg-blue-500 rounded-lg`}
+          style={[
+            tw`flex-col items-center justify-center p-2 rounded-lg`,
+            {
+              backgroundColor:
+                accessibility.selected_background_color.secondaryColor,
+            },
+          ]}
         >
           <View style={tw`items-center justify-center my-3`}>
             <View style={tw`my-3`}>
@@ -295,17 +324,33 @@ export default function SettingScreen() {
                 Enable Indoor Navigation Result Voice
               </Text>
             </View>
-            <View style={tw`justify-center p-1 bg-yellow-300 rounded-lg`}>
+            <View
+              style={[
+                tw`justify-center p-1 rounded-lg`,
+
+                {
+                  backgroundColor:
+                    accessibility.selected_background_color.darkerPrimaryColor,
+                },
+              ]}
+            >
               <Switch
                 value={indoor_navigation_result_voice_enabled}
                 onValueChange={toggleSwitch}
-                color="#003594"
+                color={accessibility.selected_background_color.secondaryColor}
               />
             </View>
           </View>
           <View style={tw`items-center justify-center my-3`}>
             <Button
-              style={tw`justify-center p-1 bg-yellow-300 rounded-lg`}
+              style={[
+                tw`justify-center p-1 rounded-lg`,
+
+                {
+                  backgroundColor:
+                    accessibility.selected_background_color.darkerPrimaryColor,
+                },
+              ]}
               onPress={changeModalVisibleBackgroundColor}
             >
               Change Background Color
@@ -314,7 +359,14 @@ export default function SettingScreen() {
           <View style={tw`items-center justify-center my-3`}>
             <Button
               onPress={changeModalVisibleFontColor}
-              style={tw`justify-center p-1 bg-yellow-300 rounded-lg`}
+              style={[
+                tw`justify-center p-1 rounded-lg`,
+
+                {
+                  backgroundColor:
+                    accessibility.selected_background_color.darkerPrimaryColor,
+                },
+              ]}
             >
               Change Text Color
             </Button>
@@ -322,7 +374,14 @@ export default function SettingScreen() {
           <View style={tw`items-center justify-center my-3`}>
             <Button
               onPress={changeModalVisibleFontSize}
-              style={tw`justify-center p-1 bg-yellow-300 rounded-lg`}
+              style={[
+                tw`justify-center p-1 rounded-lg`,
+
+                {
+                  backgroundColor:
+                    accessibility.selected_background_color.darkerPrimaryColor,
+                },
+              ]}
             >
               Change Font Size
             </Button>
@@ -330,7 +389,14 @@ export default function SettingScreen() {
           <View style={tw`items-center justify-center my-3`}>
             <Button
               onPress={handleResetSettings}
-              style={tw`justify-center p-1 bg-yellow-300 rounded-lg`}
+              style={[
+                tw`justify-center p-1 rounded-lg`,
+
+                {
+                  backgroundColor:
+                    accessibility.selected_background_color.darkerPrimaryColor,
+                },
+              ]}
             >
               Reset settings
             </Button>

@@ -18,7 +18,6 @@ import { useDispatch, useSelector } from "react-redux";
 import CustomDropdown from "../../utilities/Indoor_Navigation/Components/CustomDropdown";
 import Screen_Functions from "./Screen_Functions";
 import { getBuildings } from "../../redux_store/actions/Building_Locations";
-
 export default function Maps() {
   const [region, setRegion] = useState(null);
   const [destination, setDestination] = useState(null);
@@ -44,7 +43,7 @@ export default function Maps() {
   useEffect(() => {
     dispatch(getBuildings());
   }, [dispatch]);
-
+  const accessibility = useSelector((state) => state.accessibility);
   const buildings = useSelector((state) => state.buildings.data);
   const data = buildings.map((building) => ({
     label: building.buildingName,
@@ -144,7 +143,14 @@ export default function Maps() {
     }
   };
   return (
-    <View style={[tw`bg-yellow-100`, styles.container]}>
+    <View
+      style={[
+        {
+          backgroundColor: accessibility.selected_background_color.primaryColor,
+        },
+        styles.container,
+      ]}
+    >
       <View style={tw`flex-col flex-1 my-3`}>
         <CustomDropdown
           data={data}
@@ -182,7 +188,13 @@ export default function Maps() {
             />
           </MapView>
           <Button
-            style={tw`bg-blue-500 mt-3`}
+            style={[
+              tw`mt-3`,
+              {
+                backgroundColor:
+                  accessibility.selected_background_color.secondaryColor,
+              },
+            ]}
             labelStyle={tw`text-lg text-white `}
             onPress={handleGetDirections}
           >
@@ -193,7 +205,7 @@ export default function Maps() {
         <ActivityIndicator
           animating={true}
           size="large"
-          color="#003594"
+          color={accessibility.selected_background_color.secondaryColor}
           style={tw`self-center`} // Center the activity indicator
         />
       )}

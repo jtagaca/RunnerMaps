@@ -12,11 +12,11 @@ import {
 } from "../redux_store/reducers";
 import SegmentedControlTab from "react-native-segmented-control-tab";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-
 import Screen_Functions, {
   getWallsByFloorId,
   getMarkersByFloorId,
   formatTitleForIndoorNavigationHome,
+  makeHexColorDarker,
 } from "../utilities/Indoor_Navigation/Library/Screen_Functions";
 import { solveTheGrid } from "../utilities/Indoor_Navigation/Library/Algorithm_Functions";
 import * as Location from "expo-location";
@@ -685,8 +685,17 @@ export default function IndoorNavigation({ navigation }) {
     set_is_find_loading(false);
   };
 
+  const accessibility = useSelector((state) => state.accessibility);
+
   return (
-    <SafeAreaView style={tw`flex flex-1 bg-yellow-100`}>
+    <SafeAreaView
+      style={[
+        tw`flex flex-1`,
+        {
+          backgroundColor: accessibility.selected_background_color.primaryColor,
+        },
+      ]}
+    >
       <ScrollView
         style={[tw`flex-col`, { opacity: is_loading ? 0 : 1 }]}
         contentContainerStyle={{ padding: 24 }}
@@ -719,7 +728,14 @@ export default function IndoorNavigation({ navigation }) {
                     </Text>
                   </View>
                   <SegmentedControlTab
-                    tabsContainerStyle={tw`my-3 bg-blue-500`}
+                    tabsContainerStyle={[
+                      tw`my-3`,
+                      {
+                        backgroundColor:
+                          accessibility.selected_background_color
+                            .secondaryColor,
+                      },
+                    ]}
                     tabTextStyle={tw`text-lg`}
                     values={ways_to_navigate_between_floors}
                     selectedIndex={selectedIndex}
@@ -772,7 +788,14 @@ export default function IndoorNavigation({ navigation }) {
                   setSelectedItem={setSelectedFloor}
                 />
                 <View
-                  style={tw`flex-col m-1 justify-center items-center bg-yellow-300 rounded-lg p-4 mt-3`}
+                  style={[
+                    tw`flex-col m-1 justify-center items-center rounded-lg p-4 mt-3`,
+                    {
+                      backgroundColor:
+                        accessibility.selected_background_color
+                          .darkerPrimaryColor,
+                    },
+                  ]}
                 >
                   <Text style={tw`text-center text-lg`}>
                     Closest location near you
@@ -781,7 +804,9 @@ export default function IndoorNavigation({ navigation }) {
                     <ActivityIndicator
                       animating={true}
                       size="large"
-                      color="#003594"
+                      color={
+                        accessibility.selected_background_color.secondaryColor
+                      }
                       style={tw`self-center`} // Center the activity indicator
                     />
                   ) : (
@@ -853,7 +878,14 @@ export default function IndoorNavigation({ navigation }) {
           <>
             <View style={tw`flex-col flex-1 my-3`}>
               <Text
-                style={tw`px-1 py-2 my-1 text-lg font-bold text-left bg-yellow-300 rounded-md shadow-md w-5/10`}
+                style={[
+                  tw`px-1 py-2 my-1 text-lg font-bold text-left rounded-md shadow-md w-5/10`,
+                  {
+                    backgroundColor:
+                      accessibility.selected_background_color
+                        .darkerPrimaryColor,
+                  },
+                ]}
               >
                 Building Selected:
               </Text>
@@ -877,7 +909,14 @@ export default function IndoorNavigation({ navigation }) {
             </View>
             <View style={tw`flex-col flex-1 my-3`}>
               <Text
-                style={tw`px-1 py-2 my-1 text-lg font-bold text-left bg-yellow-300 rounded-md shadow-md w-4/10`}
+                style={[
+                  tw`px-1 py-2 my-1 text-lg font-bold text-left rounded-md shadow-md w-4/10`,
+                  {
+                    backgroundColor:
+                      accessibility.selected_background_color
+                        .darkerPrimaryColor,
+                  },
+                ]}
               >
                 Start Location:
               </Text>
@@ -912,7 +951,11 @@ export default function IndoorNavigation({ navigation }) {
                       tw`rounded-full p-2`,
                       indoor_locations_data.length &&
                       indoor_locations_data.length > 0
-                        ? tw`bg-blue-500`
+                        ? {
+                            backgroundColor:
+                              accessibility.selected_background_color
+                                .secondaryColor,
+                          }
                         : tw`bg-gray-300`,
                     ]}
                     disabled={indoor_locations_data.length == 0}
@@ -934,7 +977,14 @@ export default function IndoorNavigation({ navigation }) {
             </View>
             <View style={tw`flex-col flex-1 my-3`}>
               <Text
-                style={tw`px-1 py-2 my-1 text-lg font-bold text-left bg-yellow-300 rounded-md shadow-md w-6/10`}
+                style={[
+                  tw`px-1 py-2 my-1 text-lg font-bold text-left rounded-md shadow-md w-6/10`,
+                  {
+                    backgroundColor:
+                      accessibility.selected_background_color
+                        .darkerPrimaryColor,
+                  },
+                ]}
               >
                 Destination Location:
               </Text>
@@ -1020,7 +1070,11 @@ export default function IndoorNavigation({ navigation }) {
       </ScrollView>
       {(is_loading || data.length === 0) && (
         <View style={[tw`absolute inset-0 flex items-center justify-center`]}>
-          <ActivityIndicator animating={true} size="large" color="#003594" />
+          <ActivityIndicator
+            animating={true}
+            size="large"
+            color={accessibility.selected_background_color.secondaryColor}
+          />
         </View>
       )}
     </SafeAreaView>
