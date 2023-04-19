@@ -379,7 +379,7 @@ export default function CustomSwiper() {
 
           <View
             style={[
-              tw`flex-row justify-center  m-0 h-16/20 w-20/20 content-center`,
+              tw`flex-row justify-center  m-0 h-32/40 w-20/20 content-center`,
               {
                 backgroundColor:
                   accessibility.selected_background_color.primaryColor,
@@ -395,15 +395,31 @@ export default function CustomSwiper() {
                 },
               ]}
               cards={sorted_shortest_path}
-              containerStyle={[
-                tw`flex-col justify-center items-center h-20/20 w-20/20 shadow-2xl`,
-                {
-                  backgroundColor:
-                    accessibility.selected_background_color.primaryColor,
+              containerStyle={{
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+                height: "100%", // Change this to the percentage you prefer
+                width: "100%", // Change this to the percentage you prefer
+                shadowColor: "#000",
+                shadowOffset: {
+                  width: 0,
+                  height: 2,
                 },
-              ]}
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+                elevation: 5,
+                backgroundColor:
+                  accessibility.selected_background_color.primaryColor,
+              }}
               cardVerticalMargin={0}
-              cardStyle={[tw`flex-col  h-10/20 mb-5 `]}
+              cardStyle={{
+                flexDirection: "column",
+                height: "50%",
+                marginBottom: 5,
+                backgroundColor:
+                  accessibility.selected_background_color.primaryColor,
+              }}
               ref={swiperRef}
               renderCard={(card, index) => {
                 return (

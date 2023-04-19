@@ -748,14 +748,28 @@ export default function IndoorNavigation({ navigation }) {
               >
                 <Button
                   style={tw`mx-2 bg-red-500 w-4/10`}
-                  labelStyle={tw`text-lg text-white`}
+                  labelStyle={[
+                    tw`text-lg`,
+                    accessibility.selected_font_color != "default"
+                      ? {
+                          color: accessibility.selected_font_color,
+                        }
+                      : tw`text-white`,
+                  ]}
                   onPress={changeModalVisibility}
                 >
                   Cancel
                 </Button>
                 <Button
                   style={tw`mx-2 bg-green-700 w-4/10`}
-                  labelStyle={tw`text-lg text-white `}
+                  labelStyle={[
+                    tw`text-lg `,
+                    accessibility.selected_font_color != "default"
+                      ? {
+                          color: accessibility.selected_font_color,
+                        }
+                      : tw`text-white`,
+                  ]}
                   onPress={handleStartNavigationConfirmed}
                 >
                   Start

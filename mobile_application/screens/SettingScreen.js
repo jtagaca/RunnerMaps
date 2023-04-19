@@ -35,7 +35,7 @@ export default function SettingScreen() {
     darkerPrimaryColor:
       accessibility.selected_background_color.darkerPrimaryColor,
   });
-  const [font_color, setfontColor] = useState("default");
+  const [font_color, setfontColor] = useState("#d4b3b3");
   const dispatch = useDispatch();
   const available_font_sizes = [
     { label: "10", value: 10 },
@@ -109,7 +109,7 @@ export default function SettingScreen() {
       secondaryColor: "#003594",
       darkerPrimaryColor: "#fde047",
     });
-    setfontColor("default");
+    setfontColor("#d4b3b3");
   };
 
   const renderItem = (item) => {
