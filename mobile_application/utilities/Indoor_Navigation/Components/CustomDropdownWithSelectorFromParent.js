@@ -26,18 +26,7 @@ const CustomDropdownWithSelectorFromParent = ({
   const renderItem = (item) => {
     return (
       <View style={styles.item}>
-        <Text
-          style={[
-            styles.textItem,
-            accessibility.selected_font_color != "#d4b3b3"
-              ? {
-                  color: accessibility.selected_font_color,
-                }
-              : null,
-          ]}
-        >
-          {item.label}
-        </Text>
+        <Text>{item.label}</Text>
         {item.value === selectedItem?.value && (
           <Ionicons
             style={styles.icon}
@@ -85,14 +74,7 @@ const CustomDropdownWithSelectorFromParent = ({
               }
             : tw`text-white`
         }
-        inputSearchStyle={[
-          styles.inputSearchStyle,
-          accessibility.selected_font_color != "#d4b3b3"
-            ? {
-                color: accessibility.selected_font_color,
-              }
-            : null,
-        ]}
+        inputSearchStyle={[styles.inputSearchStyle]}
         iconStyle={styles.iconStyle}
         data={data}
         search

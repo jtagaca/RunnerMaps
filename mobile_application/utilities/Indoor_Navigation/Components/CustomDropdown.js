@@ -43,11 +43,7 @@ const CustomDropdown = ({
         {item.value === selectedItem?.value && (
           <Ionicons
             style={styles.icon}
-            color={
-              accessibility.selected_font_color != "#d4b3b3"
-                ? accessibility.selected_font_color
-                : "white"
-            }
+            color="white"
             name="location"
             size={20}
           />
@@ -91,14 +87,7 @@ const CustomDropdown = ({
               }
             : tw`text-white`
         }
-        inputSearchStyle={[
-          styles.inputSearchStyle,
-          accessibility.selected_font_color != "#d4b3b3"
-            ? {
-                color: accessibility.selected_font_color,
-              }
-            : null,
-        ]}
+        inputSearchStyle={[styles.inputSearchStyle]}
         iconStyle={[
           styles.iconStyle,
           accessibility.selected_font_color != "#d4b3b3"
