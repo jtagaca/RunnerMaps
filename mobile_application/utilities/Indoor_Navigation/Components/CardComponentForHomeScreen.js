@@ -58,7 +58,10 @@ const CardComponentForHomeScreen = React.memo(
                         color: accessibility.selected_font_color,
                       }
                     : tw`text-white`,
-                  { fontSize: parseInt(accessibility.selected_font_size, 10) },
+                  {
+                    fontSize:
+                      parseInt(accessibility.selected_font_size, 10) - 4,
+                  },
                 ]}
               >
                 Indoor Navigate
@@ -90,7 +93,10 @@ const CardComponentForHomeScreen = React.memo(
                         color: accessibility.selected_font_color,
                       }
                     : tw`text-white`,
-                  { fontSize: parseInt(accessibility.selected_font_size, 10) },
+                  {
+                    fontSize:
+                      parseInt(accessibility.selected_font_size, 10) - 4,
+                  },
                 ]}
               >
                 Outdoor Navigate
