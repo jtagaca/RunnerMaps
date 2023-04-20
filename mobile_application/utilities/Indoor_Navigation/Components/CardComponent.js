@@ -4,6 +4,8 @@ import { Card } from "react-native-paper";
 import tw from "../../../tailwind/CustomTailwind";
 import { buildText } from "../Library/FormatText";
 
+import { useSelector } from "react-redux";
+
 export default function CardComponent({ card, index, sorted_shortest_path }) {
   const buildTextComponent = (card, index, sorted_shortest_path, type) => {
     const text = buildText(card, index, sorted_shortest_path, type);
@@ -14,6 +16,7 @@ export default function CardComponent({ card, index, sorted_shortest_path }) {
 
     return null;
   };
+  const accessibility = useSelector((state) => state.accessibility);
 
   const textContent = buildTextComponent(card, index, sorted_shortest_path);
   const hasNoImageTextContent = buildTextComponent(
@@ -26,8 +29,19 @@ export default function CardComponent({ card, index, sorted_shortest_path }) {
   return (
     <View style={(styles.container, tw`mt-2 shadow-2xl`)}>
       <Card style={styles.card}>
-        <Card.Content style={tw`flex flex-col justify-center`}>
-          {textContent}
+        <Card.Content style={[tw`flex flex-col justify-center`]}>
+          <Text
+            style={[
+              tw`text-center`,
+              accessibility.selected_font_color != "#d4b3b3"
+                ? {
+                    color: accessibility.selected_font_color,
+                  }
+                : null,
+            ]}
+          >
+            {textContent}
+          </Text>
 
           {card.image && card.image != null && card.image != "" ? (
             <Card.Cover
@@ -36,8 +50,21 @@ export default function CardComponent({ card, index, sorted_shortest_path }) {
               resizeMode="contain"
             />
           ) : (
-            <View style={tw`flex flex-col items-center justify-center h-full`}>
-              {hasNoImageTextContent}
+            <View
+              style={[tw`flex flex-col items-center justify-center h-full`]}
+            >
+              <Text
+                style={[
+                  tw`text-center`,
+                  accessibility.selected_font_color != "#d4b3b3"
+                    ? {
+                        color: accessibility.selected_font_color,
+                      }
+                    : null,
+                ]}
+              >
+                {hasNoImageTextContent}
+              </Text>
             </View>
           )}
         </Card.Content>

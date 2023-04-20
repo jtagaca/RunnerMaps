@@ -24,6 +24,11 @@ const CardComponentForHomeScreen = React.memo(
                   backgroundColor:
                     accessibility.selected_background_color.darkerPrimaryColor,
                 },
+                accessibility.selected_font_color != "#d4b3b3"
+                  ? {
+                      color: accessibility.selected_font_color,
+                    }
+                  : null,
               ]}
             >
               {formatTitle(item)}
@@ -45,8 +50,26 @@ const CardComponentForHomeScreen = React.memo(
               ]}
               onPress={() => handleIndoorNavigate(item)}
             >
-              <Text style={tw`text-white`}>Indoor Navigate</Text>
-              <Icon name="street-view" color="white" size={25}></Icon>
+              <Text
+                style={
+                  accessibility.selected_font_color != "#d4b3b3"
+                    ? {
+                        color: accessibility.selected_font_color,
+                      }
+                    : tw`text-white`
+                }
+              >
+                Indoor Navigate
+              </Text>
+              <Icon
+                name="street-view"
+                color={
+                  accessibility.selected_font_color != "#d4b3b3"
+                    ? accessibility.selected_font_color
+                    : "white"
+                }
+                size={25}
+              ></Icon>
             </TouchableOpacity>
             <TouchableOpacity
               style={[
@@ -58,8 +81,26 @@ const CardComponentForHomeScreen = React.memo(
               ]}
               onPress={() => handleOutdoorNavigate(item)}
             >
-              <Text style={tw`text-white`}>Outdoor Navigate</Text>
-              <Icon name="compass" color="white" size={25}></Icon>
+              <Text
+                style={
+                  accessibility.selected_font_color != "#d4b3b3"
+                    ? {
+                        color: accessibility.selected_font_color,
+                      }
+                    : tw`text-white`
+                }
+              >
+                Outdoor Navigate
+              </Text>
+              <Icon
+                name="compass"
+                color={
+                  accessibility.selected_font_color != "#d4b3b3"
+                    ? accessibility.selected_font_color
+                    : "white"
+                }
+                size={25}
+              ></Icon>
             </TouchableOpacity>
           </View>
         </Card>

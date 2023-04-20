@@ -162,7 +162,7 @@ const accessibility_slice = createSlice({
       secondaryColor: "#003594",
       darkerPrimaryColor: "#fde047",
     },
-    selected_font_color: "#FFFFFF",
+    selected_font_color: "#d4b3b3",
     selected_font_size: "default",
   },
   reducers: {
@@ -185,7 +185,7 @@ const accessibility_slice = createSlice({
         secondaryColor: "#003594",
         darkerPrimaryColor: "#fde047",
       };
-      state.selected_font_color = "#FFFFFF";
+      state.selected_font_color = "#d4b3b3";
       state.selected_font_size = "default";
     },
   },

@@ -195,7 +195,14 @@ export default function Maps() {
                   accessibility.selected_background_color.secondaryColor,
               },
             ]}
-            labelStyle={tw`text-lg text-white `}
+            labelStyle={[
+              tw`text-lg `,
+              accessibility.selected_font_color != "#d4b3b3"
+                ? {
+                    color: accessibility.selected_font_color,
+                  }
+                : tw`text-white`,
+            ]}
             onPress={handleGetDirections}
           >
             Start Live Navigation

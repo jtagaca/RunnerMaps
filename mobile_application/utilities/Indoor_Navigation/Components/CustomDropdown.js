@@ -43,7 +43,11 @@ const CustomDropdown = ({
         {item.value === selectedItem?.value && (
           <Ionicons
             style={styles.icon}
-            color="white"
+            color={
+              accessibility.selected_font_color != "#d4b3b3"
+                ? accessibility.selected_font_color
+                : "white"
+            }
             name="location"
             size={20}
           />
@@ -55,11 +59,16 @@ const CustomDropdown = ({
   return (
     <View
       style={[
-        tw`flex flex-row items-center content-center justify-center p-2 my-2 text-white rounded-lg `,
+        tw`flex flex-row items-center content-center justify-center p-2 my-2 rounded-lg `,
         {
           backgroundColor:
             accessibility.selected_background_color.secondaryColor,
         },
+        accessibility.selected_font_color != "#d4b3b3"
+          ? {
+              color: accessibility.selected_font_color,
+            }
+          : tw`text-white`,
       ]}
     >
       <Dropdown
@@ -69,15 +78,43 @@ const CustomDropdown = ({
         placeholderStyle={
           given_style && data && data.length === 0
             ? given_style
+            : accessibility.selected_font_color != "#d4b3b3"
+            ? {
+                color: accessibility.selected_font_color,
+              }
             : tw`text-white`
         }
-        selectedTextStyle={tw`text-white `}
-        inputSearchStyle={styles.inputSearchStyle}
-        iconStyle={styles.iconStyle}
+        selectedTextStyle={
+          accessibility.selected_font_color != "#d4b3b3"
+            ? {
+                color: accessibility.selected_font_color,
+              }
+            : tw`text-white`
+        }
+        inputSearchStyle={[
+          styles.inputSearchStyle,
+          accessibility.selected_font_color != "#d4b3b3"
+            ? {
+                color: accessibility.selected_font_color,
+              }
+            : null,
+        ]}
+        iconStyle={[
+          styles.iconStyle,
+          accessibility.selected_font_color != "#d4b3b3"
+            ? {
+                color: accessibility.selected_font_color,
+              }
+            : null,
+        ]}
         data={data}
         search
         searchField="label"
-        iconColor="white"
+        iconColor={
+          accessibility.selected_font_color != "#d4b3b3"
+            ? accessibility.selected_font_color
+            : "white"
+        }
         autoScroll={false}
         maxHeight={300}
         labelField="label"
@@ -95,7 +132,11 @@ const CustomDropdown = ({
         renderLeftIcon={() => (
           <Ionicons
             style={styles.icon}
-            color="white"
+            color={
+              accessibility.selected_font_color != "#d4b3b3"
+                ? accessibility.selected_font_color
+                : "white"
+            }
             name="location"
             size={20}
           />
@@ -103,7 +144,14 @@ const CustomDropdown = ({
         renderItem={renderItem}
       />
       <View style={tw`items-center justify-center flex-1 `}>
-        <Button textColor="white" onPress={handleClearLocal}>
+        <Button
+          textColor={
+            accessibility.selected_font_color != "#d4b3b3"
+              ? accessibility.selected_font_color
+              : "white"
+          }
+          onPress={handleClearLocal}
+        >
           Clear
         </Button>
       </View>
@@ -114,12 +162,6 @@ const CustomDropdown = ({
 export default CustomDropdown;
 
 const styles = StyleSheet.create({
-  placeholderStyle: {
-    color: "white",
-    fontSize: 25,
-    paddingHorizontal: 5, // Add padding to the placeholder text
-  },
-
   dropdown: {
     borderRadius: 12,
     padding: 12,
@@ -145,14 +187,7 @@ const styles = StyleSheet.create({
     flex: 1,
     fontSize: 16,
   },
-  placeholderStyle: {
-    color: "white",
-    fontSize: 16,
-  },
-  selectedTextStyle: {
-    fontSize: 16,
-    color: "white",
-  },
+
   iconStyle: {
     width: 20,
     height: 20,

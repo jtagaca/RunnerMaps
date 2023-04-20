@@ -281,7 +281,16 @@ export default function CustomSwiper() {
             ]}
           >
             <View style={tw`mx-10`}>
-              <Text style={tw`text-white font-bold text-lg mb-1 text-center`}>
+              <Text
+                style={[
+                  tw`font-bold text-lg mb-1 text-center`,
+                  accessibility.selected_font_color != "#d4b3b3"
+                    ? {
+                        color: accessibility.selected_font_color,
+                      }
+                    : tw`text-white`,
+                ]}
+              >
                 Upcoming Paths
               </Text>
               <ScrollView style={tw`h-25`}>
@@ -300,7 +309,16 @@ export default function CustomSwiper() {
                             },
                       ]}
                     >
-                      <Text style={tw`text-black text-center`}>
+                      <Text
+                        style={[
+                          tw`text-center`,
+                          accessibility.selected_font_color != "#d4b3b3"
+                            ? {
+                                color: accessibility.selected_font_color,
+                              }
+                            : tw`text-black`,
+                        ]}
+                      >
                         {buildText(
                           item,
                           item.index,
@@ -330,12 +348,30 @@ export default function CustomSwiper() {
                 },
               ]}
             >
-              <Text style={tw`text-black font-bold text-lg text-center mb-2`}>
+              <Text
+                style={[
+                  tw`font-bold text-lg text-center mb-2`,
+                  accessibility.selected_font_color != "#d4b3b3"
+                    ? {
+                        color: accessibility.selected_font_color,
+                      }
+                    : tw`text-black`,
+                ]}
+              >
                 Information
               </Text>
               {current_start && current_end ? (
                 <View style={tw`text-center flex-col items-center`}>
-                  <Text style={tw`text-center`}>
+                  <Text
+                    style={[
+                      tw`text-center`,
+                      accessibility.selected_font_color != "#d4b3b3"
+                        ? {
+                            color: accessibility.selected_font_color,
+                          }
+                        : tw`text-black`,
+                    ]}
+                  >
                     CURRENT START:{"\n"}
                     <Text style={tw`font-semibold `}>
                       {buildText(
@@ -350,7 +386,16 @@ export default function CustomSwiper() {
                       )}
                     </Text>
                   </Text>
-                  <Text style={tw`text-center`}>
+                  <Text
+                    style={[
+                      tw`text-center`,
+                      accessibility.selected_font_color != "#d4b3b3"
+                        ? {
+                            color: accessibility.selected_font_color,
+                          }
+                        : tw`text-black`,
+                    ]}
+                  >
                     CURRENT CHECKPOINT:{"\n"}
                     <Text style={tw`font-semibold `}>
                       {buildText(
@@ -368,7 +413,16 @@ export default function CustomSwiper() {
                 </View>
               ) : null}
 
-              <Text style={tw`text-center`}>
+              <Text
+                style={[
+                  tw`text-center`,
+                  accessibility.selected_font_color != "#d4b3b3"
+                    ? {
+                        color: accessibility.selected_font_color,
+                      }
+                    : tw`text-black`,
+                ]}
+              >
                 Distance of current start and current checkpoint:{"\n"}
                 <Text style={tw`font-semibold text-center`}>
                   {current_distance_between_start_and_end.toFixed(2)} meters

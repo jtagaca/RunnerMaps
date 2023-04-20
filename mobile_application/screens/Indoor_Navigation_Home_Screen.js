@@ -717,13 +717,31 @@ export default function IndoorNavigation({ navigation }) {
               {isStartAndDestinationOnDifferentFloors == true ? (
                 <>
                   <View style={tw`w-full my-3`}>
-                    <Text style={tw`text-lg text-left`}>
+                    <Text
+                      style={[
+                        tw`text-lg text-left`,
+                        accessibility.selected_font_color != "#d4b3b3"
+                          ? {
+                              color: accessibility.selected_font_color,
+                            }
+                          : null,
+                      ]}
+                    >
                       Your start location and destination location are on
                       different floors{" "}
                     </Text>
                   </View>
                   <View style={tw`w-full my-3`}>
-                    <Text style={tw`text-lg text-left`}>
+                    <Text
+                      style={[
+                        tw`text-lg text-left`,
+                        accessibility.selected_font_color != "#d4b3b3"
+                          ? {
+                              color: accessibility.selected_font_color,
+                            }
+                          : null,
+                      ]}
+                    >
                       Choose your preferred method
                     </Text>
                   </View>
@@ -736,7 +754,14 @@ export default function IndoorNavigation({ navigation }) {
                             .secondaryColor,
                       },
                     ]}
-                    tabTextStyle={tw`text-lg`}
+                    tabTextStyle={[
+                      tw`text-lg`,
+                      accessibility.selected_font_color != "#d4b3b3"
+                        ? {
+                            color: accessibility.selected_font_color,
+                          }
+                        : null,
+                    ]}
                     values={ways_to_navigate_between_floors}
                     selectedIndex={selectedIndex}
                     onTabPress={handleIndexChange}
@@ -750,7 +775,7 @@ export default function IndoorNavigation({ navigation }) {
                   style={tw`mx-2 bg-red-500 w-4/10`}
                   labelStyle={[
                     tw`text-lg`,
-                    accessibility.selected_font_color != "default"
+                    accessibility.selected_font_color != "#d4b3b3"
                       ? {
                           color: accessibility.selected_font_color,
                         }
@@ -764,7 +789,7 @@ export default function IndoorNavigation({ navigation }) {
                   style={tw`mx-2 bg-green-700 w-4/10`}
                   labelStyle={[
                     tw`text-lg `,
-                    accessibility.selected_font_color != "default"
+                    accessibility.selected_font_color != "#d4b3b3"
                       ? {
                           color: accessibility.selected_font_color,
                         }
@@ -795,7 +820,14 @@ export default function IndoorNavigation({ navigation }) {
                 style={tw`flex-col items-center justify-center justify-between flex-1 m-3`}
               >
                 <CustomDropdownWithSelectorFromParent
-                  given_style={tw`h-12/10 text-white`}
+                  given_style={[
+                    tw`h-12/10`,
+                    accessibility.selected_font_color != "#d4b3b3"
+                      ? {
+                          color: accessibility.selected_font_color,
+                        }
+                      : tw`text-white`,
+                  ]}
                   data={floor_data_dropdown}
                   placeholder="Which floor are you in?"
                   selectedItem={selected_floor}
@@ -835,7 +867,14 @@ export default function IndoorNavigation({ navigation }) {
                 <View style={tw`flex-row justify-center items-center mt-3`}>
                   <Button
                     style={tw`mx-2 bg-red-500 w-4/10`}
-                    labelStyle={tw`text-lg text-white`}
+                    labelStyle={[
+                      tw`text-lg`,
+                      accessibility.selected_font_color != "#d4b3b3"
+                        ? {
+                            color: accessibility.selected_font_color,
+                          }
+                        : tw`text-white`,
+                    ]}
                     onPress={() => {
                       handleClearStartLocationInModal();
                       setModalForClosestLocation(false);
@@ -855,6 +894,11 @@ export default function IndoorNavigation({ navigation }) {
                       tw`text-lg`,
                       selected_floor == null
                         ? tw`text-gray-500`
+                        : accessibility.selected_font_color != "#d4b3b3"
+                        ? {
+                            ...tw`font-bold text-[1rem]`,
+                            color: accessibility.selected_font_color,
+                          }
                         : tw`font-bold text-[1rem] text-white`,
                     ]}
                     onPress={handleFindClosestLocation}
@@ -899,6 +943,11 @@ export default function IndoorNavigation({ navigation }) {
                       accessibility.selected_background_color
                         .darkerPrimaryColor,
                   },
+                  accessibility.selected_font_color != "#d4b3b3"
+                    ? {
+                        color: accessibility.selected_font_color,
+                      }
+                    : null,
                 ]}
               >
                 Building Selected:
@@ -930,13 +979,25 @@ export default function IndoorNavigation({ navigation }) {
                       accessibility.selected_background_color
                         .darkerPrimaryColor,
                   },
+                  accessibility.selected_font_color != "#d4b3b3"
+                    ? {
+                        color: accessibility.selected_font_color,
+                      }
+                    : null,
                 ]}
               >
                 Start Location:
               </Text>
               <View style={tw`flex-row`}>
                 <CustomDropdown
-                  given_style={tw`h-12/10 text-white`}
+                  given_style={[
+                    tw`h-12/10`,
+                    accessibility.selected_font_color != "#d4b3b3"
+                      ? {
+                          color: accessibility.selected_font_color,
+                        }
+                      : tw`text-white`,
+                  ]}
                   data={indoor_locations_data}
                   handleSelection={handleSelectionStartLocation}
                   handleClear={handleClearIndoorNavigationProperties}
@@ -980,7 +1041,9 @@ export default function IndoorNavigation({ navigation }) {
                       color={
                         indoor_locations_data.length &&
                         indoor_locations_data.length > 0
-                          ? "white"
+                          ? accessibility.selected_font_color != "#d4b3b3"
+                            ? accessibility.selected_font_color
+                            : "white"
                           : "grey"
                       }
                       size={40}
@@ -998,6 +1061,11 @@ export default function IndoorNavigation({ navigation }) {
                       accessibility.selected_background_color
                         .darkerPrimaryColor,
                   },
+                  accessibility.selected_font_color != "#d4b3b3"
+                    ? {
+                        color: accessibility.selected_font_color,
+                      }
+                    : null,
                 ]}
               >
                 Destination Location:
@@ -1040,8 +1108,7 @@ export default function IndoorNavigation({ navigation }) {
                     ? "bg-gray-300"
                     : "bg-green-700"
                 } `}
-                labelStyle={tw` 
-                ${
+                labelStyle={[
                   indoor_locations_data == null ||
                   indoor_locations_data.length == 0 ||
                   indoor_navigation_properties.start_location_id == null ||
@@ -1049,10 +1116,15 @@ export default function IndoorNavigation({ navigation }) {
                     null ||
                   indoor_navigation_properties.start_location_id ==
                     indoor_navigation_properties.destination_location_id
-                    ? "text-gray-500"
-                    : "font-bold text-[1rem] text-white"
-                }
-                `}
+                    ? tw`text-gray-500`
+                    : {
+                        ...tw`font-bold text-[1rem]`,
+                        color:
+                          accessibility.selected_font_color != "#d4b3b3"
+                            ? accessibility.selected_font_color
+                            : "white",
+                      },
+                ]}
                 disabled={
                   indoor_locations_data == null ||
                   indoor_locations_data.length == 0 ||

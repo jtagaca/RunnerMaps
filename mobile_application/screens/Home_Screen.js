@@ -247,7 +247,11 @@ export default function HomeScreen() {
                       accessibility.selected_background_color
                         .darkerPrimaryColor,
                   }}
-                  color={"black"}
+                  color={
+                    accessibility.selected_font_color != "#d4b3b3"
+                      ? accessibility.selected_font_color
+                      : "black"
+                  }
                 />
               </View>
             </View>

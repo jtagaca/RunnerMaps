@@ -147,8 +147,30 @@ export default function SettingScreen() {
             >
               <Icon name="times" size={24} color="black" />
             </TouchableOpacity>
-            <Text style={tw`text-xl`}>Background Color</Text>
-            <Text style={tw`text-xl`}>Primary Color: default yellow</Text>
+            <Text
+              style={[
+                tw`text-xl`,
+                accessibility.selected_font_color != "#d4b3b3"
+                  ? {
+                      color: accessibility.selected_font_color,
+                    }
+                  : null,
+              ]}
+            >
+              Background Color
+            </Text>
+            <Text
+              style={[
+                tw`text-xl`,
+                accessibility.selected_font_color != "#d4b3b3"
+                  ? {
+                      color: accessibility.selected_font_color,
+                    }
+                  : null,
+              ]}
+            >
+              Primary Color: default yellow
+            </Text>
             <TriangleColorPicker
               hideSliders={true}
               color={background_color.primaryColor}
@@ -164,7 +186,18 @@ export default function SettingScreen() {
               sliderComponent={Slider}
               hideControls={true}
             />
-            <Text style={tw`text-xl`}>Secondary Color: default navy</Text>
+            <Text
+              style={[
+                tw`text-xl`,
+                accessibility.selected_font_color != "#d4b3b3"
+                  ? {
+                      color: accessibility.selected_font_color,
+                    }
+                  : null,
+              ]}
+            >
+              Secondary Color: default navy
+            </Text>
 
             <TriangleColorPicker
               hideSliders={true}
@@ -199,7 +232,18 @@ export default function SettingScreen() {
             >
               <Icon name="times" size={24} color="black" />
             </TouchableOpacity>
-            <Text style={tw`text-xl`}>Font Color</Text>
+            <Text
+              style={[
+                tw`text-xl`,
+                accessibility.selected_font_color != "#d4b3b3"
+                  ? {
+                      color: accessibility.selected_font_color,
+                    }
+                  : null,
+              ]}
+            >
+              Font Color
+            </Text>
             <TriangleColorPicker
               color={font_color}
               hideSliders={true}
@@ -231,7 +275,18 @@ export default function SettingScreen() {
             >
               <Icon name="times" size={24} color="black" />
             </TouchableOpacity>
-            <Text style={tw`text-xl`}>Font Color</Text>
+            <Text
+              style={[
+                tw`text-xl`,
+                accessibility.selected_font_color != "#d4b3b3"
+                  ? {
+                      color: accessibility.selected_font_color,
+                    }
+                  : null,
+              ]}
+            >
+              Font Color
+            </Text>
             <TriangleColorPicker
               color={font_color}
               hideSliders={true}
@@ -264,13 +319,29 @@ export default function SettingScreen() {
             >
               <Icon name="times" size={24} color="black" />
             </TouchableOpacity>
-            <Text style={tw`text-xl`}>Font Size</Text>
+            <Text
+              style={[
+                tw`text-xl`,
+                accessibility.selected_font_color != "#d4b3b3"
+                  ? {
+                      color: accessibility.selected_font_color,
+                    }
+                  : null,
+              ]}
+            >
+              Font Size
+            </Text>
             <View style={tw`my-10`}>
               <Text
                 style={[
                   font_size === "default"
                     ? tw`text-lg`
                     : { fontSize: parseInt(font_size.value, 10) },
+                  accessibility.selected_font_color != "#d4b3b3"
+                    ? {
+                        color: accessibility.selected_font_color,
+                      }
+                    : null,
                 ]}
               >
                 "Example of font"
@@ -289,14 +360,26 @@ export default function SettingScreen() {
                 dropdownPosition="auto"
                 showsVerticalScrollIndicator={true}
                 style={(styles.dropdown, tw`w-8/10 my-4 mr-0 h-2/30 `)}
-                placeholderStyle={tw`text-white`}
+                placeholderStyle={
+                  accessibility.selected_font_color != "#d4b3b3"
+                    ? {
+                        color: accessibility.selected_font_color,
+                      }
+                    : tw`text-white`
+                }
                 placeholder="Select Font Size"
                 data={available_font_sizes}
                 search={false}
                 searchField="label"
                 iconColor="white"
                 autoScroll={false}
-                selectedTextStyle={tw`text-white`}
+                selectedTextStyle={
+                  accessibility.selected_font_color != "#d4b3b3"
+                    ? {
+                        color: accessibility.selected_font_color,
+                      }
+                    : tw`text-white`
+                }
                 maxHeight={300}
                 labelField="label"
                 valueField="value"
@@ -320,7 +403,16 @@ export default function SettingScreen() {
         >
           <View style={tw`items-center justify-center my-3`}>
             <View style={tw`my-3`}>
-              <Text style={tw`text-lg text-center text-white`}>
+              <Text
+                style={[
+                  tw`text-lg text-center`,
+                  accessibility.selected_font_color != "#d4b3b3"
+                    ? {
+                        color: accessibility.selected_font_color,
+                      }
+                    : tw`text-white`,
+                ]}
+              >
                 Enable Indoor Navigation Result Voice
               </Text>
             </View>
@@ -351,6 +443,11 @@ export default function SettingScreen() {
                     accessibility.selected_background_color.darkerPrimaryColor,
                 },
               ]}
+              textColor={
+                accessibility.selected_font_color != "#d4b3b3"
+                  ? accessibility.selected_font_color
+                  : null
+              }
               onPress={changeModalVisibleBackgroundColor}
             >
               Change Background Color
@@ -367,6 +464,11 @@ export default function SettingScreen() {
                     accessibility.selected_background_color.darkerPrimaryColor,
                 },
               ]}
+              textColor={
+                accessibility.selected_font_color != "#d4b3b3"
+                  ? accessibility.selected_font_color
+                  : null
+              }
             >
               Change Text Color
             </Button>
@@ -382,6 +484,11 @@ export default function SettingScreen() {
                     accessibility.selected_background_color.darkerPrimaryColor,
                 },
               ]}
+              textColor={
+                accessibility.selected_font_color != "#d4b3b3"
+                  ? accessibility.selected_font_color
+                  : null
+              }
             >
               Change Font Size
             </Button>
@@ -397,6 +504,11 @@ export default function SettingScreen() {
                     accessibility.selected_background_color.darkerPrimaryColor,
                 },
               ]}
+              textColor={
+                accessibility.selected_font_color != "#d4b3b3"
+                  ? accessibility.selected_font_color
+                  : null
+              }
             >
               Reset settings
             </Button>

@@ -26,7 +26,18 @@ const CustomDropdownWithSelectorFromParent = ({
   const renderItem = (item) => {
     return (
       <View style={styles.item}>
-        <Text style={styles.textItem}>{item.label}</Text>
+        <Text
+          style={[
+            styles.textItem,
+            accessibility.selected_font_color != "#d4b3b3"
+              ? {
+                  color: accessibility.selected_font_color,
+                }
+              : null,
+          ]}
+        >
+          {item.label}
+        </Text>
         {item.value === selectedItem?.value && (
           <Ionicons
             style={styles.icon}
@@ -42,25 +53,55 @@ const CustomDropdownWithSelectorFromParent = ({
   return (
     <View
       style={[
-        tw`flex flex-row items-center justify-center content-center rounded-lg mt-10 p-4 text-white shadow-2xl`,
+        tw`flex flex-row items-center justify-center content-center rounded-lg mt-10 p-4 shadow-2xl`,
         {
           backgroundColor:
             accessibility.selected_background_color.secondaryColor,
         },
+        accessibility.selected_font_color != "#d4b3b3"
+          ? {
+              color: accessibility.selected_font_color,
+            }
+          : tw`text-white`,
       ]}
     >
       <Dropdown
         dropdownPosition="auto"
         showsVerticalScrollIndicator={true}
         style={(styles.dropdown, tw`w-8/10 my-4 mr-0 h-2/30 `)}
-        placeholderStyle={given_style ? given_style : tw`text-white`}
-        selectedTextStyle={tw`text-white`}
-        inputSearchStyle={styles.inputSearchStyle}
+        placeholderStyle={
+          given_style
+            ? given_style
+            : accessibility.selected_font_color != "#d4b3b3"
+            ? {
+                color: accessibility.selected_font_color,
+              }
+            : tw`text-white`
+        }
+        selectedTextStyle={
+          accessibility.selected_font_color != "#d4b3b3"
+            ? {
+                color: accessibility.selected_font_color,
+              }
+            : tw`text-white`
+        }
+        inputSearchStyle={[
+          styles.inputSearchStyle,
+          accessibility.selected_font_color != "#d4b3b3"
+            ? {
+                color: accessibility.selected_font_color,
+              }
+            : null,
+        ]}
         iconStyle={styles.iconStyle}
         data={data}
         search
         searchField="label"
-        iconColor="white"
+        iconColor={
+          accessibility.selected_font_color != "#d4b3b3"
+            ? accessibility.selected_font_color
+            : "white"
+        }
         autoScroll={false}
         maxHeight={300}
         labelField="label"
@@ -71,8 +112,19 @@ const CustomDropdownWithSelectorFromParent = ({
         onChange={(item) => handleSelectionLocal(item)}
         renderLeftIcon={() => (
           <Ionicons
-            style={styles.icon}
-            color="white"
+            style={[
+              styles.icon,
+              accessibility.selected_font_color != "#d4b3b3"
+                ? {
+                    color: accessibility.selected_font_color,
+                  }
+                : null,
+            ]}
+            color={
+              accessibility.selected_font_color != "#d4b3b3"
+                ? accessibility.selected_font_color
+                : "white"
+            }
             name="location"
             size={20}
           />
@@ -80,7 +132,14 @@ const CustomDropdownWithSelectorFromParent = ({
         renderItem={renderItem}
       />
       <View style={tw`flex-1 items-center justify-center `}>
-        <Button textColor="white" onPress={handleClearLocal}>
+        <Button
+          textColor={
+            accessibility.selected_font_color != "#d4b3b3"
+              ? accessibility.selected_font_color
+              : "white"
+          }
+          onPress={handleClearLocal}
+        >
           Clear
         </Button>
       </View>
