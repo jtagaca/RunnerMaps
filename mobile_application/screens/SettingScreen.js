@@ -26,7 +26,10 @@ export default function SettingScreen() {
     useState(false);
   const [modalVisibleFontColor, setmodalVisibleFontColor] = useState(false);
   const [modalVisibleFontSize, setmodalVisibleFontSize] = useState(false);
-  const [font_size, setFontSize] = useState("default");
+  const [font_size, setFontSize] = useState({
+    label: "18",
+    value: 18,
+  });
 
   const accessibility = useSelector((state) => state.accessibility);
   const [background_color, setbackgroundColor] = useState({
@@ -38,20 +41,17 @@ export default function SettingScreen() {
   const [font_color, setfontColor] = useState("#d4b3b3");
   const dispatch = useDispatch();
   const available_font_sizes = [
-    { label: "10", value: 10 },
-    { label: "12", value: 12 },
-    { label: "14", value: 14 },
-    { label: "16", value: 16 },
-    { label: "18", value: 18 },
-    { label: "20", value: 20 },
-    { label: "22", value: 22 },
-    { label: "24", value: 24 },
-    { label: "26", value: 26 },
-    { label: "28", value: 28 },
-    { label: "30", value: 30 },
-    { label: "32", value: 32 },
-    { label: "34", value: 34 },
-    { label: "36", value: 36 },
+    { label: "small", value: 10 },
+    { label: "default", value: 18 },
+    { label: "medium", value: 20 },
+    { label: "large", value: 25 },
+    // { label: "24", value: 24 },
+    // { label: "26", value: 26 },
+    // { label: "28", value: 28 },
+    // { label: "30", value: 30 },
+    // { label: "32", value: 32 },
+    // { label: "34", value: 34 },
+    // { label: "36", value: 36 },
   ];
 
   useEffect(() => {
@@ -103,7 +103,10 @@ export default function SettingScreen() {
   const handleResetSettings = () => {
     dispatch(accessibility_actions.resetSettings());
     setIndoorNavigationResultVoiceEnabled(false);
-    setFontSize("default");
+    setFontSize({
+      label: "18",
+      value: 18,
+    });
     setbackgroundColor({
       primaryColor: "#fefce8",
       secondaryColor: "#003594",
@@ -149,7 +152,7 @@ export default function SettingScreen() {
             </TouchableOpacity>
             <Text
               style={[
-                tw`text-xl`,
+                { fontSize: parseInt(accessibility.selected_font_size, 10) },
                 accessibility.selected_font_color != "#d4b3b3"
                   ? {
                       color: accessibility.selected_font_color,
@@ -161,7 +164,7 @@ export default function SettingScreen() {
             </Text>
             <Text
               style={[
-                tw`text-xl`,
+                { fontSize: parseInt(accessibility.selected_font_size, 10) },
                 accessibility.selected_font_color != "#d4b3b3"
                   ? {
                       color: accessibility.selected_font_color,
@@ -188,7 +191,7 @@ export default function SettingScreen() {
             />
             <Text
               style={[
-                tw`text-xl`,
+                { fontSize: parseInt(accessibility.selected_font_size, 10) },
                 accessibility.selected_font_color != "#d4b3b3"
                   ? {
                       color: accessibility.selected_font_color,
@@ -234,7 +237,7 @@ export default function SettingScreen() {
             </TouchableOpacity>
             <Text
               style={[
-                tw`text-xl`,
+                { fontSize: parseInt(accessibility.selected_font_size, 10) },
                 accessibility.selected_font_color != "#d4b3b3"
                   ? {
                       color: accessibility.selected_font_color,
@@ -277,7 +280,7 @@ export default function SettingScreen() {
             </TouchableOpacity>
             <Text
               style={[
-                tw`text-xl`,
+                { fontSize: parseInt(accessibility.selected_font_size, 10) },
                 accessibility.selected_font_color != "#d4b3b3"
                   ? {
                       color: accessibility.selected_font_color,
@@ -321,7 +324,7 @@ export default function SettingScreen() {
             </TouchableOpacity>
             <Text
               style={[
-                tw`text-xl`,
+                { fontSize: parseInt(accessibility.selected_font_size, 10) },
                 accessibility.selected_font_color != "#d4b3b3"
                   ? {
                       color: accessibility.selected_font_color,
@@ -332,20 +335,27 @@ export default function SettingScreen() {
               Font Size
             </Text>
             <View style={tw`my-10`}>
-              <Text
-                style={[
-                  font_size === "default"
-                    ? tw`text-lg`
-                    : { fontSize: parseInt(font_size.value, 10) },
-                  accessibility.selected_font_color != "#d4b3b3"
-                    ? {
-                        color: accessibility.selected_font_color,
-                      }
-                    : null,
-                ]}
-              >
-                "Example of font"
-              </Text>
+              <View style={tw`my-3`}>
+                <Text
+                  style={[
+                    tw`text-center`,
+                    { fontSize: parseInt(font_size.value, 10) },
+                    accessibility.selected_font_color != "#d4b3b3"
+                      ? {
+                          color: accessibility.selected_font_color,
+                        }
+                      : { color: "black" }, // Replace "black" with your desired fallback color
+                  ]}
+                >
+                  "Example of font"
+                </Text>
+              </View>
+              <View style={tw`my-3`}>
+                <Text>
+                  Some text will not grow to the requested size due to mobile
+                  screen limitations
+                </Text>
+              </View>
             </View>
             <View
               style={[
@@ -405,7 +415,8 @@ export default function SettingScreen() {
             <View style={tw`my-3`}>
               <Text
                 style={[
-                  tw`text-lg text-center`,
+                  tw` text-center`,
+                  { fontSize: parseInt(accessibility.selected_font_size, 10) },
                   accessibility.selected_font_color != "#d4b3b3"
                     ? {
                         color: accessibility.selected_font_color,
@@ -448,6 +459,9 @@ export default function SettingScreen() {
                   ? accessibility.selected_font_color
                   : null
               }
+              labelStyle={{
+                fontSize: parseInt(accessibility.selected_font_size - 4, 10),
+              }}
               onPress={changeModalVisibleBackgroundColor}
             >
               Change Background Color
@@ -469,6 +483,9 @@ export default function SettingScreen() {
                   ? accessibility.selected_font_color
                   : null
               }
+              labelStyle={{
+                fontSize: parseInt(accessibility.selected_font_size - 4, 10),
+              }}
             >
               Change Text Color
             </Button>
@@ -489,6 +506,9 @@ export default function SettingScreen() {
                   ? accessibility.selected_font_color
                   : null
               }
+              labelStyle={{
+                fontSize: parseInt(accessibility.selected_font_size - 4, 10),
+              }}
             >
               Change Font Size
             </Button>
@@ -509,6 +529,9 @@ export default function SettingScreen() {
                   ? accessibility.selected_font_color
                   : null
               }
+              labelStyle={{
+                fontSize: parseInt(accessibility.selected_font_size - 4, 10),
+              }}
             >
               Reset settings
             </Button>

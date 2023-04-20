@@ -163,7 +163,7 @@ const accessibility_slice = createSlice({
       darkerPrimaryColor: "#fde047",
     },
     selected_font_color: "#d4b3b3",
-    selected_font_size: "default",
+    selected_font_size: 18,
   },
   reducers: {
     setVoiceEnabled: (state, action) => {
@@ -186,7 +186,7 @@ const accessibility_slice = createSlice({
         darkerPrimaryColor: "#fde047",
       };
       state.selected_font_color = "#d4b3b3";
-      state.selected_font_size = "default";
+      state.selected_font_size = 18;
     },
   },
 });

@@ -712,19 +712,25 @@ export default function IndoorNavigation({ navigation }) {
         >
           <View style={tw`flex-col content-center justify-center flex-1`}>
             <View
-              style={tw`m-[20px] bg-white rounded-2xl p-10 items-center h-1/2 shadow-md flex-col justify-start`}
+              style={tw`m-[20px] bg-white rounded-2xl p-10 items-center h-6/10 shadow-md flex-col justify-start`}
             >
               {isStartAndDestinationOnDifferentFloors == true ? (
                 <>
                   <View style={tw`w-full my-3`}>
                     <Text
                       style={[
-                        tw`text-lg text-left`,
+                        tw`text-left`,
                         accessibility.selected_font_color != "#d4b3b3"
                           ? {
                               color: accessibility.selected_font_color,
                             }
                           : null,
+                        {
+                          fontSize: parseInt(
+                            accessibility.selected_font_size,
+                            10
+                          ),
+                        },
                       ]}
                     >
                       Your start location and destination location are on
@@ -734,12 +740,18 @@ export default function IndoorNavigation({ navigation }) {
                   <View style={tw`w-full my-3`}>
                     <Text
                       style={[
-                        tw`text-lg text-left`,
+                        tw`text-left`,
                         accessibility.selected_font_color != "#d4b3b3"
                           ? {
                               color: accessibility.selected_font_color,
                             }
                           : null,
+                        {
+                          fontSize: parseInt(
+                            accessibility.selected_font_size,
+                            10
+                          ),
+                        },
                       ]}
                     >
                       Choose your preferred method
@@ -843,7 +855,17 @@ export default function IndoorNavigation({ navigation }) {
                     },
                   ]}
                 >
-                  <Text style={tw`text-center text-lg`}>
+                  <Text
+                    style={[
+                      tw`text-center `,
+                      {
+                        fontSize: parseInt(
+                          accessibility.selected_font_size,
+                          10
+                        ),
+                      },
+                    ]}
+                  >
                     Closest location near you
                   </Text>
                   {is_find_loading ? (
@@ -856,7 +878,17 @@ export default function IndoorNavigation({ navigation }) {
                       style={tw`self-center`} // Center the activity indicator
                     />
                   ) : (
-                    <Text style={tw`text-center text-lg`}>
+                    <Text
+                      style={[
+                        tw`text-center `,
+                        {
+                          fontSize: parseInt(
+                            accessibility.selected_font_size,
+                            10
+                          ),
+                        },
+                      ]}
+                    >
                       {closest_location_near_user &&
                         formatTitleForIndoorNavigationHome(
                           closest_location_near_user
@@ -937,7 +969,8 @@ export default function IndoorNavigation({ navigation }) {
             <View style={tw`flex-col flex-1 my-3`}>
               <Text
                 style={[
-                  tw`px-1 py-2 my-1 text-lg font-bold text-left rounded-md shadow-md w-5/10`,
+                  tw`px-1 py-2 my-1 font-bold text-left rounded-md shadow-md w-5/10`,
+                  { fontSize: parseInt(accessibility.selected_font_size, 10) },
                   {
                     backgroundColor:
                       accessibility.selected_background_color
@@ -984,6 +1017,9 @@ export default function IndoorNavigation({ navigation }) {
                         color: accessibility.selected_font_color,
                       }
                     : null,
+                  {
+                    fontSize: accessibility.selected_font_size,
+                  },
                 ]}
               >
                 Start Location:
@@ -1055,7 +1091,7 @@ export default function IndoorNavigation({ navigation }) {
             <View style={tw`flex-col flex-1 my-3`}>
               <Text
                 style={[
-                  tw`px-1 py-2 my-1 text-lg font-bold text-left rounded-md shadow-md w-6/10`,
+                  tw`px-1 py-2 my-1 font-bold text-left rounded-md shadow-md w-6/10`,
                   {
                     backgroundColor:
                       accessibility.selected_background_color
@@ -1066,6 +1102,7 @@ export default function IndoorNavigation({ navigation }) {
                         color: accessibility.selected_font_color,
                       }
                     : null,
+                  { fontSize: parseInt(accessibility.selected_font_size, 10) },
                 ]}
               >
                 Destination Location:

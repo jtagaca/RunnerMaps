@@ -38,6 +38,7 @@ export default function CardComponent({ card, index, sorted_shortest_path }) {
                     color: accessibility.selected_font_color,
                   }
                 : null,
+              { fontSize: parseInt(accessibility.selected_font_size, 10) },
             ]}
           >
             {textContent}
@@ -61,6 +62,7 @@ export default function CardComponent({ card, index, sorted_shortest_path }) {
                         color: accessibility.selected_font_color,
                       }
                     : null,
+                  { fontSize: parseInt(accessibility.selected_font_size, 10) },
                 ]}
               >
                 {hasNoImageTextContent}
