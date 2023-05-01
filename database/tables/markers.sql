@@ -14,3 +14,4 @@ CREATE TABLE `markers` ( -- complained about not being on the same line
         CONSTRAINT `foreign_key_of_markers_to_floors` FOREIGN KEY (`floorID`) REFERENCES `floors` (`floorID`) 
         -- ON DELETE NO ACTION ON UPDATE NO ACTION
     ); -- was missing semi-colon
+
