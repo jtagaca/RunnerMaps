@@ -1,4 +1,4 @@
-CREATE TABLE `wall` (
+CREATE TABLE `walls` (
   `floorID` int(11) NOT NULL,
   `row` varchar(45) DEFAULT NULL,
   `col` varchar(45) DEFAULT NULL,

@@ -1,3 +1,7 @@
+
+/php/config/
+
+# git restore --staged php/config/*
 node_modules/
 .expo/
 dist/
@@ -12,3 +16,4 @@ web-build/
 backend/config.php
 # macOS
 .DS_Store
+
