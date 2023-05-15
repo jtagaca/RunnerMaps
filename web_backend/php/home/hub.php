@@ -15,7 +15,8 @@ require_once("../auth/logout.php");
 
     <body>
         <div>
-            <a href="../auth/login_page.php"><img src="../images/csub.png" alt="school logo" height="50px" style="display: inline;"></a>
+            <a href="../auth/login_page.php"><img src="../images/csub.png" 
+            alt="school logo" height="50px" style="display: inline;"></a>
             <h1 style="display: inline; margin: 30px 5px">Campus Map Hub</h1>
         </div>
         
@@ -25,12 +26,12 @@ require_once("../auth/logout.php");
         </h2>
 
         <h2>
-        <a href="../map/delete_page.php"> View/Delete a Map </a>
+        <a href="../map/delete_page.php"> View Maps </a>
         </h2>
     
 
         <h2>
-            <a href="../category/delete_page.php"> View/Delete an Indoor Location </a>
+            <a href="../category/delete_page.php"> View Indoor Locations </a>
         </h2>
         
 
