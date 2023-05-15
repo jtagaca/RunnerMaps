@@ -1,6 +1,7 @@
 <?php
 session_start();
 require_once("../settings/settings_func.php");
+require_once("../settings/style_sheet.php");
 
 // log in form
 if (isset($_SESSION["authorized"])) {

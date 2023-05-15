@@ -1,7 +1,6 @@
 <?php
 session_start();
 require_once("../auth/logout.php");
-// require_once("../settings/style_sheet.php");
 
 
 if (isset($_SESSION["error"])) {
@@ -11,7 +10,6 @@ if (isset($_SESSION["success_message"])) {
     $success_message = $_SESSION["success_message"];
 }
 
-// echo $_SESSION["authorized"];
 
 ?>
 <!DOCTYPE html>
@@ -31,7 +29,8 @@ if (isset($_SESSION["success_message"])) {
         <br><br>
 
         <div>
-            <a href="../auth/login_page.php"><img src="../images/csub.png" alt="school logo" height="50px" style="display: inline;"></a>
+            <a href="../auth/login_page.php"><img src="../images/csub.png" 
+                alt="school logo" height="50px" style="display: inline;"></a>
             <h1 style="display: inline; margin: 30px 5px">Campus Map</h1>
         </div>
         <h2>User Settings</h2>
@@ -39,17 +38,23 @@ if (isset($_SESSION["success_message"])) {
         <form action="settings_ops.php" method="POST">
 
             Font Size:
-            <input type="number" name="fontSize" value="<?=$_SESSION['fontSize'];?>"><br><br>
+            <input type="number" name="fontSize" 
+                                value="<?=$_SESSION['fontSize'];?>"><br><br>
             Font Color:
-            <input type="color" name="fontColor" value="<?=$_SESSION['fontColor'];?>"><br><br>
+            <input type="color" name="fontColor" 
+                                value="<?=$_SESSION['fontColor'];?>"><br><br>
             Background Color:
-            <input type="color" name="backgroundColor" value="<?=$_SESSION['backgroundColor'];?>"><br><br>
+            <input type="color" name="backgroundColor" 
+                            value="<?=$_SESSION['backgroundColor'];?>"><br><br>
             Border Color:
-            <input type="color" name="borderColor" value="<?=$_SESSION['borderColor'];?>"><br><br>
+            <input type="color" name="borderColor" 
+                                value="<?=$_SESSION['borderColor'];?>"><br><br>
             
 
-            <input style="background-color: #78AD9E;" type="submit" name="updateSettings" value="Update Settings"> 
-            <input style="background-color: lightpink;" type="submit" name="restoreSettings" value="Restore to Default Settings">
+            <input style="background-color: #78AD9E;" 
+                    type="submit" name="updateSettings" value="Update Settings"> 
+            <input style="background-color: lightpink;" type="submit" 
+                    name="restoreSettings" value="Restore to Default Settings">
         </form>
     
         <br><br>

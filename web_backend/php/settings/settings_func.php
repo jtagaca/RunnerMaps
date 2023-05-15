@@ -12,8 +12,11 @@ function initializeSettings($userID) {
     echo "in settings func";
 
     $db = get_connection();
-    $command = $db->prepare("insert into settings (`userID`, `fontSize`, `fontColor`, `backgroundColor`, `borderColor`) values (?, ?, ?, ?, ?)");
-    $command->bind_param('issss', $userID, $fontSize, $fontColor, $backgroundColor, $borderColor);
+    $command = $db->prepare("insert into settings (`userID`, `fontSize`, 
+                                    `fontColor`, `backgroundColor`, 
+                                    `borderColor`) values (?, ?, ?, ?, ?)");
+    $command->bind_param('issss', $userID, $fontSize, $fontColor, 
+                                            $backgroundColor, $borderColor);
     
     if (!$command->execute()) {
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
@@ -23,10 +26,14 @@ function initializeSettings($userID) {
     return;
 }
 
-function updateSettings($userID, $fontSize, $fontColor, $backgroundColor, $borderColor) {
+function updateSettings($userID, $fontSize, $fontColor, 
+                                            $backgroundColor, $borderColor) {
     $db = get_connection();
-    $command = $db->prepare("update settings set `fontSize` = ?, `fontColor` = ?, `backgroundColor` = ?, `borderColor` = ? where userID = ?");
-    $command->bind_param('ssssi', $fontSize, $fontColor, $backgroundColor, $borderColor, $userID);
+    $command = $db->prepare("update settings set `fontSize` = ?, 
+                                    `fontColor` = ?, `backgroundColor` = ?, 
+                                        `borderColor` = ? where userID = ?");
+    $command->bind_param('ssssi', $fontSize, $fontColor, $backgroundColor, 
+                                                        $borderColor, $userID);
 
     if (!$command->execute()) {
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");

@@ -22,7 +22,8 @@ if (isset($_POST["updateSettings"])) {
         echo "<div style='color: red'>$error</div>";
     }
 
-    updateSettings($userID, $fontSize, $fontColor, $backgroundColor, $borderColor);
+    updateSettings($userID, $fontSize, $fontColor, 
+                                                $backgroundColor, $borderColor);
 
     $settings = array(
         "fontSize" => $fontSize,
@@ -40,12 +41,17 @@ if (isset($_POST["restoreSettings"])) {
 
     $userID = $_SESSION["userID"];
     
+    // default colors: light blue background, dark blue fonts, green border
     $fontSize = "16";
-    $fontColor = "#000000";
-    $backgroundColor = "#FFFFFF";
-    $borderColor = "grey";
+    $fontColor = "#0A0462";
+    $backgroundColor = "#DDFDFC";
+    $borderColor = "#1A5615";
+    // $fontColor = "#000000";
+    // $backgroundColor = "#FFFFFF";
+    // $borderColor = "grey";
 
-    updateSettings($userID, $fontSize, $fontColor, $backgroundColor, $borderColor);
+    updateSettings($userID, $fontSize, $fontColor, 
+                                                $backgroundColor, $borderColor);
 
     $settings = array(
         "fontSize" => $fontSize,
