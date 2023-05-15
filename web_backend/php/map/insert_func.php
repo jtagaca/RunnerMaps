@@ -5,7 +5,8 @@ require_once("../config/config.php");
 
 function doesBuildingAlreadyExist($buildingName) {
     $db = get_connection();
-    $command = $db->prepare("SELECT buildingID FROM `buildings` WHERE buildingName = ?");
+    $command = $db->prepare("SELECT buildingID FROM `buildings` 
+                                                    WHERE buildingName = ?");
     $command->bind_param('s', $buildingName);
 
     if (!$command->execute()) {
@@ -23,12 +24,14 @@ function doesBuildingAlreadyExist($buildingName) {
 
 }
 
+
 function doesFloorAlreadyExist($buildingName, $floorNumber) {
 
     $buildingID = getBuildingID($buildingName);
 
     $db = get_connection();
-    $command = $db->prepare("SELECT floorID FROM `floors` WHERE buildingID = ? AND floorNumber = ?");
+    $command = $db->prepare("SELECT floorID FROM `floors` WHERE buildingID = ? 
+                                                        AND floorNumber = ?");
     $command->bind_param('ii', $buildingID, $floorNumber);
 
     if (!$command->execute()) {
@@ -48,7 +51,8 @@ function doesFloorAlreadyExist($buildingName, $floorNumber) {
 
 function getBuildingID($buildingName) {
     $db = get_connection();
-    $command = $db->prepare("SELECT buildingID FROM `buildings` WHERE buildingName = ?");
+    $command = $db->prepare("SELECT buildingID FROM `buildings` 
+                                                WHERE buildingName = ?");
     $command->bind_param('s', $buildingName);
 
     if (!$command->execute()) {
@@ -68,7 +72,8 @@ function getFloorID($buildingName, $floorNumber) {
     $buildingID = getBuildingID($buildingName);
 
     $db = get_connection();
-    $command = $db->prepare("SELECT floorID FROM `floors` WHERE buildingID = ? AND floorNumber = ?");
+    $command = $db->prepare("SELECT floorID FROM `floors` WHERE buildingID = ? 
+                                                        AND floorNumber = ?");
     $command->bind_param('ii', $buildingID, $floorNumber);
 
     if (!$command->execute()) {
@@ -86,7 +91,8 @@ function getFloorID($buildingName, $floorNumber) {
 function insertIntoBuildings($buildingName, $mapURL, $geoLocation) {
     $db = get_connection();
 
-    $command = $db->prepare("INSERT INTO buildings (`buildingName`, `mapURL`, `geolocation`) VALUES (?, ?, ?)");
+    $command = $db->prepare("INSERT INTO buildings 
+                (`buildingName`, `mapURL`, `geolocation`) VALUES (?, ?, ?)");
 
     $command->bind_param('sss', $buildingName, $mapURL, $geoLocation);
 
@@ -94,54 +100,69 @@ function insertIntoBuildings($buildingName, $mapURL, $geoLocation) {
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
     }
     else {
-        $_SESSION["success_message"] = "Successfully inserted building: $buildingName <br>";
+        $_SESSION["success_message"] = "Successfully inserted building: " .
+                                                        "$buildingName <br>";
     }
 }
 
 
-function insertIntoFloors($buildingName, $floorNumber, $gridColumnLength, $gridRowLength) {
+function insertIntoFloors($buildingName, $floorNumber, $gridColumnLength, 
+                                                            $gridRowLength) {
     
     $returnedBuildingID = getBuildingID($buildingName, $floorNumber);
 
     $db = get_connection();
-    $command = $db->prepare("INSERT INTO floors (`buildingID`, `floorNumber`, `gridColumnLength`, `gridRowLength`) VALUES (?, ?, ?, ?)");
-    $command->bind_param('iiss', $returnedBuildingID, $floorNumber, $gridColumnLength, $gridRowLength);
+    $command = $db->prepare("INSERT INTO floors 
+            (`buildingID`, `floorNumber`, `gridColumnLength`, `gridRowLength`) 
+                                                        VALUES (?, ?, ?, ?)");
+    $command->bind_param('iiss', $returnedBuildingID, $floorNumber, 
+                                            $gridColumnLength, $gridRowLength);
 
     if (!$command->execute()) {
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
     }
     else {
-        $_SESSION["success_message"] .= "Successfully inserted floor number $floorNumber for building $buildingName <br>";
+        $_SESSION["success_message"] .= "Successfully inserted floor " . 
+                        "number $floorNumber for building $buildingName <br>";
     }
 }
 
 
-function insertIntoIndoorLocations($floorID, $row, $col, $image, $latitude, $longitude, $name, $description) {
+function insertIntoIndoorLocations($floorID, $row, $col, $image, 
+                                $latitude, $longitude, $name, $description) {
     
     $db = get_connection();
-    $command = $db->prepare("INSERT INTO indoor_locations (`floorID`, `row`, `col`, `image`, `latitude`, `longitude`, `name`, `description`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-    $command->bind_param('isssddss', $floorID, $row, $col, $image, $latitude, $longitude, $name, $description);
+    $command = $db->prepare("INSERT INTO indoor_locations 
+            (`floorID`, `row`, `col`, `image`, `latitude`, `longitude`, 
+                    `name`, `description`) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+    $command->bind_param('isssddss', $floorID, $row, $col, $image, $latitude, 
+                                            $longitude, $name, $description);
 
     if (!$command->execute()) {
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
     }
     else {
-        $_SESSION["success_message"] .= "Successfully inserted indoor location: $name <br>";
+        $_SESSION["success_message"] .= "Successfully inserted indoor " . 
+                                                        "location: $name <br>";
     }
 }
 
 
-function insertIntoMarkers($floorID, $row, $col, $image, $latitude, $longitude) {
+function insertIntoMarkers($floorID, $row, $col, $image, $latitude, 
+                                                                $longitude) {
     
     $db = get_connection();
-    $command = $db->prepare("INSERT INTO markers (`floorID`, `row`, `col`, `image`, `latitude`, `longitude`) VALUES (?, ?, ?, ?, ?, ?)");
-    $command->bind_param('isssdd', $floorID, $row, $col, $image, $latitude, $longitude);
+    $command = $db->prepare("INSERT INTO markers (`floorID`, `row`, `col`, 
+                `image`, `latitude`, `longitude`) VALUES (?, ?, ?, ?, ?, ?)");
+    $command->bind_param('isssdd', $floorID, $row, $col, $image, 
+                                                        $latitude, $longitude);
 
     if (!$command->execute()) {
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
     }
     else {
-        $_SESSION["success_message"] .= "Successfully inserted markers at: $row, $col <br>";
+        $_SESSION["success_message"] .= "Successfully inserted markers " . 
+                                                        "at: $row, $col <br>";
     }
 }
 
@@ -149,14 +170,16 @@ function insertIntoMarkers($floorID, $row, $col, $image, $latitude, $longitude) 
 function insertIntoWalls($floorID, $row, $col) {
     
     $db = get_connection();
-    $command = $db->prepare("INSERT INTO walls (`floorID`, `row`, `col`) VALUES (?, ?, ?)");
+    $command = $db->prepare("INSERT INTO walls (`floorID`, `row`, `col`) 
+                                                            VALUES (?, ?, ?)");
     $command->bind_param('iss', $floorID, $row, $col);
 
     if (!$command->execute()) {
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
     }
     else {
-        $_SESSION["success_message"] .= "Successfully inserted walls at: $row, $col <br>";
+        $_SESSION["success_message"] .= "Successfully inserted walls " . 
+                                                        "at: $row, $col <br>";
     }
 }
 

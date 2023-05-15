@@ -1,7 +1,6 @@
 <?php
 session_start();
 require_once("delete_func.php");
-// require_once("../settings/style_sheet.php");
 require_once("../auth/logout.php");
 ?>
 
@@ -26,7 +25,8 @@ require_once("../auth/logout.php");
         <br><br>
 
         <div>
-            <a href="../auth/login_page.php"><img src="../images/csub.png" alt="school logo" height="50px" style="display: inline;"></a>
+            <a href="../auth/login_page.php"><img src="../images/csub.png" 
+                alt="school logo" height="50px" style="display: inline;"></a>
             <h1 style="display: inline; margin: 30px 5px">Campus Map</h1>
         </div>
         <h2>Delete Floor Plans</h2>

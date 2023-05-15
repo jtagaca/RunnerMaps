@@ -4,7 +4,8 @@ require_once("../config/config.php");
 
 function fetchFloorPlans() {
     $db = get_connection();
-    $command = $db->prepare("SELECT floorID, floorNumber, buildingName FROM floors NATURAL JOIN buildings ORDER BY buildingName, floorID;");
+    $command = $db->prepare("SELECT floorID, floorNumber, buildingName 
+        FROM floors NATURAL JOIN buildings ORDER BY buildingName, floorID;");
 
     if (!$command->execute()) {
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
@@ -17,7 +18,7 @@ function fetchFloorPlans() {
         $floorID = $row["floorID"];
         $buildingName = $row["buildingName"];
         $floorNumber = $row["floorNumber"];
-        // $floorPlans[$buildingName] []= $floorID;
+
         $floorPlans []= array(
             "floorID" => $floorID,
             "buildingName" => $buildingName, 
@@ -38,11 +39,10 @@ function printFloorPlan($floorPlan) {
     "
     <form class=deleteForms action=\"delete_ops.php\" method=\"POST\"> 
     <input type=\"hidden\" name=\"floorID\" value=\"$floorID\">
-    <input class=deleteButtons type=\"submit\" name=\"deleteFloorPlan\" value=\"Delete\">
+    <input class=deleteButtons type=\"submit\" name=\"deleteFloorPlan\" 
+    value=\"Delete\">
     </form>
     ";
-
-
 
     echo "<tr>";
     echo "<td>$buildingName</td>";
@@ -50,9 +50,6 @@ function printFloorPlan($floorPlan) {
     echo "<td>$deleteButton</td>";
     echo "</tr>";
 }
-
-// insert into buildings (`buildingID`, `buildingName`) VALUES ("4", "test");
-// insert into floors VALUES (4, 4, 4, 4, 4);
 
 function deleteIndoorLocations($floorID) {
     $db = get_connection();
@@ -78,7 +75,6 @@ function deleteMarkers($floorID) {
     return;
 }
 
-
 function deleteWalls($floorID) {
     $db = get_connection();
     $command = $db->prepare("DELETE FROM walls WHERE floorID = ?;");
@@ -90,7 +86,6 @@ function deleteWalls($floorID) {
     
     return;
 }
-
 
 function deleteFloorPlan($floorID) {
     deleteIndoorLocations($floorID);

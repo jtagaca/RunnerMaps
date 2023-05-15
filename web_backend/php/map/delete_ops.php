@@ -7,7 +7,7 @@ if (isset($_POST["deleteFloorPlan"])) {
 
     if (isset($_POST["floorID"])) {    
 
-        $floorID = $_POST["floorID"];
+        $floorID = htmlspecialchars($_POST["floorID"]);
         
         if (blankTest($floorID)) {
             deleteFloorPlan($floorID);

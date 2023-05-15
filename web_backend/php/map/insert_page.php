@@ -1,7 +1,6 @@
 <?php
 session_start();
 require_once("../auth/logout.php");
-// require_once("../settings/style_sheet.php");
 
 
 if (isset($_SESSION["error"])) {
@@ -11,7 +10,6 @@ if (isset($_SESSION["success_message"])) {
     $success_message = $_SESSION["success_message"];
 }
 
-// echo $_SESSION["authorized"];
 
 ?>
 
@@ -33,13 +31,17 @@ if (isset($_SESSION["success_message"])) {
         <br><br>
 
         <div>
-            <a href="../auth/login_page.php"><img src="../images/csub.png" alt="school logo" height="50px" style="display: inline;"></a>
+            <a href="../auth/login_page.php"><img src="../images/csub.png" 
+                alt="school logo" height="50px" style="display: inline;"></a>
             <h1 style="display: inline; margin: 30px 5px">Campus Map</h1>
         </div>
         <h2>Insert a Map</h2>
-        <!-- https://gomakethings.com/how-to-upload-and-process-a-json-file-with-vanilla-js/ -->
-        <!-- https://www.php.net/manual/en/features.file-upload.post-method.php -->
-        <form action="insert_ops.php" method="POST" enctype="multipart/form-data">
+        <!-- https://gomakethings.com/how-to-upload-and-
+                                    process-a-json-file-with-vanilla-js/ -->
+        <!-- https://www.php.net/manual/en/
+                                    features.file-upload.post-method.php -->
+        <form action="insert_ops.php" method="POST" 
+                                            enctype="multipart/form-data">
 
             <label for="buildingName">Building Name:</label> 
             <br>
@@ -54,6 +56,7 @@ if (isset($_SESSION["success_message"])) {
         
             <label for="jsonFile">Upload the JSON File</label>
             <br>
+            <!-- thought about limiting file size but didn't in the end -->
             <!-- <input type="hidden" name="MAX_FILE_SIZE" value="30000"> -->
             <input type="file" name="jsonFile" accept=".json">
             <br><br><br>
