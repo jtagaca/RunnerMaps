@@ -2,6 +2,7 @@
 session_start();
 require_once("../settings/settings_func.php");
 
+// log in form
 if (isset($_SESSION["authorized"])) {
     if ($_SESSION["authorized"] === true) {
         header("Location: ../home/hub.php");

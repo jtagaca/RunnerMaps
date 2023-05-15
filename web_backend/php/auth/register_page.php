@@ -23,22 +23,28 @@ if (isset($_SESSION["success_message"])) {
 
     <body>
         <div>
-        <a href="../auth/login_page.php"><img src="../images/csub.png" alt="school logo" height="50px" style="display: inline;">
+        <a href="../auth/login_page.php"><img src="../images/csub.png" 
+                    alt="school logo" height="50px" style="display: inline;">
             <h1 style="display: inline; margin: 30px 5px">Campus Map</h1></a>
         </div>
         <h2>Register</h2>
         
         <form action="register_ops.php" method="POST">
             <p>Registration Code:</p>
-            <input type="text" name="registrationCode" value="<?=$_SESSION["registrationCode"]?>" placeholder="Registration Code"> 
+            <input type="text" name="registrationCode" 
+                        value="<?=$_SESSION["registrationCode"]?>" 
+                                                placeholder="Registration Code"> 
             <br><br>
             <p>Email Address:</p>
-            <input type="text" name="email" value="<?=$_SESSION["registerEmail"]?>" placeholder="someone@example.com">
-            <!-- <input type="text" name="email_username" placeholder="someone"> <span>@</span>
-            <input type="text" name="email_domain" placeholder="example.com"> -->
+            <input type="text" name="email" 
+                    value="<?=$_SESSION["registerEmail"]?>" 
+                                            placeholder="someone@example.com">
+                                            
             <br><br>
             <p>Choose a Username</p>
-            <input type="text" name="username" value="<?=$_SESSION["registerUsername"]?>" placeholder="username"> 
+            <input type="text" name="username" 
+                    value="<?=$_SESSION["registerUsername"]?>" 
+                                                        placeholder="username"> 
             <br><br>
             <p>Choose a Password</p>
             <input type="password" name="password" placeholder="*****">

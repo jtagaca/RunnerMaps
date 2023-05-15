@@ -7,34 +7,8 @@ require_once("../settings/settings_func.php");
 $userExists = false;
 
 function login($username, $password) {    
-    /*
-        first validate on backend:
-        - blank submissions or not
-        - minimum length for username
-        - minimum length for password
-    */
-
-    /*
-        then validate via database the credentials:
-        1. prepare statements
-        2. bind param
-        3. execute
-        4. retrieve result
-        5. set session variables based on auth result
-    */
-
-    /*
-        then handle the post submissions 
-        - success = jump to home
-        - failure = display error message
-    */
-
-    /*
-        perhaps having 3 wrong attempts in a row:
-        - could highlight "reset password" link
-    */
-
-
+  
+    // check if username exists
     $db = get_connection();
     $hashed = password_hash($password, PASSWORD_DEFAULT);
 
@@ -62,8 +36,7 @@ function login($username, $password) {
     }
 
 
-
-
+    // if account exists, try logging in
     if ($userExists) {
 
         $command = $db->prepare("SELECT * FROM users WHERE username = ?");
@@ -82,13 +55,7 @@ function login($username, $password) {
         else {
             $fetchedResult = $command->get_result();
 
-
             if ($row = $fetchedResult->fetch_assoc()) {
-
-                // if (is_null($row)) {
-                //     $_SESSION["error"] = "User not found. <br>";
-                //     header("Location: login_page.php");
-                // }
 
                 $retrievedPassword = $row["password"];
                 $userID = $row["userID"];
@@ -96,15 +63,12 @@ function login($username, $password) {
                 $userEmail = $row["email"];
                 $deptID = $row["departmentID"];
             }
-            // else {
-            //     $_SESSION["error"] = "Query Failed. <br>";
-            //     header("Location: login_page.php");
-            // }
 
             $validLogIn = password_verify($password, $retrievedPassword);
-
+            
+            // if login is valid, set session variables 
+            // and retrieve user preferences
             if ($validLogIn) {
-
                 $_SESSION["success_message"] = "Login Successful <br>";
 
                 $_SESSION["authorized"] = true;
@@ -116,9 +80,6 @@ function login($username, $password) {
 
                 $settings = fetchSettings($userID);
                 $_SESSION["style"] = $settings;
-                
-                // header("Location: ../home/hub.php");
-
             }
             else {
                 $_SESSION["error"] = "No matching combination of username & password found";    
@@ -133,8 +94,8 @@ if (isset($_POST["login"])) {
 
     if (isset($_POST["username"]) && isset($_POST["password"])) {
 
-        $username = $_POST["username"];
-        $password = $_POST["password"];
+        $username = htmlspecialchars($_POST["username"]);
+        $password = htmlspecialchars($_POST["password"]);
 
         //for sticky form
         $_SESSION["loginUsername"] = $username;

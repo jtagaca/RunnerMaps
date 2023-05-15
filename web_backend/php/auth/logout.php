@@ -1,11 +1,7 @@
 <?php
 require_once("../settings/style_sheet.php");
 
-// if (isset($_SESSION["authorized"])) {
-//     if ($_SESSION["authorized"] === true) {
-//         header("Location: ../home/hub.php");
-//     }
-// }
+// unset variables upon logging out
 if (isset($_POST["logout"])) {
     $_SESSION["authorized"] = false;
 
@@ -30,17 +26,14 @@ if (isset($_POST["logout"])) {
     unset($_SESSION);
 }
 
+// redirect users if they log out
 if (!$_SESSION["authorized"] || !isset($_SESSION["authorized"])) {
     header("Location: ../auth/login_page.php");
 }
 ?>
 
-
+<!-- the logout button -->
 <form action="<?=$_SERVER['PHP_SELF']?>" method="POST">
     <input class=logout type="submit" name="logout" value="Log Out">
 </form>
 
-<!-- <div>
-    <a href="../auth/login_page.php"><img src="../images/csub.png" alt="school logo" height="50px" style="display: inline;"></a>
-    <h1 style="display: inline; margin: 30px 5px">Campus Map</h1>
-</div> -->
