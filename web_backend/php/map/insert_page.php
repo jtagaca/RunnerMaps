@@ -32,7 +32,10 @@ if (isset($_SESSION["success_message"])) {
         </h3>
         <br><br>
 
-        <h1>Campus Map</h1>
+        <div>
+            <a href="../auth/login_page.php"><img src="../images/csub.png" alt="school logo" height="50px" style="display: inline;"></a>
+            <h1 style="display: inline; margin: 30px 5px">Campus Map</h1>
+        </div>
         <h2>Insert a Map</h2>
         <!-- https://gomakethings.com/how-to-upload-and-process-a-json-file-with-vanilla-js/ -->
         <!-- https://www.php.net/manual/en/features.file-upload.post-method.php -->

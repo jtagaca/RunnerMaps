@@ -25,7 +25,10 @@ require_once("../auth/logout.php");
         </h3>
         <br><br>
 
-        <h1>Campus Map</h1>
+        <div>
+            <a href="../auth/login_page.php"><img src="../images/csub.png" alt="school logo" height="50px" style="display: inline;"></a>
+            <h1 style="display: inline; margin: 30px 5px">Campus Map</h1>
+        </div>
         <h2>Delete Floor Plans</h2>
         
 

@@ -29,9 +29,11 @@ if (isset($_SESSION["success_message"])) {
     </head>
 
     <body>
-        <h1>Campus Map</h1>
+        <div>
+        <a href="../auth/login_page.php"><img src="../images/csub.png" alt="school logo" height="50px" style="display: inline;">
+            <h1 style="display: inline; margin: 30px 5px">Campus Map</h1></a>
+        </div>
         <h2>Log In</h2>
-        
         <form action="login_ops.php" method="POST">
             <p>Username</p>
             <input type="text" name="username" value="<?=$_SESSION["loginUsername"]?>" placeholder="username"> 

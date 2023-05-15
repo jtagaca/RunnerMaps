@@ -14,7 +14,11 @@ require_once("../auth/logout.php");
     </head>
 
     <body>
-        <h1>Campus Map Hub</h1>
+        <div>
+            <a href="../auth/login_page.php"><img src="../images/csub.png" alt="school logo" height="50px" style="display: inline;"></a>
+            <h1 style="display: inline; margin: 30px 5px">Campus Map Hub</h1>
+        </div>
+        
         
         <h2>
         <a href="../map/insert_page.php"> Insert a Map </a>

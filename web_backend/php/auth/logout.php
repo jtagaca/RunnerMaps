@@ -40,3 +40,7 @@ if (!$_SESSION["authorized"] || !isset($_SESSION["authorized"])) {
     <input class=logout type="submit" name="logout" value="Log Out">
 </form>
 
+<!-- <div>
+    <a href="../auth/login_page.php"><img src="../images/csub.png" alt="school logo" height="50px" style="display: inline;"></a>
+    <h1 style="display: inline; margin: 30px 5px">Campus Map</h1>
+</div> -->
