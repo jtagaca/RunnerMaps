@@ -9,7 +9,8 @@ function doesCategoryAlreadyExist($categoryName) {
     $categoryName = strtolower(htmlspecialchars($categoryName));
 
     $db = get_connection();
-    $command = $db->prepare("SELECT count(*) FROM `categories` WHERE services = ?");
+    $command = $db->prepare("SELECT count(*) FROM `categories` 
+                                                        WHERE services = ?");
     $command->bind_param('s', $categoryName);
 
     if (!$command->execute()) {
@@ -42,7 +43,8 @@ function insertIntoCategories($categoryName) {
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
     }
     else {
-        $_SESSION["success_message"] = "Successfully inserted category: $categoryName <br>";
+        $_SESSION["success_message"] = 
+                        "Successfully inserted category: $categoryName <br>";
     }
 }
 
@@ -80,17 +82,12 @@ function printCategoriesOptions() {
     echo "<select name=updatedCategory>";
 
     echo "<option value=\"\">Please Select A Category</option>";
-    echo "<option style=\"background-color:#F2C0BD;\" value=\"remove\">Remove Category</option>";
+    echo "<option style=\"background-color:#F2C0BD;\" value=\"remove\">
+                                                Remove Category</option>";
     
     foreach($categories as $category) {
-        // didn't end up needing the id
         
         $categoryName = $category["categoryName"];
-        // $categoryID = $category["categoryID"];
-
-        // if (!blankTest($categoryName) || !blankTest($categoryID)) {
-        //     return;
-        // }
 
         if (!blankTest($categoryName)) {
             return;
@@ -98,13 +95,6 @@ function printCategoriesOptions() {
 
         $categoryName = htmlspecialchars($categoryName);
         $categoryName = ucwords($categoryName);
-        // $categoryID = htmlspecialchars($categoryID);
-
-        // $realCategoryID = fetchCategoryID($categoryName);
-
-        // if ($categoryID != $realCategoryID) {
-        //     return false;
-        // }
 
         $categoryOption = 
         "
@@ -124,7 +114,8 @@ function fetchCategoryID($categoryName) {
     $categoryName = strtolower(htmlspecialchars($categoryName));
 
     $db = get_connection();
-    $command = $db->prepare("SELECT categoryID FROM categories WHERE services = ?;");
+    $command = $db->prepare("SELECT categoryID FROM categories 
+                                                        WHERE services = ?;");
     $command->bind_param('s', $categoryName);
 
 
@@ -148,7 +139,8 @@ function doesLocationExist($locationID) {
     
     $db = get_connection();
 
-    $command = $db->prepare("select count(*) from indoor_locations WHERE locationID = ?");
+    $command = $db->prepare("select count(*) from indoor_locations 
+                                                    WHERE locationID = ?");
 
     $command->bind_param('i', $locationID);
 
@@ -175,14 +167,16 @@ function updateCategories($locationID, $categoryName) {
         return;
     }
     if (!doesLocationExist($locationID)) {
-        $_SESSION["error"] = "location ID does not exist. please check again.<br>";
+        $_SESSION["error"] = 
+                        "location ID does not exist. please check again.<br>";
         return;
     }
 
     if ($categoryName == "remove") {
         $db = get_connection();
 
-        $command = $db->prepare("UPDATE indoor_locations SET categoryID = NULL WHERE locationID = ?");
+        $command = $db->prepare("UPDATE indoor_locations SET 
+                                    categoryID = NULL WHERE locationID = ?");
 
         $command->bind_param('i', $locationID);
 
@@ -190,7 +184,8 @@ function updateCategories($locationID, $categoryName) {
             $_SESSION["error"] = die(mysqli_error($db) . "<br>");
         }
         else {
-            $_SESSION["success_message"] = "Successfully removed the category for location #$locationID.<br>";
+            $_SESSION["success_message"] = 
+            "Successfully removed the category for location #$locationID.<br>";
         }
     }
 
@@ -205,7 +200,8 @@ function updateCategories($locationID, $categoryName) {
 
         $db = get_connection();
 
-        $command = $db->prepare("UPDATE indoor_locations SET categoryID = ? WHERE locationID = ?");
+        $command = $db->prepare("UPDATE indoor_locations SET categoryID = ? 
+                                                        WHERE locationID = ?");
 
         $command->bind_param('ii', $categoryID, $locationID);
 
@@ -213,7 +209,8 @@ function updateCategories($locationID, $categoryName) {
             $_SESSION["error"] = die(mysqli_error($db) . "<br>");
         }
         else {
-            $_SESSION["success_message"] = "Successfully updated category for location #$locationID to $categoryName<br>";
+            $_SESSION["success_message"] = "Successfully updated category " .
+                            "for location #$locationID to $categoryName<br>";
         }
     }
 }
@@ -236,7 +233,8 @@ function editCategoryName($old, $new) {
 
     $db = get_connection();
 
-    $command = $db->prepare("UPDATE categories SET services = ? WHERE categoryID = ?");
+    $command = $db->prepare("UPDATE categories SET services = ? 
+                                                        WHERE categoryID = ?");
 
     $command->bind_param('si', $new, $categoryID);
 
@@ -244,7 +242,9 @@ function editCategoryName($old, $new) {
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
     }
     else {
-        $_SESSION["success_message"] = "Successfully updated category name from $old to $new<br> This applies to ALL LOCATIONS that belong to this category";
+        $_SESSION["success_message"] = "Successfully updated category ".
+                    "name from $old to $new<br> This applies to ALL ".
+                                    "LOCATIONS that belong to this category";
     }
 }
 

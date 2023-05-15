@@ -3,9 +3,10 @@ session_start();
 require_once("insert_func.php");
 require_once("../auth/validation_functions.php");
 
+// handler to create category
 if (isset($_POST["addCategory"])) {
     if (isset($_POST["categoryName"])) {
-        $categoryName = $_POST["categoryName"];
+        $categoryName = htmlspecialchars($_POST["categoryName"]);
         
         if (blankTest($categoryName)) {
             $testFailed = doesCategoryAlreadyExist($categoryName);
@@ -21,18 +22,14 @@ if (isset($_POST["addCategory"])) {
     }
 }
 
-// else {
-//     echo "if form submission is invalid";
-//     $_SESSION["error"] = "please submit the form properly <br>";
-// }
-
+// handler to update a location's category
 if (isset($_POST["updateCategory"])) {
     if (isset($_POST["updatedCategory"])) {
         // https://html.form.guide/php-form/php-form-select/
 
         if (isset($_POST["locationID"])) {
-            $locationID = $_POST["locationID"];
-            $categoryName = $_POST["updatedCategory"];
+            $locationID = htmlspecialchars($_POST["locationID"]);
+            $categoryName = htmlspecialchars($_POST["updatedCategory"]);
 
             if (blankTest($locationID) && blankTest($categoryName)) {
                 updateCategories($locationID, $categoryName);
@@ -44,12 +41,12 @@ if (isset($_POST["updateCategory"])) {
     }
 }
 
-
+// handler to rename category
 if (isset($_POST["editCategoryName"])) {
     if (isset($_POST["oldCategoryName"]) && isset($_POST["newCategoryName"])) {
 
-        $oldCategoryName = $_POST["oldCategoryName"];
-        $newCategoryName = $_POST["newCategoryName"];
+        $oldCategoryName = htmlspecialchars($_POST["oldCategoryName"]);
+        $newCategoryName = htmlspecialchars($_POST["newCategoryName"]);
 
         if (blankTest($oldCategoryName) && blankTest($newCategoryName)) {
             editCategoryName($oldCategoryName, $newCategoryName);
@@ -60,12 +57,6 @@ if (isset($_POST["editCategoryName"])) {
     }
 }
     
-
-// else {
-//     echo "if form submission is invalid";
-//     $_SESSION["error"] = "please submit the form properly <br>";
-// }
-
 
 //redirecting the results back to the form page
 header("Location: insert_page.php");

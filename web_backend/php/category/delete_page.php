@@ -1,7 +1,6 @@
 <?php
 session_start();
 require_once("delete_func.php");
-// require_once("../settings/style_sheet.php");
 require_once("../auth/logout.php");
 ?>
 
@@ -26,21 +25,20 @@ require_once("../auth/logout.php");
         <br><br>
 
         <div>
-            <a href="../auth/login_page.php"><img src="../images/csub.png" alt="school logo" height="50px" style="display: inline;"></a>
+            <a href="../auth/login_page.php"><img src="../images/csub.png" 
+            alt="school logo" height="50px" style="display: inline;"></a>
             <h1 style="display: inline; margin: 30px 5px">Campus Map</h1>
         </div>
         <h2>Delete Indoor Locations</h2>
         
         <?php
+            // generate the tables
             $floorPlans = fetchFloorPlans();
-            // print_r($floorPlans);
+
             foreach ($floorPlans as $floorPlan) {
-                // print_r($floorPlan);
                 $floorID = $floorPlan["floorID"];
-                // echo $floorID;
 
                 $locations = fetchIndoorLocationsByFloorID($floorID);
-                // print_r($locations);
 
                 $buildingName = $floorPlan["buildingName"];
                 $floorNumber = $floorPlan["floorNumber"];

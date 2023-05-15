@@ -3,9 +3,12 @@ session_start();
 require_once("../config/config.php");
 require_once("../auth/validation_functions.php");
 
+// returns list of floor plans
 function fetchFloorPlans() {
     $db = get_connection();
-    $command = $db->prepare("SELECT floorID, floorNumber, buildingName FROM floors NATURAL JOIN buildings ORDER BY buildingName, floorID;");
+    $string = "SELECT floorID, floorNumber, buildingName FROM floors " .
+                    "NATURAL JOIN buildings ORDER BY buildingName, floorID;";
+    $command = $db->prepare($string);
 
     if (!$command->execute()) {
         $_SESSION["error"] = die(mysqli_error($db) . "<br>");
@@ -18,7 +21,7 @@ function fetchFloorPlans() {
         $floorID = $row["floorID"];
         $buildingName = $row["buildingName"];
         $floorNumber = $row["floorNumber"];
-        // $floorPlans[$buildingName] []= $floorID;
+
         $floorPlans []= array(
             "floorID" => $floorID,
             "buildingName" => $buildingName, 
@@ -29,15 +32,13 @@ function fetchFloorPlans() {
     return $floorPlans;
 }
 
-
+// returns a list of indoor locations belonging to the floor
 function fetchIndoorLocationsByFloorID($floorID) {
-    // echo $floorID;
-
     $db = get_connection();
-    // $command = $db->prepare("SELECT locationID, buildingName, floorNumber, i.name, services FROM indoor_locations as i NATURAL JOIN floors NATURAL JOIN buildings NATURAL JOIN categories WHERE floorID = ? ORDER BY buildingName, floorID, i.name;");
     $command = $db->prepare(
         "SELECT locationID, buildingName, floorNumber, i.name, services
-        FROM indoor_locations as i NATURAL JOIN floors NATURAL JOIN buildings LEFT JOIN categories 
+        FROM indoor_locations as i NATURAL JOIN floors 
+        NATURAL JOIN buildings LEFT JOIN categories 
         on categories.categoryID = i.categoryID
         WHERE floorID = ? ORDER BY buildingName, floorID, i.name;
     ");
@@ -51,14 +52,12 @@ function fetchIndoorLocationsByFloorID($floorID) {
 
     $locations = [];
     while ($row = $fetchedResult->fetch_assoc()) {
-        // print_r($row);
         $locationID = $row["locationID"];
         $buildingName = $row["buildingName"];
         $floorNumber = $row["floorNumber"];
         $locationName = $row["name"];
         $categoryName = $row["services"];
 
-        // $floorPlans[$buildingName] []= $floorID;
         $locations []= array(
             "locationID" => $locationID,
             "buildingName" => $buildingName, 
@@ -71,27 +70,22 @@ function fetchIndoorLocationsByFloorID($floorID) {
     return $locations;
 }
 
+// generates the table by floor
 function printIndoorLocations($location) {
-    // print_r($location);
     
     $locationID = htmlspecialchars($location["locationID"]);
-    // $buildingName = htmlspecialchars($location["buildingName"]);
-    // $floorNumber = htmlspecialchars($location["floorNumber"]);
     $locationName = htmlspecialchars($location["locationName"]);
     $categoryName = htmlspecialchars($location["categoryName"]);
     
     $locationName = ucwords($locationName);
     $categoryName = ucwords($categoryName);
 
-    // if (!blankTest($categoryName)) { 
-    //     $categoryName = "N/A";
-    // }
-
     $deleteButton = 
     "
     <form class=deleteForms action=\"delete_ops.php\" method=\"POST\"> 
     <input type=\"hidden\" name=\"locationID\" value=\"$locationID\">
-    <input class=deleteButtons type=\"submit\" name=\"deleteLocation\" value=\"Delete\">
+    <input class=deleteButtons type=\"submit\" name=\"deleteLocation\" 
+    value=\"Delete\">
     </form>
     ";
 
@@ -103,14 +97,11 @@ function printIndoorLocations($location) {
     echo "</tr>";
 }
 
-// insert into buildings (`buildingID`, `buildingName`) VALUES ("4", "test");
-// insert into floors VALUES (4, 4, 4, 4, 4);
-
-
 
 function deleteIndoorLocations($locationID) {
     $db = get_connection();
-    $command = $db->prepare("DELETE FROM indoor_locations WHERE locationID = ?;");
+    $command = $db->prepare("DELETE FROM indoor_locations 
+                                                WHERE locationID = ?;");
     $command->bind_param('i', $locationID);
 
     if (!$command->execute()) {

@@ -7,7 +7,7 @@ if (isset($_POST["deleteLocation"])) {
 
     if (isset($_POST["locationID"])) {    
 
-        $locationID = $_POST["locationID"];
+        $locationID = htmlspecialchars($_POST["locationID"]);
         
         if (blankTest($locationID)) {
             deleteIndoorLocations($locationID);

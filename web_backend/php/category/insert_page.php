@@ -2,7 +2,6 @@
 session_start();
 require_once("../auth/logout.php");
 require_once("insert_func.php");
-// require_once("../settings/style_sheet.php");
 
 
 if (isset($_SESSION["error"])) {
@@ -12,7 +11,6 @@ if (isset($_SESSION["success_message"])) {
     $success_message = $_SESSION["success_message"];
 }
 
-// echo $_SESSION["authorized"];
 
 ?>
 
@@ -34,7 +32,8 @@ if (isset($_SESSION["success_message"])) {
         <br><br>
 
         <div>
-            <a href="../auth/login_page.php"><img src="../images/csub.png" alt="school logo" height="50px" style="display: inline;"></a>
+            <a href="../auth/login_page.php"><img src="../images/csub.png" 
+                alt="school logo" height="50px" style="display: inline;"></a>
             <h1 style="display: inline; margin: 30px 5px">Campus Map</h1>
         </div>
         <h2>Insert a Category</h2>
@@ -44,7 +43,8 @@ if (isset($_SESSION["success_message"])) {
             <input type="text" name="categoryName">
             <br><br>           
         
-            <input style="background-color: #ADD8E6;" type="submit" name="addCategory" value="Add a New Category">
+            <input style="background-color: #ADD8E6;" type="submit" 
+                                name="addCategory" value="Add a New Category">
         </form>
 
         <br>
@@ -54,7 +54,8 @@ if (isset($_SESSION["success_message"])) {
         <h2>Edit a Category</h2>
         <div> 
             <span style="background-color:yellow;">
-                Note: This change will apply to ALL LOCATIONS that share this category.
+                Note: This change will apply to ALL LOCATIONS 
+                that share this category.
             </span>
         </div>
         <form action="insert_ops.php" method="POST">
@@ -66,7 +67,8 @@ if (isset($_SESSION["success_message"])) {
             <input type="text" name="newCategoryName">
             <br><br>           
         
-            <input style="background-color: #ADD8E6;" type="submit" name="editCategoryName" value="Edit">
+            <input style="background-color: #ADD8E6;" type="submit" 
+                                    name="editCategoryName" value="Edit">
         </form>
 
         <br>
@@ -88,7 +90,8 @@ if (isset($_SESSION["success_message"])) {
             
             <br>
             <br>
-            <input style="background-color: #ADD8E6;" type="submit" name="updateCategory" value="Update Category">
+            <input style="background-color: #ADD8E6;" type="submit" 
+                            name="updateCategory" value="Update Category">
         </form>
 
         <br><br>
