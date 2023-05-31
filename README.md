@@ -33,12 +33,14 @@ For the outdoor navigation, the user has the ability to navigate there by clicki
 
 **Outdoor Navigation Loading Screen**
 
- ![](/images/Outdoor%20Navigation%20Loading%20Screen.png)
+<img src="/images/Outdoor%20Navigation%20Loading%20Screen.png" height="500">
  </div>
 <div align="center">
 
 **Outdoor Navigation Search Building Options**
- ![](RackMultipart20230531-1-3m5ncx_html_83aa3ae5b7c29d22.png)
+
+<img src="/images/Outdoor%20Navigation%20Search%20Building%20Options.png" height="500">
+
  </div>
 <div align="center">
 
