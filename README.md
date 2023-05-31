@@ -1,3 +1,13 @@
+## Project Motivation and Description
+There are times when students need help locating their required classrooms. For example, the first day of a semester can be overwhelming, and part of that often comes from the worry of not being able to find a classroom on time. At its core, Runner Maps is a mobile application that provides both outdoor and indoor navigation for the campus of the California State University of Bakersfield. With a campus size of 375  acres in mind, this project could help serve the 12,000  students, staff, and faculty on a day to day basis. This project has the potential to help not only the population today, but also the future occupants and visitors as well. This project is the first project to bring to life a simple solution to this authentic navigation challenge on campus grounds. With a simple search on the application, users can now locate the target classrooms with specific directions.
+
+Runner Maps is the perfect application for students to guide themselves from class to class without the worry of getting lost. Runner Maps accomplishes this by allowing users to search for a certain room in a certain building. Then, the application gives them step by step directions, along with visuals, and assists users to their classrooms. Runner Maps utilizes outdoor navigation to access where the users are located on the campus and will help guide them to the building to which they wish to go. Similarly, once inside the building, users will have the option to receive directions on where to go next, each step leading them closer to the classroom, until finally reaching their destination.
+
+The application can cater to a broad audience. There are often students, new employees, and visitors disoriented by the size and complexity of the campus when in search of a desired location. With a simple search on a free application, users can obtain helpful information quickly, which saves time in their navigation to these places.
+
+Runner Maps is needed on CSUB’s campus. Students deserve a navigational tool that will allow them to get anywhere on campus without getting lost. Runner Maps solves the problem of students not having a quick way to evaluate how to get to their destination upon arrival on campus. This application will ensure that students are well informed and guided the moment they step on CSUB’s campus.
+
+
 ## Architecture of the Project
 
 The first component is a web application to manage rooms and users. It is a web application using PHP for the front end and PHP for the back end, which will serve the REST endpoint that performs CRUD operations against a SQL database. The next component is a mobile application, which has a front-end built with React Native and a backend written in PHP. The PHP endpoint will perform CRUD operations on a SQL database. Odin will host the backend for both applications. To facilitate the scalable creation of floor plans, a visual designer has been developed. After designing the floor plan using this tool, it can be exported as a JSON file and inserted into the database through the web admin forms application. This streamlined process enables efficient management of floor plans within the system.
@@ -88,9 +98,6 @@ The indoor navigation screen is designed to assist users in selecting both their
 
 <img src="/images/Mobile%20Application%20Indoor%20Navigation%20Screen%20Pop%20Up%20Multi%20level%20floor%20navigation.png" height="500">
 </div>
-To facilitate indoor navigation, the mobile app employs an engine that utilizes Dijkstra's algorithm to determine the shortest path. This engine is integrated directly into the app to ensure minimal latency when initiating indoor navigation.
-
-In the code snippet provided below, a function called 'solveTheGrid' is demonstrated. This function invokes the Dijkstra's algorithm and subsequently returns the 'shortestPathList', which then generates travel instructions relative to the different directions that the user faces throughout their travel. By automating the generation of directions to a specific location, the system saves time by removing manual labor and enhancing scalability, ultimately improving the overall navigation experience.
 
 3. Indoor Navigation Result Screen
 
