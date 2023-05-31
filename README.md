@@ -38,6 +38,7 @@ For the outdoor navigation, the user has the ability to navigate there by clicki
 **Outdoor Navigation Route Overview**
  ![](RackMultipart20230531-1-3m5ncx_html_ab50dd5233f7a3dc.png)
 </div>
+
 ### Indoor Navigation
 
 1. Home Screen
@@ -93,6 +94,7 @@ The accessibility features for the mobile application cater to a diverse range o
 **Settings Screen Accessibility Features**
  ![](RackMultipart20230531-1-3m5ncx_html_9efee30ed73a4f02.png)
 </div>
+
 5. Visual Designer
 
 The Visual Designer is a web application designed to streamline the creation of floor plans, ensuring scalability. With just a click of a button, users can easily add walls and room locations to their designs. The application also features a testing capability that utilizes the same engine as the mobile. By testing the grid within the Visual Designer, users can be confident that their floor plan will function seamlessly within the mobile application.
