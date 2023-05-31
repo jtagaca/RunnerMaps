@@ -17,9 +17,10 @@ Our splash screen is the first look into our app for our user. This screen pops 
 
 **Runner Maps Splash Screen**
 
-![](/images/Runner%20Maps%20Splash%20Screen.png)
+<img src="/images/Runner%20Maps%20Splash%20Screen.png" height="500">
 
 </div>
+
 
 
 ### Outdoor Navigation
