@@ -4,6 +4,7 @@ The first component is a web application to manage rooms and users. It is a web 
 <div align="center">
 
 **Infrastructure**
+
 ![](/images/infrastructure.png)
 </div>
 
@@ -15,7 +16,8 @@ Our splash screen is the first look into our app for our user. This screen pops 
 <div align="center">
 
 **Runner Maps Splash Screen**
-![](RackMultipart20230531-1-3m5ncx_html_a794c307eecce894.png)
+
+![](/images/Runner%20Maps%20Splash%20Screen.png)
 
 </div>
 
@@ -29,7 +31,8 @@ For the outdoor navigation, the user has the ability to navigate there by clicki
 <div align="center">
 
 **Outdoor Navigation Loading Screen**
- ![](RackMultipart20230531-1-3m5ncx_html_64006d059cbbe472.png)
+
+ ![](/images/Outdoor%20Navigation%20Loading%20Screen.png)
  </div>
 <div align="center">
 
