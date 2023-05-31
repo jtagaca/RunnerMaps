@@ -45,7 +45,9 @@ For the outdoor navigation, the user has the ability to navigate there by clicki
 <div align="center">
 
 **Outdoor Navigation Route Overview**
- ![](RackMultipart20230531-1-3m5ncx_html_ab50dd5233f7a3dc.png)
+
+<img src="/images/Outdoor%20Navigation%20Route%20Overview.png" height="500">
+
 </div>
 
 ### Indoor Navigation
@@ -57,13 +59,15 @@ The home screen of the mobile application, serves as the central hub for users t
 <div align="center">
 
 **Mobile Application Home Screen**
- ![](RackMultipart20230531-1-3m5ncx_html_38e3f44b68d0d7a7.png)
- 
+
+<img src="/images/Mobile%20Application%20Home%20Screen.png" height="500">
+
  </div>
 <div align="center">
 
 **Mobile Application Home Screen Filter**
- ![](RackMultipart20230531-1-3m5ncx_html_51592f60c85d6271.png)
+
+<img src="/images/Mobile%20Application%20Home%20Screen%20Filter.png" height="500">
  
  </div>
 
@@ -73,12 +77,14 @@ The indoor navigation screen is designed to assist users in selecting both their
 <div align="center">
 
 **Mobile Application Indoor Navigation Screen**
- ![](RackMultipart20230531-1-3m5ncx_html_f0074b6e3462c3b1.png)
- </div>
+
+<img src="/images/Mobile%20Application%20Indoor%20Navigation%20Screen.png" height="500">
+</div>
 <div align="center">
 
 **Mobile Application Indoor Navigation Screen Pop Up Multi level floor navigation**
- ![](RackMultipart20230531-1-3m5ncx_html_e80b55689fab77e1.png)
+
+<img src="/images/Mobile%20Application%20Indoor%20Navigation%20Screen%20Pop%20Up%20Multi%20level%20floor%20navigation.png" height="500">
 </div>
 To facilitate indoor navigation, the mobile app employs an engine that utilizes Dijkstra's algorithm to determine the shortest path. This engine is integrated directly into the app to ensure minimal latency when initiating indoor navigation.
 
@@ -91,7 +97,8 @@ The result screen appears after the engine has successfully calculated the short
 <div align="center">
 
 **Indoor Navigation Result Screen**
- ![](RackMultipart20230531-1-3m5ncx_html_730761a3c58bdd28.png)
+
+<img src="/images/Indoor%20Navigation%20Result%20Screen.png" height="500">
  </div>
 
 4. Accessibility Features
@@ -101,7 +108,8 @@ The accessibility features for the mobile application cater to a diverse range o
 <div align="center">
 
 **Settings Screen Accessibility Features**
- ![](RackMultipart20230531-1-3m5ncx_html_9efee30ed73a4f02.png)
+
+<img src="/images/Settings%20Screen%20Accessibility%20Features.png" height="500">
 </div>
 
 5. Visual Designer
@@ -109,5 +117,7 @@ The accessibility features for the mobile application cater to a diverse range o
 The Visual Designer is a web application designed to streamline the creation of floor plans, ensuring scalability. With just a click of a button, users can easily add walls and room locations to their designs. The application also features a testing capability that utilizes the same engine as the mobile. By testing the grid within the Visual Designer, users can be confident that their floor plan will function seamlessly within the mobile application.
 <div align="center">
 
-**Web Visual Floor Plan Designer**![](RackMultipart20230531-1-3m5ncx_html_bb24c3b6eb8e650.png)
+**Web Visual Floor Plan Designer**
+
+<img src="/images/Web%20Visual%20Floor%20Plan%20Designer.png" height="500">
 </div>
