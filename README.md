@@ -35,6 +35,7 @@ For the outdoor navigation, the user has the ability to navigate there by clicki
 
 <img src="/images/Outdoor%20Navigation%20Loading%20Screen.png" height="500">
  </div>
+
 <div align="center">
 
 **Outdoor Navigation Search Building Options**
@@ -42,6 +43,7 @@ For the outdoor navigation, the user has the ability to navigate there by clicki
 <img src="/images/Outdoor%20Navigation%20Search%20Building%20Options.png" height="500">
 
  </div>
+ 
 <div align="center">
 
 **Outdoor Navigation Route Overview**
