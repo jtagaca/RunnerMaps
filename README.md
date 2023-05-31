@@ -2,7 +2,7 @@
 
 The first component is a web application to manage rooms and users. It is a web application using PHP for the front end and PHP for the back end, which will serve the REST endpoint that performs CRUD operations against a SQL database. The next component is a mobile application, which has a front-end built with React Native and a backend written in PHP. The PHP endpoint will perform CRUD operations on a SQL database. Odin will host the backend for both applications. To facilitate the scalable creation of floor plans, a visual designer has been developed. After designing the floor plan using this tool, it can be exported as a JSON file and inserted into the database through the web admin forms application. This streamlined process enables efficient management of floor plans within the system.
 
-**Infrastructure**![](RackMultipart20230531-1-3m5ncx_html_3fff25179d5a7a56.png)
+**Infrastructure**![](/images/infrastructure.png)
 
 ## Features
 
